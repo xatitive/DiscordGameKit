@@ -168,7 +168,7 @@ public extension DiscordClient {
     ///
     /// This callback is invoked with the join secret from the activity rich presence, which you can
     /// use to join them to the game's internal party system. See ``Activity`` for more information on invites.
-    func onActivityJoinWithApp(
+    func onActivityJoinedWithApp(
         _ body: @escaping ActivityJoinWithApplicationCallback
     ) {
         let ptr = setCallback(body, to: \.activityJoinWithApp)

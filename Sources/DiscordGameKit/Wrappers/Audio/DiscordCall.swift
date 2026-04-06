@@ -136,8 +136,7 @@ public final class DiscordCall: DiscordObject {
     public func getVoiceStateHandle(for userId: UInt64) -> VoiceStateHandle? {
         storage.withLock { raw -> VoiceStateHandle? in
             var handle = Discord_VoiceStateHandle()
-            guard Discord_Call_GetVoiceStateHandle(&raw, userId, &handle) else { return nil }
-            return VoiceStateHandle(takingOwnership: handle)
+            return Discord_Call_GetVoiceStateHandle(&raw, userId, &handle) ? VoiceStateHandle(takingOwnership: handle) : nil
         }
     }
     

@@ -283,7 +283,7 @@ extension DiscordClient {
         }}}
     }
     
-    /// This function is a combination of ``authorize(with:_:)`` and ``getToken(application:code:codeVerifier:redirectUri:_:)``, but is used
+    /// This function is a combination of ``authorize(with:_:)`` and ``getToken(application:code:codeVerifier:redirectURI:_:)``, but is used
     /// for the case where the user is on a limited input device, such as a console or smart TV.
     ///
     /// The callback function will be invoked with two tokens:
@@ -390,13 +390,13 @@ extension DiscordClient {
     /// later unlinks, then a new provisional account with a new unique ID is created.
     ///
     /// The account merging process starts the same as the normal login flow, by invoking the
-    /// Authorize method to get an authorization code back. But instead of calling ``getToken(application:code:codeVerifier:redirectUri:_:)``,
+    /// Authorize method to get an authorization code back. But instead of calling ``getToken(application:code:codeVerifier:redirectURI:_:)``,
     /// call this function and pass in the provisional user's identity as well.
     ///
     /// The Discord backend can then find both the provisional account with that identity and the
     /// new Discord account and merge any data as necessary.
     ///
-    /// See the documentation for ``getToken(application:code:codeVerifier:redirectUri:_:)`` for more details on the callback. Note that the callback
+    /// See the documentation for ``getToken(application:code:codeVerifier:redirectURI:_:)`` for more details on the callback. Note that the callback
     /// will be invoked when the token exchange completes, but the process of merging accounts
     /// happens asynchronously so will not be complete yet.
     ///
@@ -602,16 +602,5 @@ extension DiscordClient {
             )
         }
     }
-    
-    public func updateToken(
-        to token: String,
-        for type: AuthorizationTokenType) async throws {
-            return try await withCheckedThrowingContinuation { continuation in
-                updateToken(to: token, for: type) { result in
-                    continuation.resume(with: result)
-                }
-            }
-        }
-    
     
 }

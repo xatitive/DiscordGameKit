@@ -257,9 +257,9 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
 
     /// Authorization helper property that can create a code challenge and verifier.
     ///
-    /// Used in the ``authorize(with:_:)`` + ``getToken(application:code:codeVerifier:redirectUri:_:)`` flow.
+    /// Used in the ``authorize(with:_:)`` + ``getToken(application:code:codeVerifier:redirectURI:_:)`` flow.
     /// This returns a struct with two items, a ``AuthorizationCodeVerifier/challenge`` value to pass into ``authorize(with:_:)`` and
-    ///  a ``AuthorizationCodeVerifier/verifier`` value to pass into ``getToken(application:code:codeVerifier:redirectUri:_:)``.
+    ///  a ``AuthorizationCodeVerifier/verifier`` value to pass into ``getToken(application:code:codeVerifier:redirectURI:_:)``.
     private(set) public lazy var authorizationCodeVerifier: AuthorizationCodeVerifier = {
         storage.withLock { raw in
             var verifier = Discord_AuthorizationCodeVerifier()
@@ -284,6 +284,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
         usingLock(Discord_Client_SetHttpRequestTimeout, time)
     }
 
+    /// Returns a reference to the currently active call, if any.
     public func call(for channel: UInt64) -> DiscordCall {
         storage.withLock { raw in
             var call = Discord_Call()
@@ -292,6 +293,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
         }
     }
 
+    /// Returns a reference to all currently active calls, if any.
     public func calls() -> [DiscordCall] {
         storage.withLock { raw in
             var span = Discord_CallSpan()
@@ -358,7 +360,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     /// - Parameter id: The channel or lobby identifier to start or join a call in.
     /// - Returns: A ``DiscordCall`` instance if the call was successfully started or joined,
     ///  		   otherwise `nil` if already inside the voice channel.
-    public func call(_ id: UInt64) -> DiscordCall? {
+    public func call(lobby id: UInt64) -> DiscordCall? {
         storage.withLock { raw -> DiscordCall? in
             var call = Discord_Call()
             guard Discord_Client_StartCall(&raw, id, &call) else { return nil }

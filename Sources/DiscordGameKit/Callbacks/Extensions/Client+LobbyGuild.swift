@@ -309,7 +309,7 @@ public extension DiscordClient {
     /// Removes any existing channel link from the specified lobby.
     ///
     /// See the documentation for ``LobbyHandle`` for more information.
-    /// A lobby can be unlinked by any user with the ``LobbyMemberFlags.CanLinkLobby`` flag. The user
+    /// A lobby can be unlinked by any user with the `LobbyMemberFlags.CanLinkLobby` flag. The user
     /// does not need to have permissions on the Discord channel to remove the in-game link.
     ///
     /// - Parameters:

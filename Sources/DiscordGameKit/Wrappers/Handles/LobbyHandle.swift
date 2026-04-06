@@ -48,7 +48,7 @@
 /// try to start voice calls in lobbies that large. We strongly recommend sticking to around 25
 /// members or fewer for voice calls.
 ///
-/// See ``DiscordClient/startCall(in:)`` for more information on how to start a voice call in a lobby.
+/// See ``DiscordClient/call(lobby:)`` for more information on how to start a voice call in a lobby.
 ///
 /// ## Channel Linking
 /// Lobbies can be linked to a channel on Discord, which allows messages sent in one place to show

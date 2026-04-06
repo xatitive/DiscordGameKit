@@ -7,7 +7,7 @@
 
 @_implementationOnly import discord_partner_sdk
 
-/// Arguments to ``DiscordClient/authorize(args:_:)``
+/// Arguments to ``DiscordClient/authorize(with:_:)``
 public struct AuthorizationArgs: DiscordObject, Sendable {
     var storage: DiscordStorage<Discord_AuthorizationArgs>
     init(storage: DiscordStorage<Discord_AuthorizationArgs>) {
@@ -106,7 +106,7 @@ public struct AuthorizationArgs: DiscordObject, Sendable {
         }
     }
     
-    /// If using the ``DiscordClient/getToken(application:code:codeVerifier:redirectUri:_:)`` flow, you will need to generate a code challenge and verifier.
+    /// If using the ``DiscordClient/getToken(application:code:codeVerifier:redirectURI:_:)`` flow, you will need to generate a code challenge and verifier.
     ///
     /// Use ``DiscordClient/authorizationCodeVerifier`` to generate these values and pass the challenge property here.
     public var codeChallenge: AuthorizationCodeChallenge? {

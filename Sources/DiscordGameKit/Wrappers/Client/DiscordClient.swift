@@ -13,10 +13,12 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     var storage: DiscordStorage<Discord_Client>
     init(storage: DiscordStorage<Discord_Client>) {
         self.storage = storage
+        _ = authorizationCodeVerifier
     }
 
     public init() {
         self.storage = .init()
+        _ = authorizationCodeVerifier
     }
 
     public init(options: Options) {
@@ -25,6 +27,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
             Discord_Client_InitWithOptions(&client, &raw)
             return DiscordStorage(takingOwnership: client)
         }
+        _ = authorizationCodeVerifier // doing this bc the lazy var is unsafe so we init it first before any accesses
     }
 
     public init(api: String, base: String) {
@@ -39,6 +42,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
                 return DiscordStorage(takingOwnership: client)
             }
         }
+        _ = authorizationCodeVerifier
     }
 
     // MARK: Properties
@@ -124,8 +128,10 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     public var isAutoGainEnabled: Bool {
         get { autoGain }
         set {
-            autoGain = newValue
-            usingLock(Discord_Client_SetAutomaticGainControl, autoGain)
+            $autoGain.withLock { gain in
+                gain = newValue
+                usingLock(Discord_Client_SetAutomaticGainControl, gain)
+            }
         }
     }
 
@@ -137,8 +143,10 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     public var isEchoCancelling: Bool {
         get { echoCancel }
         set {
-            echoCancel = newValue
-            usingLock(Discord_Client_SetEchoCancellation, echoCancel)
+            $echoCancel.withLock { echo in
+                echo = newValue
+                usingLock(Discord_Client_SetEchoCancellation, echo)
+            }
         }
     }
 
@@ -159,8 +167,10 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     public var isAudioEngineManagedSession: Bool {
         get { engineManaged }
         set {
-            engineManaged = newValue
-            usingLock(Discord_Client_SetEngineManagedAudioSession, engineManaged)
+            $engineManaged.withLock { engine in
+                engine = newValue
+                usingLock(Discord_Client_SetEngineManagedAudioSession, engine)
+            }
         }
     }
 
@@ -176,8 +186,10 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     public var noAudioInputThreshold: Float {
         get { audioDBFS }
         set {
-            audioDBFS = newValue
-            usingLock(Discord_Client_SetNoAudioInputThreshold, audioDBFS)
+            $audioDBFS.withLock { dbfs in
+                dbfs = newValue
+                usingLock(Discord_Client_SetNoAudioInputThreshold, dbfs)
+            }
         }
     }
 
@@ -190,45 +202,65 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     public var isNoiseSupressing: Bool {
         get { supressingNoise }
         set {
-            supressingNoise = newValue
-            usingLock(Discord_Client_SetNoiseSuppression, supressingNoise)
+            $supressingNoise.withLock { noise in
+                noise = newValue
+                usingLock(Discord_Client_SetNoiseSuppression, noise)
+            }
         }
     }
-
-    @ThreadSafe private var opusEncoding: Bool = true
-
-    /// Opus hardware encoding for audio, if available.
-    /// - remark: Defaults to on. This must be called immediately
-    /// 		  after constructing the Client. If called too late an error
-    /// 		  will be logged and the setting will not take effect.
-    public var opusEncodingEnabled: Bool {
-        get { opusEncoding }
-        set {
-            opusEncoding = newValue
-            usingLock(Discord_Client_SetOpusHardwareCoding, opusEncoding, opusDecoding)
-        }
-    }
-
-    @ThreadSafe private var opusDecoding: Bool = true
-
-    /// Opus hardware decoding for audio, if available.
+    
+    
+    @ThreadSafe private var opusHardware: (encoding: Bool, decoding: Bool) = (true, true)
+    
+    /// Opus hardware encoding/decoding for audio, if available.
     /// - remark: Defaults to on. This must be called immediately
     ///           after constructing the Client. If called too late an error
     ///           will be logged and the setting will not take effect.
-    public var opusDecodingEnabled: Bool {
-        get { opusEncoding }
+    public var opusHardwareAcceleration: (encoding: Bool, decoding: Bool) {
+        get { opusHardware }
         set {
-            opusEncoding = newValue
-            usingLock(Discord_Client_SetOpusHardwareCoding, opusEncoding, opusDecoding)
+            $opusHardware.withLock { opus in
+                opus = newValue
+                usingLock(Discord_Client_SetOpusHardwareCoding, opus.encoding, opus.decoding)
+            }
         }
     }
+    
+
+//    @ThreadSafe private var opusEncoding: Bool = true
+//
+//    /// Opus hardware encoding for audio, if available.
+//    /// - remark: Defaults to on. This must be called immediately
+//    /// 		  after constructing the Client. If called too late an error
+//    /// 		  will be logged and the setting will not take effect.
+//    public var opusEncodingEnabled: Bool {
+//        get { opusEncoding }
+//        set {
+//            opusEncoding = newValue
+//            usingLock(Discord_Client_SetOpusHardwareCoding, opusEncoding, opusDecoding)
+//        }
+//    }
+//
+//    @ThreadSafe private var opusDecoding: Bool = true
+//
+//    /// Opus hardware decoding for audio, if available.
+//    /// - remark: Defaults to on. This must be called immediately
+//    ///           after constructing the Client. If called too late an error
+//    ///           will be logged and the setting will not take effect.
+//    public var opusDecodingEnabled: Bool {
+//        get { opusEncoding }
+//        set {
+//            opusEncoding = newValue
+//            usingLock(Discord_Client_SetOpusHardwareCoding, opusEncoding, opusDecoding)
+//        }
+//    }
 
     /// Authorization helper property that can create a code challenge and verifier.
     ///
     /// Used in the ``authorize(with:_:)`` + ``getToken(application:code:codeVerifier:redirectUri:_:)`` flow.
     /// This returns a struct with two items, a ``AuthorizationCodeVerifier/challenge`` value to pass into ``authorize(with:_:)`` and
     ///  a ``AuthorizationCodeVerifier/verifier`` value to pass into ``getToken(application:code:codeVerifier:redirectUri:_:)``.
-    public lazy var authorizationCodeVerifier: AuthorizationCodeVerifier = {
+    private(set) public lazy var authorizationCodeVerifier: AuthorizationCodeVerifier = {
         storage.withLock { raw in
             var verifier = Discord_AuthorizationCodeVerifier()
             Discord_Client_CreateAuthorizationCodeVerifier(&raw, &verifier)
@@ -326,7 +358,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     /// - Parameter id: The channel or lobby identifier to start or join a call in.
     /// - Returns: A ``DiscordCall`` instance if the call was successfully started or joined,
     ///  		   otherwise `nil` if already inside the voice channel.
-    public func startCall(in id: UInt64) -> DiscordCall? {
+    public func call(_ id: UInt64) -> DiscordCall? {
         storage.withLock { raw -> DiscordCall? in
             var call = Discord_Call()
             guard Discord_Client_StartCall(&raw, id, &call) else { return nil }
@@ -577,8 +609,6 @@ extension DiscordClient {
         var deviceChange = CallbackBox<AudioDeviceChangedCallback>()
         var noAudioInput = CallbackBox<NoAudioInputCallback>()
         var voiceParticipant = CallbackBox<VoiceParticipantChangedCallback>()
-        var audioReceived = CallbackBox<UserAudioReceivedCallback>()
-        var audioCaptured = CallbackBox<UserAudioCapturedCallback>()
 
         // Messaging
         var messageCreated = CallbackBox<MessageCreatedCallback>()

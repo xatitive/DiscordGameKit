@@ -13,17 +13,17 @@
     // MARK: - Audio
     // ===============
 
-    extension DiscordClient {
+    public extension DiscordClient {
 
         /// Ends any active call, if any. Any references you have to Call objects are invalid after they are ended, and can be immediately freed.
-        public func endCall(channel id: UInt64) async {
+        func endCall(channel id: UInt64) async {
             await withCheckedContinuation { cont in
                 endCall(channel: id) { cont.resume() }
             }
         }
 
         /// Ends any active call, if any. Any references you have to Call objects are invalid after they are ended, and can be immediately freed.
-        public func endCalls() async {
+        func endCalls() async {
             await withCheckedContinuation { cont in
                 endCalls { cont.resume() }
             }
@@ -32,7 +32,7 @@
         /// Asynchronously changes the audio input device in use by the client to the specified device.
         ///
         /// You can find the list of device IDs that can be passed in with ``inputDevices(_:)``.
-        public func setInputDevice(to id: String) async throws {
+        func setInputDevice(to id: String) async throws {
             try await withCheckedThrowingContinuation { cont in
                 setInputDevice(to: id) { cont.resume(with: $0) }
             }
@@ -41,7 +41,7 @@
         /// Asynchronously changes the audio output device in use by the client to the specified device.
         ///
         /// You can find the list of device IDs that can be passed in with ``outputDevices(_:)``.
-        public func setOutputDevice(to id: String) async throws {
+        func setOutputDevice(to id: String) async throws {
             try await withCheckedThrowingContinuation { cont in
                 setOutputDevice(to: id) { cont.resume(with: $0) }
             }
@@ -53,9 +53,9 @@
     // MARK: - Auth
     // ===============
 
-    extension DiscordClient {
+    public extension DiscordClient {
 
-        public func authorize(with args: AuthorizationArgs) async throws -> (
+        func authorize(with args: AuthorizationArgs) async throws -> (
             code: String, redirectURI: String
         ) {
             try await withCheckedThrowingContinuation { cont in
@@ -63,7 +63,7 @@
             }
         }
 
-        public func provisionalToken(
+        func provisionalToken(
             application id: UInt64,
             type: AuthenticationExternalAuthType,
             token: String
@@ -77,7 +77,7 @@
             }
         }
 
-        public func refreshToken(application id: UInt64, token: String)
+        func refreshToken(application id: UInt64, token: String)
             async throws -> TokenExchange
         {
             try await withCheckedThrowingContinuation { cont in
@@ -87,7 +87,7 @@
             }
         }
 
-        public func getToken(
+        func getToken(
             application id: UInt64,
             code: String,
             codeVerifier: String,
@@ -105,7 +105,7 @@
             }
         }
 
-        public func getTokenFromDevice(with args: DeviceAuthorizationArgs)
+        func getTokenFromDevice(with args: DeviceAuthorizationArgs)
             async throws -> TokenExchange
         {
             try await withCheckedThrowingContinuation { cont in
@@ -113,7 +113,7 @@
             }
         }
 
-        public func getTokenFromDeviceProvisionalMerge(
+        func getTokenFromDeviceProvisionalMerge(
             args: DeviceAuthorizationArgs,
             authType: AuthenticationExternalAuthType,
             token: String
@@ -127,7 +127,7 @@
             }
         }
 
-        public func getTokenFromProvisionalMerge(
+        func getTokenFromProvisionalMerge(
             application id: UInt64,
             code: String,
             verifier: String,
@@ -147,7 +147,7 @@
             }
         }
 
-        public func revokeToken(application id: UInt64, token: String)
+        func revokeToken(application id: UInt64, token: String)
             async throws
         {
             try await withCheckedThrowingContinuation { cont in
@@ -157,7 +157,7 @@
             }
         }
 
-        public func unmergeIntoProvisionalAccount(
+        func unmergeIntoProvisionalAccount(
             application id: UInt64,
             authType: AuthenticationExternalAuthType,
             token: String
@@ -171,7 +171,7 @@
             }
         }
 
-        public func updateProvisionalAccountDisplayName(to name: String)
+        func updateProvisionalAccountDisplayName(to name: String)
             async throws
         {
             return try await withCheckedThrowingContinuation { continuation in
@@ -181,7 +181,7 @@
             }
         }
 
-        public func updateToken(
+        func updateToken(
             to token: String,
             for type: AuthorizationTokenType
         ) async throws {
@@ -197,7 +197,7 @@
     // MARK: - Chat
     // ===============
 
-    extension DiscordClient {
+    public extension DiscordClient {
 
         func deleteMessage(
             to reciepientID: UInt64,
@@ -210,7 +210,7 @@
             }
         }
 
-        public func editMessage(
+        func editMessage(
             to reciepientID: UInt64,
             id msgID: UInt64,
             content: String
@@ -223,7 +223,7 @@
             }
         }
 
-        public func sendMessage(
+        func sendMessage(
             to recipientID: UInt64,
             content: String
         ) async throws -> UInt64 {
@@ -234,7 +234,7 @@
             }
         }
 
-        public func sendMessage(
+        func sendMessage(
             to recipientID: UInt64,
             content: String,
             metadata: [String: String]
@@ -250,7 +250,7 @@
             }
         }
 
-        public func userMessageSummaries() async throws -> [UserMessageSummary]
+        func userMessageSummaries() async throws -> [UserMessageSummary]
         {
             return try await withCheckedThrowingContinuation { continuation in
                 userMessageSummaries { result in
@@ -259,7 +259,7 @@
             }
         }
 
-        public func userMessages(
+        func userMessages(
             to recipientID: UInt64,
             limit: Int32
         ) async throws -> [MessageHandle] {
@@ -275,9 +275,9 @@
     // MARK: - Core
     // ===============
 
-    extension DiscordClient {
+    public extension DiscordClient {
 
-        public func fetchCurrentUser(
+        func fetchCurrentUser(
             token: String,
             type: AuthorizationTokenType
         ) async throws -> (userID: UInt64, username: String) {
@@ -288,7 +288,7 @@
             }
         }
 
-        public func openConnectedSettings() async throws {
+        func openConnectedSettings() async throws {
             return try await withCheckedThrowingContinuation { continuation in
                 openConnectedSettings { result in
                     continuation.resume(with: result)
@@ -296,7 +296,7 @@
             }
         }
 
-        public func clientConnectedUser(for application: UInt64) async throws
+        func clientConnectedUser(for application: UInt64) async throws
             -> UserHandle?
         {
             return try await withCheckedThrowingContinuation { continuation in
@@ -311,7 +311,7 @@
     // MARK: - Lobbies
     // ===============
 
-    extension DiscordClient {
+    public extension DiscordClient {
 
         func getLobbyMessagesWithLimit(
             id: UInt64,
@@ -442,7 +442,7 @@
     // MARK: - Presence
     // ===============
 
-    extension DiscordClient {
+    public extension DiscordClient {
 
         func acceptActivityInvite(
             for invite: ActivityInvite
@@ -510,7 +510,7 @@
     // MARK: - Relationships
     // ===============
 
-    extension DiscordClient {
+    public extension DiscordClient {
 
         func acceptDiscordFriendRequest(
             from userId: UInt64
@@ -637,7 +637,7 @@
     // MARK: - Users
     // ===============
 
-    extension DiscordClient {
+    public extension DiscordClient {
 
         func blockUser(
             _ userId: UInt64

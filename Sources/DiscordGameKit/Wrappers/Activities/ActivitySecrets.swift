@@ -26,7 +26,7 @@ public struct ActivitySecrets: DiscordObject {
             storage.withLock {
                 var ds = Discord_String()
                 Discord_ActivitySecrets_Join(&$0, &ds)
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         set {

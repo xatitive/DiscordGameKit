@@ -127,7 +127,6 @@ extension DiscordClient {
     ///   in your Info.plist for this check to work correctly.
     /// - Android: Your app must include "com.discord" in the `queries` element
     ///   in your AndroidManifest.xml (required for Android 11+).
-    ///
     @available(iOS 18.5, *)
     @available(Android 11.0, *)
     public func isDiscordInstalled(

@@ -25,11 +25,11 @@ public struct ActivityParty: DiscordObject, Identifiable {
     /// must be a string between 2 and 128 characters.
     public var id: String {
         get {
-            var ds = Discord_String()
             storage.withLock { raw in
+                var ds = Discord_String()
                 Discord_ActivityParty_Id(&raw, &ds)
+                return ds.toString()
             }
-            return String(discordOwned: ds)
         }
         set {
             ensureUnique()

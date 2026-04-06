@@ -224,7 +224,7 @@ public struct Activity: DiscordObject {
     ///
     /// This should almost always be set to ``ActivityType/playing``
     public var type: ActivityType {
-        get { storage.withLock { Discord_Activity_Type(&$0).swiftValue } }
+        get { usingLock(Discord_Activity_Type).swiftValue }
         set {
             ensureUnique()
             storage.withLock { raw in
@@ -238,7 +238,7 @@ public struct Activity: DiscordObject {
     /// For example if a game is available on both PC and Mobile, but PC users cannot join Mobile users and vice versa, this field can be
     /// used so that an activity only shows as joinable on Discord if the user is on the appropriate platform.
     public var supportedPlatform: ActivityGamePlatform {
-        get { storage.withLock { Discord_Activity_SupportedPlatforms(&$0).swiftValue } }
+        get { usingLock(Discord_Activity_SupportedPlatforms).swiftValue }
         set {
             ensureUnique()
             storage.withLock { raw in
@@ -264,14 +264,14 @@ public struct Activity: DiscordObject {
             ensureUnique()
             var value = self.statusDisplay
             yield &value
-            if var value = value?.discordValue {
-                storage.withLock { raw in
-                    Discord_Activity_SetStatusDisplayType(&raw, &value)
-                }
-            } else {
-                storage.withLock { raw in
-                    Discord_Activity_SetStatusDisplayType(&raw, nil)
-                }
+            
+            guard var value else {
+                usingLock(Discord_Activity_SetStatusDisplayType, nil)
+                return
+            }
+            
+            storage.withLock { raw in
+                Discord_Activity_SetStatusDisplayType(&raw, &value.discordValue)
             }
         }
     }
@@ -291,10 +291,15 @@ public struct Activity: DiscordObject {
             ensureUnique()
             var value = self.state
             yield &value
-            value?.withDiscordString { str in
-                var str = str
+            
+            guard let value else {
+                usingLock(Discord_Activity_SetState, nil)
+                return
+            }
+            
+            value.withDiscordStringPointer { str in
                 storage.withLock { raw in
-                    Discord_Activity_SetState(&raw, &str)
+                    Discord_Activity_SetState(&raw, str)
                 }
             }
         }
@@ -315,7 +320,13 @@ public struct Activity: DiscordObject {
             ensureUnique()
             var value = self.state
             yield &value
-            value?.withDiscordStringPointer { str in
+            
+            guard let value else {
+                usingLock(Discord_Activity_SetStateUrl, nil)
+                return
+            }
+            
+            value.withDiscordStringPointer { str in
                 storage.withLock { raw in
                     Discord_Activity_SetStateUrl(&raw, str)
                 }
@@ -338,10 +349,15 @@ public struct Activity: DiscordObject {
             ensureUnique()
             var value = self.state
             yield &value
-            value?.withDiscordString { str in
-                var str = str
+            
+            guard let value else {
+                usingLock(Discord_Activity_SetDetails, nil)
+                return
+            }
+            
+            value.withDiscordStringPointer { str in
                 storage.withLock { raw in
-                    Discord_Activity_SetDetails(&raw, &str)
+                    Discord_Activity_SetDetails(&raw, str)
                 }
             }
         }
@@ -362,10 +378,15 @@ public struct Activity: DiscordObject {
             ensureUnique()
             var value = self.state
             yield &value
-            value?.withDiscordString { str in
-                var str = str
+            
+            guard let value else {
+                usingLock(Discord_Activity_SetDetailsUrl, nil)
+                return
+            }
+            
+            value.withDiscordStringPointer { str in
                 storage.withLock { raw in
-                    Discord_Activity_SetDetailsUrl(&raw, &str)
+                    Discord_Activity_SetDetailsUrl(&raw, str)
                 }
             }
         }
@@ -387,11 +408,10 @@ public struct Activity: DiscordObject {
             yield &value
             
             guard var value else {
-                storage.withLock { raw in
-                    Discord_Activity_SetApplicationId(&raw, nil)
-                }
+                usingLock(Discord_Activity_SetApplicationId, nil)
                 return
             }
+            
             storage.withLock { raw in
                 Discord_Activity_SetApplicationId(&raw, &value)
             }
@@ -414,11 +434,10 @@ public struct Activity: DiscordObject {
             yield &value
             
             guard var value else {
-                storage.withLock { raw in
-                    Discord_Activity_SetParentApplicationId(&raw, nil)
-                }
+                usingLock(Discord_Activity_SetParentApplicationId, nil)
                 return
             }
+            
             storage.withLock { raw in
                 Discord_Activity_SetParentApplicationId(&raw, &value)
             }
@@ -437,12 +456,12 @@ public struct Activity: DiscordObject {
             ensureUnique()
             var value = self.assets
             yield &value
+            
             guard let value else {
-                storage.withLock { raw in
-                    Discord_Activity_SetAssets(&raw, nil)
-                }
+				usingLock(Discord_Activity_SetAssets, nil)
                 return
             }
+            
             storage.withLock { activityRaw in
                 value.storage.withLock { assetRaw in
                     Discord_Activity_SetAssets(&activityRaw, &assetRaw)
@@ -467,11 +486,10 @@ public struct Activity: DiscordObject {
             yield &value
             
             guard let value else {
-                storage.withLock { raw in
-                    Discord_Activity_SetTimestamps(&raw, nil)
-                }
+                usingLock(Discord_Activity_SetTimestamps, nil)
                 return
             }
+            
             storage.withLock { activityRaw in
                 value.storage.withLock { timestampRaw in
                     Discord_Activity_SetTimestamps(&activityRaw, &timestampRaw)
@@ -543,11 +561,11 @@ public struct Activity: DiscordObject {
 
     /// Returns the custom buttons for the rich presence
     public var buttons: [ActivityButton] {
-        var span = Discord_ActivityButtonSpan()
         storage.withLock { raw in
+            var span = Discord_ActivityButtonSpan()
             Discord_Activity_GetButtons(&raw, &span)
+            return span.converting()
         }
-        return span.converting()
     }
 }
 

@@ -26,21 +26,15 @@ public struct ActivityTimestamps: DiscordObject {
     /// been playing this activity.
     public var start: Date? {
         get {
-            let time = storage.withLock { raw in
-                TimeInterval(Discord_ActivityTimestamps_Start(&raw))
-            }
+            let time = TimeInterval(usingLock(Discord_ActivityTimestamps_Start))
             return Date(timeIntervalSince1970: time / 1000)
         }
         set {
             if let newValue {
                 let time = UInt64(newValue.timeIntervalSince1970 * 1000)
-                storage.withLock { raw in
-                    Discord_ActivityTimestamps_SetStart(&raw, time)
-                }
+				usingLock(Discord_ActivityTimestamps_SetStart, time)
             } else {
-                storage.withLock { raw in
-                    Discord_ActivityTimestamps_SetStart(&raw, 0)
-                }
+                usingLock(Discord_ActivityTimestamps_SetStart, 0)
             }
         }
     }
@@ -52,21 +46,15 @@ public struct ActivityTimestamps: DiscordObject {
     /// activity ends.
     public var end: Date? {
         get {
-            let time = storage.withLock { raw in
-                TimeInterval(Discord_ActivityTimestamps_End(&raw))
-            }
+            let time = TimeInterval(usingLock(Discord_ActivityTimestamps_End))
             return Date(timeIntervalSince1970: time / 1000)
         }
         set {
             if let newValue {
                 let time = UInt64(newValue.timeIntervalSince1970 * 1000)
-                storage.withLock { raw in
-                    Discord_ActivityTimestamps_SetEnd(&raw, time)
-                }
+                usingLock(Discord_ActivityTimestamps_SetEnd, time)
             } else {
-                storage.withLock { raw in
-                    Discord_ActivityTimestamps_SetEnd(&raw, 0)
-                }
+                usingLock(Discord_ActivityTimestamps_SetEnd, 0)
             }
         }
     }

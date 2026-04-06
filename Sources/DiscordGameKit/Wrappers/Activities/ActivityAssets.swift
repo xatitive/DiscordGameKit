@@ -46,9 +46,7 @@ public struct ActivityAssets: DiscordObject {
             var value = self.largeImage
             yield &value
             guard let value else {
-                storage.withLock { raw in
-                    Discord_ActivityAssets_SetLargeImage(&raw, nil)
-                }
+                usingLock(Discord_ActivityAssets_SetLargeImage, nil)
                 return
             }
             value.withDiscordStringPointer { ptr in
@@ -74,9 +72,7 @@ public struct ActivityAssets: DiscordObject {
             var value = self.largeImage
             yield &value
             guard let value else {
-                storage.withLock { raw in
-                    Discord_ActivityAssets_SetLargeText(&raw, nil)
-                }
+                usingLock(Discord_ActivityAssets_SetLargeText, nil)
                 return
             }
             value.withDiscordStringPointer { ptr in
@@ -92,24 +88,21 @@ public struct ActivityAssets: DiscordObject {
     /// If specified, must be a string between 1 and 256 characters.
     public var largeUrl: String? {
         get {
-            var ds = Discord_String()
-            guard storage.withLock({ raw in
-                Discord_ActivityAssets_LargeUrl(&raw, &ds)
-            }) else {
-                return nil
+            storage.withLock { raw in
+                var ds = Discord_String()
+                return Discord_ActivityAssets_LargeUrl(&raw, &ds) ? ds.toString() : nil
             }
-            return String(discordOwned: ds)
         }
         _modify {
             ensureUnique()
             var value = self.largeUrl
             yield &value
+            
             guard let value else {
-                storage.withLock { raw in
-                    Discord_ActivityAssets_SetLargeUrl(&raw, nil)
-                }
+                usingLock(Discord_ActivityAssets_SetLargeUrl, nil)
                 return
             }
+            
             value.withDiscordStringPointer { str in
                 storage.withLock { raw in
                     Discord_ActivityAssets_SetLargeUrl(&raw, str)
@@ -123,24 +116,21 @@ public struct ActivityAssets: DiscordObject {
     /// If specified, must be a string between 1 and 300 characters.
     public var smallImage: String? {
         get {
-            var ds = Discord_String()
-            guard storage.withLock({ raw in
-                Discord_ActivityAssets_SmallImage(&raw, &ds)
-            }) else {
-                return nil
+            storage.withLock { raw in
+                var ds = Discord_String()
+                return Discord_ActivityAssets_SmallImage(&raw, &ds) ? ds.toString() : nil
             }
-            return String(discordOwned: ds)
         }
         _modify {
             ensureUnique()
             var value = self.smallImage
             yield &value
+            
             guard let value else {
-                storage.withLock { raw in
-                    Discord_ActivityAssets_SetSmallImage(&raw, nil)
-                }
+                usingLock(Discord_ActivityAssets_SetSmallImage, nil)
                 return
             }
+            
             value.withDiscordStringPointer { str in
                 storage.withLock { raw in
                     Discord_ActivityAssets_SetSmallImage(&raw, str)
@@ -154,24 +144,21 @@ public struct ActivityAssets: DiscordObject {
     /// If specified, must be a string between 2 and 128 characters.
     public var smallText: String? {
         get {
-            var ds = Discord_String()
-            guard storage.withLock({ raw in
-                Discord_ActivityAssets_SmallText(&raw, &ds)
-            }) else {
-                return nil
+            storage.withLock { raw in
+                var ds = Discord_String()
+                return Discord_ActivityAssets_SmallText(&raw, &ds) ? ds.toString() : nil
             }
-            return String(discordOwned: ds)
         }
         _modify {
             ensureUnique()
             var value = self.smallText
             yield &value
+            
             guard let value else {
-                storage.withLock { raw in
-                    Discord_ActivityAssets_SetSmallText(&raw, nil)
-                }
+                usingLock(Discord_ActivityAssets_SetSmallText, nil)
                 return
             }
+            
             value.withDiscordStringPointer { str in
                 storage.withLock { raw in
                     Discord_ActivityAssets_SetSmallText(&raw, str)
@@ -185,24 +172,21 @@ public struct ActivityAssets: DiscordObject {
     /// If specified, must be a string between 1 and 256 characters.
     public var smallUrl: String? {
         get {
-            var ds = Discord_String()
-            guard storage.withLock({ raw in
-                Discord_ActivityAssets_SmallUrl(&raw, &ds)
-            }) else {
-                return nil
+            storage.withLock{ raw in
+                var ds = Discord_String()
+                return Discord_ActivityAssets_SmallUrl(&raw, &ds) ? ds.toString() : nil
             }
-            return String(discordOwned: ds)
         }
         _modify {
             ensureUnique()
             var value = self.smallUrl
             yield &value
+            
             guard let value else {
-                storage.withLock { raw in
-                    Discord_ActivityAssets_SetSmallUrl(&raw, nil)
-                }
+                usingLock(Discord_ActivityAssets_SetSmallUrl, nil)
                 return
             }
+            
             value.withDiscordStringPointer { str in
                 storage.withLock { raw in
                     Discord_ActivityAssets_SetSmallUrl(&raw, str)
@@ -225,12 +209,12 @@ public struct ActivityAssets: DiscordObject {
             ensureUnique()
             var value = self.inviteCoverImage
             yield &value
+            
             guard let value else {
-                storage.withLock { raw in
-                    Discord_ActivityAssets_SetInviteCoverImage(&raw, nil)
-                }
+                usingLock(Discord_ActivityAssets_SetInviteCoverImage, nil)
                 return
             }
+            
             value.withDiscordStringPointer { str in
                 storage.withLock { raw in
                     Discord_ActivityAssets_SetInviteCoverImage(&raw, str)

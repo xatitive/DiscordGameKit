@@ -4,6 +4,8 @@
 import Foundation
 import DiscordGameKit
 
+let appId = try! applicationIdFromEnv(at: "/Users/chris/Documents/DiscordGameKit-xatitive/Sources/DiscordGameRunner/.env")
+
 @main
 struct DiscordGameRunner {
     static func main() {

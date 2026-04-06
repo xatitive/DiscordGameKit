@@ -6,13 +6,24 @@ import PackageDescription
 let package = Package(
     name: "DiscordGameKit",
     platforms: [.macOS(.v11), .iOS(.v15)],
+    products: [
+        .library(
+            name: "DiscordGameKit",
+            targets: ["DiscordGameKit"]
+        )
+    ],
+    traits: [
+        .trait(name: "asyncCallbacks")
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "DiscordGameKit",
             dependencies: ["discord_partner_sdk"],
-            swiftSettings: [.unsafeFlags(["-enable-library-evolution", "-emit-module-interface"])]
+            swiftSettings: [
+                .unsafeFlags(["-enable-library-evolution", "-emit-module-interface"]),
+            ],
         ),
         .executableTarget(
             name: "DiscordGameRunner",

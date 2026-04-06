@@ -22,14 +22,6 @@ extension DiscordClient {
     }
     
     /// Ends any active call, if any. Any references you have to Call objects are invalid after they are ended, and can be immediately freed.
-    @_disfavoredOverload
-    public func endCall(channel id: UInt64) async {
-        await withCheckedContinuation { cont in
-            endCall(channel: id) { cont.resume() }
-        }
-    }
-    
-    /// Ends any active call, if any. Any references you have to Call objects are invalid after they are ended, and can be immediately freed.
     public func endCalls(_ body: @escaping EndCallsCallback) {
         let cb = CallbackBox(body)
         usingLock(
@@ -38,14 +30,6 @@ extension DiscordClient {
             freeBox,
             cb.retainedOpaqueValue()
         )
-    }
-    
-    /// Ends any active call, if any. Any references you have to Call objects are invalid after they are ended, and can be immediately freed.
-    @_disfavoredOverload
-    public func endCalls() async {
-        await withCheckedContinuation { cont in
-            endCalls { cont.resume() }
-        }
     }
 
     /// Asynchronously fetches the current audio input device in use by the client.
@@ -57,16 +41,6 @@ extension DiscordClient {
             freeBox,
             cb.retainedOpaqueValue()
         )
-    }
-
-    /// Asynchronously fetches the current audio input device in use by the client.
-    @_disfavoredOverload
-    public func currentInputDevice() async -> AudioDevice {
-        await withCheckedContinuation { cont in
-            currentInputDevice { dev in
-                cont.resume(returning: dev)
-            }
-        }
     }
 
     /// Asynchronously fetches the current audio output device in use by the client.
@@ -82,16 +56,6 @@ extension DiscordClient {
         )
     }
 
-    /// Asynchronously fetches the current audio output device in use by the client.
-    @_disfavoredOverload
-    public func currentOutputDevice() async -> AudioDevice {
-        await withCheckedContinuation { cont in
-            currentOutputDevice { dev in
-                cont.resume(returning: dev)
-            }
-        }
-    }
-
     /// Asynchronously fetches the list of audio input devices available to the user.
     public func inputDevices(_ body: @escaping InputAudioDevicesCallback) {
         let cb = CallbackBox(body)
@@ -103,16 +67,6 @@ extension DiscordClient {
         )
     }
     
-    /// Asynchronously fetches the list of audio input devices available to the user.
-    @_disfavoredOverload
-    public func inputDevices() async -> [AudioDevice] {
-        await withCheckedContinuation { cont in
-            inputDevices { devs in
-                cont.resume(returning: devs)
-            }
-        }
-    }
-    
     /// Asynchronously fetches the list of audio output devices available to the user.
     public func outputDevices(_ body: @escaping InputAudioDevicesCallback) {
         let cb = CallbackBox(body)
@@ -122,16 +76,6 @@ extension DiscordClient {
             freeBox,
             cb.retainedOpaqueValue()
         )
-    }
-
-    /// Asynchronously fetches the list of audio output devices available to the user.
-    @_disfavoredOverload
-    public func outputDevices() async -> [AudioDevice] {
-        await withCheckedContinuation { cont in
-            outputDevices { devs in
-                cont.resume(returning: devs)
-            }
-        }
     }
     
     // Persistent funcs DO NOT get an async partner, i do not have the time for that rn

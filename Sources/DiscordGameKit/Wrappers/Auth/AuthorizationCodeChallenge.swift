@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Struct that encapsulates the challenge part of the code verification flow.
-public struct AuthorizationCodeChallenge: DiscordObject {
+public struct AuthorizationCodeChallenge: DiscordObject, CustomStringConvertible {
     var storage: DiscordStorage<Discord_AuthorizationCodeChallenge>
     init(storage: DiscordStorage<Discord_AuthorizationCodeChallenge>) {
         self.storage = storage
@@ -42,5 +42,9 @@ public struct AuthorizationCodeChallenge: DiscordObject {
                 usingLock(Discord_AuthorizationCodeChallenge_SetChallenge, str)
             }
         }
+    }
+
+    public var description: String {
+        "AuthorizationCodeChallenge(method: \(method), challenge: \(challenge))"
     }
 }

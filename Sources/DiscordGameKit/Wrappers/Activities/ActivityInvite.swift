@@ -10,7 +10,7 @@
 /// When one user invites another to join their game on Discord, it will send a message to
 /// that user. The SDK will parse those messages for you automatically, and this struct contains all
 /// of the relevant invite information which is needed to later accept that invite.
-public struct ActivityInvite: DiscordObject, Sendable {
+public struct ActivityInvite: DiscordObject, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_ActivityInvite>
     init(storage: DiscordStorage<Discord_ActivityInvite>) {
         self.storage = storage
@@ -133,5 +133,9 @@ public struct ActivityInvite: DiscordObject, Sendable {
                 Discord_ActivityInvite_SetIsValid(&raw, newValue)
             }
         }
+    }
+    
+    public var description: String {
+        "ActivityInvite(senderId: \(senderId), channelId: \(channelId), messageId: \(messageId), type: \(type), applicationId: \(applicationId), parentApplicationId: \(parentApplicationId), partyId: \(partyId), sessionId: \(sessionId), isValid: \(isValid))"
     }
 }

@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Arguments to ``DiscordClient/getTokenFromDevice(args:_:)``
-public struct DeviceAuthorizationArgs: DiscordObject {
+public struct DeviceAuthorizationArgs: DiscordObject, CustomStringConvertible {
     var storage: DiscordStorage<Discord_DeviceAuthorizationArgs>
     init(storage: DiscordStorage<Discord_DeviceAuthorizationArgs>) {
         self.storage = storage
@@ -53,5 +53,9 @@ public struct DeviceAuthorizationArgs: DiscordObject {
                 usingLock(Discord_DeviceAuthorizationArgs_SetScopes, str)
             }
         }
+    }
+
+    public var description: String {
+        "DeviceAuthorizationArgs(clientId: \(clientId), scopes: \(scopes))"
     }
 }

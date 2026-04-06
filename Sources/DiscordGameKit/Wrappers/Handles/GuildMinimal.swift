@@ -9,7 +9,7 @@
 
 /// Represents a guild (also knowns as a Discord server), that the current user is a member
 /// of, that contains channels that can be linked to a lobby.
-public struct GuildMinimal: DiscordObject, Identifiable, Sendable {
+public struct GuildMinimal: DiscordObject, Identifiable, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_GuildMinimal>
     init(storage: DiscordStorage<Discord_GuildMinimal>) {
         self.storage = storage
@@ -43,5 +43,9 @@ public struct GuildMinimal: DiscordObject, Identifiable, Sendable {
                 usingLock(Discord_GuildMinimal_SetName, str)
             }
         }
+    }
+
+    public var description: String {
+        "GuildMinimal(id: \(id), name: \(name))"
     }
 }

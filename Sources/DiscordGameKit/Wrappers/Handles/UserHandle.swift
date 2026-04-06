@@ -17,7 +17,7 @@
 /// having to re-create them. If the SDK instance is destroyed, but you still have a reference to a
 /// handle object, note that it will return the default value for all method calls (ie an empty
 /// string for methods that return a string).
-public struct UserHandle: DiscordObject, Identifiable, Sendable {
+public struct UserHandle: DiscordObject, Identifiable, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_UserHandle>
     init(storage: DiscordStorage<Discord_UserHandle>) {
         self.storage = storage
@@ -142,5 +142,9 @@ public struct UserHandle: DiscordObject, Identifiable, Sendable {
             Discord_UserHandle_Username(&raw, &ds)
             return String(discordOwned: ds)
         }
+    }
+
+    public var description: String {
+        "UserHandle(id: \(id), username: \(username), displayName: \(displayName), globalName: \(globalName, default: "N/A"), avatar: \(avatar, default: "N/A"), isProvisional: \(isProvisional), status: \(status), gameActivity: \(gameActivity, default: "N/A"), discordRelationshipType: \(relationship.discordRelationshipType), gameRelationshipType: \(relationship.gameRelationshipType), userApplicationProfiles: \(userApplicationProfiles))"
     }
 }

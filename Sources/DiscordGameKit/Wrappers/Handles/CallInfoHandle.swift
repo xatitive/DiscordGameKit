@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Convenience class that represents the state of a single Discord call in a lobby.
-public struct CallInfoHandle: DiscordObject, Sendable {
+public struct CallInfoHandle: DiscordObject, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_CallInfoHandle>
     init(storage: DiscordStorage<Discord_CallInfoHandle>) {
         self.storage = storage
@@ -42,5 +42,9 @@ public struct CallInfoHandle: DiscordObject, Sendable {
             }
             return VoiceStateHandle(takingOwnership: handle)
         }
+    }
+
+    public var description: String {
+        "CallInfoHandle(channelId: \(channelId), guildId: \(guildId), participants: \(participants))"
     }
 }

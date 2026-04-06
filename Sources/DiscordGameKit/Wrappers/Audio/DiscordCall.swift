@@ -145,7 +145,7 @@ public final class DiscordCall: DiscordObject {
     internal var persistent = PersistentCallbacks()
 }
 
-extension DiscordCall {
+extension DiscordCall: CustomStringConvertible {
     struct PersistentCallbacks {
         var voiceStateChanged = CallbackBox<VoiceStateChanged>()
         var participantChanged = CallbackBox<ParticipantChanged>()
@@ -156,5 +156,9 @@ extension DiscordCall {
     func setCallback<T>(_ cb: T, to kp: WritableKeyPath<PersistentCallbacks, CallbackBox<T>>) -> UnsafeMutableRawPointer {
         persistent[keyPath: kp].callback = cb
         return persistent[keyPath: kp].unretainedOpaqueValue()
+    }
+    
+    public var description: String {
+        "DiscordCall(status: \(status), channel: \(channelId), guild: \(guildId), mute: \(selfMute), deaf: \(selfDeaf), pttActive: \(pttActive), pttDelay: \(pttReleaseDelay), participants: \(participants))"
     }
 }

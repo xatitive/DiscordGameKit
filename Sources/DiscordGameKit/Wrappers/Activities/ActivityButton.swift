@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// See ``Activity``
-public struct ActivityButton: DiscordObject {
+public struct ActivityButton: DiscordObject, CustomStringConvertible {
     var storage: DiscordStorage<Discord_ActivityButton>
     init(storage: DiscordStorage<Discord_ActivityButton>) {
         self.storage = storage
@@ -54,5 +54,9 @@ public struct ActivityButton: DiscordObject {
                 }
             }
         }
+    }
+
+    public var description: String {
+        "ActivityButton(label: \(label), url: \(url))"
     }
 }

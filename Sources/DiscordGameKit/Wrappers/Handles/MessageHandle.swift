@@ -62,7 +62,7 @@ import Foundation
 /// having to re-create them. If the SDK instance is destroyed, but you still have a reference to a
 /// handle object, note that it will return the default value for all method calls (ie an empty
 /// string for methods that return a string).
-public struct MessageHandle: DiscordObject, Identifiable, Sendable {
+public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_MessageHandle>
     init(storage: DiscordStorage<Discord_MessageHandle>) {
         self.storage = storage
@@ -233,5 +233,9 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable {
     /// The timestamp in millis since the epoch when the message was sent.
     public var sentTimestamp: Date {
         Date(timeIntervalSince1970: TimeInterval(usingLock(Discord_MessageHandle_SentTimestamp)) / 1000)
+    }
+
+    public var description: String {
+        "MessageHandle(id: \(id), authorId: \(authorId), authorHandleId: \(author?.id, default: "N/A"), channelId: \(channelId), channelHandleId: \(channel?.id, default: "N/A"), lobbyId: \(lobby?.id, default: "N/A"), recipientId: \(recipientId), recipientHandleId: \(recipient?.id, default: "N/A"), applicationId: \(applicationId, default: "N/A"), disclosureType: \(disclosureType, default: "N/A"), sentFromGame: \(sentFromGame), sentTimestamp: \(sentTimestamp), editedTimestamp: \(editedTimestamp, default: "N/A"), content: \(content), rawContent: \(rawContent), additionalContent: \(additionalContent, default: "N/A"), metadata: \(metadata), moderationMetadata: \(moderationMetadata))"
     }
 }

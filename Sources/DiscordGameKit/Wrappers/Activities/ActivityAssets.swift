@@ -21,7 +21,7 @@
 /// See https://discord.com/developers/docs/rich-presence/overview#adding-custom-art-assets
 /// for more information on using custom art assets, as well as for visual
 /// examples of what each field does.
-public struct ActivityAssets: DiscordObject {
+public struct ActivityAssets: DiscordObject, CustomStringConvertible {
     var storage: DiscordStorage<Discord_ActivityAssets>
     init(storage: DiscordStorage<Discord_ActivityAssets>) {
         self.storage = storage
@@ -221,5 +221,9 @@ public struct ActivityAssets: DiscordObject {
                 }
             }
         }
+    }
+
+    public var description: String {
+        "ActivityAssets(largeImage: \(largeImage ?? "N/A"), largeText: \(largeText ?? "N/A"), largeUrl: \(largeUrl ?? "N/A"), smallImage: \(smallImage ?? "N/A"), smallText: \(smallText ?? "N/A"), smallUrl: \(smallUrl ?? "N/A"), inviteCoverImage: \(inviteCoverImage ?? "N/A"))"
     }
 }

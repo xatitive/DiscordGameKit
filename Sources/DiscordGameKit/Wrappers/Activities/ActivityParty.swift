@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// See ``Activity/party``
-public struct ActivityParty: DiscordObject, Identifiable {
+public struct ActivityParty: DiscordObject, Identifiable, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_ActivityParty>
     init(storage: DiscordStorage<Discord_ActivityParty>) {
         self.storage = storage
@@ -72,5 +72,9 @@ public struct ActivityParty: DiscordObject, Identifiable {
                 Discord_ActivityParty_SetPrivacy(&raw, newValue.discordValue)
             }
         }
+    }
+    
+    public var description: String {
+        "ActivityParty(id: \(id), currentSize: \(currentSize), maxSize: \(maxSize), privacy: \(privacy))"
     }
 }

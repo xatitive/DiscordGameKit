@@ -9,7 +9,7 @@
 import Foundation
 
 /// See ``Activity/timestamps``
-public struct ActivityTimestamps: DiscordObject {
+public struct ActivityTimestamps: DiscordObject, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_ActivityTimestamps>
     init(storage: DiscordStorage<Discord_ActivityTimestamps>) {
         self.storage = storage
@@ -59,4 +59,7 @@ public struct ActivityTimestamps: DiscordObject {
         }
     }
     
+    public var description: String {
+        "ActivityTimestamps(start: \(start, default: "N/A"), end: \(end, default: "N/A"))"
+    }
 }

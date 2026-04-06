@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Struct that stores information about the channel that a lobby is linked to.
-public struct LinkedChannel: DiscordObject, Sendable {
+public struct LinkedChannel: DiscordObject, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_LinkedChannel>
     init(storage: DiscordStorage<Discord_LinkedChannel>) {
         self.storage = storage
@@ -47,5 +47,9 @@ public struct LinkedChannel: DiscordObject, Sendable {
             ensureUnique()
             usingLock(Discord_LinkedChannel_SetGuildId, newValue)
         }
+    }
+
+    public var description: String {
+        "LinkedChannel(id: \(id), name: \(name), guildId: \(guildId))"
     }
 }

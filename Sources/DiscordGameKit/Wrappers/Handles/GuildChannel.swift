@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Represents a channel in a guild that the current user is a member of and may be able to be linked to a lobby.
-public struct GuildChannel: DiscordObject, Identifiable, Sendable {
+public struct GuildChannel: DiscordObject, Identifiable, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_GuildChannel>
     init(storage: DiscordStorage<Discord_GuildChannel>) {
         self.storage = storage
@@ -149,5 +149,9 @@ public struct GuildChannel: DiscordObject, Identifiable, Sendable {
                 }
             }
         }
+    }
+
+    public var description: String {
+        "GuildChannel(id: \(id), name: \(name), type: \(type), position: \(position), parentId: \(parentId, default: "N/A"), isLinkable: \(isLinkable), isViewableAndWriteableByAllMembers: \(isViewableAndWriteableByAllMembers), linkedLobby: \(linkedLobby, default: "N/A"))"
     }
 }

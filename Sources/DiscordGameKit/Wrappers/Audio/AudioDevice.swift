@@ -55,6 +55,9 @@ public struct AudioDevice: DiscordObject, Identifiable, Sendable {
         set { usingLock(Discord_AudioDevice_SetIsDefault, newValue) }
     }
     
+    public var description: String {
+        "AudioDevice(id: \(id), name: \(name))"
+    }
 }
 
 extension AudioDevice: Equatable {

@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Arguments to ``DiscordClient/authorize(with:_:)``
-public struct AuthorizationArgs: DiscordObject, Sendable {
+public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_AuthorizationArgs>
     init(storage: DiscordStorage<Discord_AuthorizationArgs>) {
         self.storage = storage
@@ -188,5 +188,9 @@ public struct AuthorizationArgs: DiscordObject, Sendable {
                 usingLock(Discord_AuthorizationArgs_SetCustomSchemeParam, ptr)
             }
         }
+    }
+
+    public var description: String {
+        "AuthorizationArgs(clientId: \(clientId), scopes: \(scopes), state: \(state, default: "N/A"), nonce: \(nonce, default: "N/A"), codeChallenge: \(codeChallenge, default: "N/A"), integrationType: \(integrationType, default: "N/A"), customSchemeParam: \(customSchemeParam, default: "N/A"))"
     }
 }

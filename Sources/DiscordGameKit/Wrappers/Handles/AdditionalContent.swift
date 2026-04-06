@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Contains information about non-text content in a message that likely cannot be rendered in game such as images, videos, embeds, polls, and more.
-public struct AdditionalContent: DiscordObject, Sendable {
+public struct AdditionalContent: DiscordObject, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_AdditionalContent>
     init(storage: DiscordStorage<Discord_AdditionalContent>) {
         self.storage = storage
@@ -61,6 +61,10 @@ public struct AdditionalContent: DiscordObject, Sendable {
             ensureUnique()
             usingLock(Discord_AdditionalContent_SetCount, newValue)
         }
+    }
+
+    public var description: String {
+        "AdditionalContent(type: \(type), title: \(title, default: "N/A"), count: \(count))"
     }
 }
 

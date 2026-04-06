@@ -16,7 +16,7 @@
 /// having to re-create them. If the SDK instance is destroyed, but you still have a reference to a
 /// handle object, note that it will return the default value for all method calls (ie an empty
 /// string for methods that return a string).
-public struct ChannelHandle: DiscordObject, Identifiable, Sendable {
+public struct ChannelHandle: DiscordObject, Identifiable, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_ChannelHandle>
     init(storage: DiscordStorage<Discord_ChannelHandle>) {
         self.storage = storage
@@ -50,5 +50,9 @@ public struct ChannelHandle: DiscordObject, Identifiable, Sendable {
     /// Type of channel.
     public var type: ChannelType {
         storage.withLock { Discord_ChannelHandle_Type(&$0).swiftValue }
+    }
+
+    public var description: String {
+        "ChannelHandle(id: \(id), name: \(name), recipients: \(recipients), type: \(type))"
     }
 }

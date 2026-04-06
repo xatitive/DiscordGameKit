@@ -189,7 +189,7 @@
 /// });
 /// \endcode
 ///
-public struct Activity: DiscordObject {
+public struct Activity: DiscordObject, CustomStringConvertible {
     var storage: DiscordStorage<Discord_Activity>
     init(storage: DiscordStorage<Discord_Activity>) {
         self.storage = storage
@@ -567,6 +567,10 @@ public struct Activity: DiscordObject {
             Discord_Activity_GetButtons(&raw, &span)
             return span.converting()
         }
+    }
+
+    public var description: String {
+        "Activity(name: \(name), type: \(type), supportedPlatform: \(supportedPlatform), statusDisplay: \(statusDisplay, default: "N/A"), state: \(state, default: "N/A"), stateUrl: \(stateUrl, default: "N/A"), details: \(details, default: "N/A"), detailsUrl: \(detailsUrl, default: "N/A"), applicationId: \(applicationId, default: "N/A"), parentApplicationId: \(parentApplicationId, default: "N/A"), assets: \(assets, default: "N/A"), timestamps: \(timestamps, default: "N/A"), party: \(party, default: "N/A"), secrets: \(secrets, default: "N/A"), buttons: \(buttons))"
     }
 }
 

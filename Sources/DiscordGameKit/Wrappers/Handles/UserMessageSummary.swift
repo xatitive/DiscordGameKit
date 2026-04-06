@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Represents a summary of a DM conversation with a user.
-public struct UserMessageSummary: DiscordObject, Sendable {
+public struct UserMessageSummary: DiscordObject, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_UserMessageSummary>
     init(storage: DiscordStorage<Discord_UserMessageSummary>) {
         self.storage = storage
@@ -22,5 +22,9 @@ public struct UserMessageSummary: DiscordObject, Sendable {
 	/// Returns the ID of the other user in the DM conversation.
     public var userId: UInt64 {
         usingLock(Discord_UserMessageSummary_UserId)
+    }
+
+    public var description: String {
+        "UserMessageSummary(lastMessageId: \(lastMessageId), userId: \(userId))"
     }
 }

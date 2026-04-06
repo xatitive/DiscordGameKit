@@ -33,4 +33,7 @@ public struct VoiceStateHandle: DiscordObject {
         usingLock(Discord_VoiceStateHandle_SelfMute)
     }
     
+    public var description: String {
+        "VoiceStateHandle(deaf: \(selfDeaf), mute: \(selfMute))"
+    }
 }

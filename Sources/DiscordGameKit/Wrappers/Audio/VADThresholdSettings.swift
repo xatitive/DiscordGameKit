@@ -29,4 +29,8 @@ public struct VADThresholdSettings: DiscordObject {
         get { usingLock(Discord_VADThresholdSettings_VadThreshold) }
         set { usingLock(Discord_VADThresholdSettings_SetVadThreshold, newValue) }
     }
+    
+    public var description: String {
+        "VADThreshold(automatic: \(automatic), threshold: \(threshold))"
+    }
 }

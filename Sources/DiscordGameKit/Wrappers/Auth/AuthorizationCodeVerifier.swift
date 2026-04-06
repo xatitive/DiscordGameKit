@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Struct that encapsulates both parts of the code verification flow.
-public struct AuthorizationCodeVerifier: DiscordObject, Sendable {
+public struct AuthorizationCodeVerifier: DiscordObject, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_AuthorizationCodeVerifier>
     init(storage: DiscordStorage<Discord_AuthorizationCodeVerifier>) {
         self.storage = storage
@@ -52,5 +52,9 @@ public struct AuthorizationCodeVerifier: DiscordObject, Sendable {
 				usingLock(Discord_AuthorizationCodeVerifier_SetVerifier, str)
             }
         }
+    }
+
+    public var description: String {
+        "AuthorizationCodeVerifier(challenge: \(challenge), verifier: \(verifier))"
     }
 }

@@ -16,7 +16,7 @@
 /// - The user is offline.
 ///
 /// The ``ClientResult/errorType`` field is used to to distinguish between the above types of failures
-public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable {
+public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable, Error {
     var storage: DiscordStorage<Discord_ClientResult>
     init(storage: DiscordStorage<Discord_ClientResult>) {
         self.storage = storage
@@ -26,7 +26,7 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable {
     ///
     /// See ``ErrorType`` for more information.
     public var errorType: ErrorType {
-        get { ErrorType(rawValue: Int32(usingLock(Discord_ClientResult_Type).rawValue))! }
+        get { usingLock(Discord_ClientResult_Type).swiftValue }
         set {
             ensureUnique()
             usingLock(Discord_ClientResult_SetType, newValue.discordValue)
@@ -37,7 +37,7 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable {
     ///
     /// This will only be set if the type of error is``ErrorType/httpError``.
     public var status: HttpStatusCode {
-        get { HttpStatusCode(rawValue: Int32(usingLock(Discord_ClientResult_Status).rawValue))! }
+        get { usingLock(Discord_ClientResult_Status).swiftValue }
         set {
             ensureUnique()
             usingLock(Discord_ClientResult_SetStatus, newValue.discordValue)
@@ -129,6 +129,22 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable {
             var ds = Discord_String()
             Discord_ClientResult_ToString(&raw, &ds)
             return String(discordOwned: ds)
+        }
+    }
+}
+
+extension Discord_ClientResult {
+    var successful: Bool {
+        mutating get {
+            Discord_ClientResult_Successful(&self)
+        }
+    }
+}
+
+extension UnsafeMutablePointer where Pointee == Discord_ClientResult {
+    var successful: Bool {
+        get {
+            pointee.successful
         }
     }
 }

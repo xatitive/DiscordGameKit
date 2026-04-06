@@ -65,12 +65,7 @@ public struct ActivityParty: DiscordObject, Identifiable {
     
     /// The privacy of the party.
     public var privacy: ActivityPartyPrivacy {
-        get {
-            storage.withLock { raw in
-                let privacy = Discord_ActivityParty_Privacy(&raw)
-                return ActivityPartyPrivacy(rawValue: Int32(privacy.rawValue)) ?? .private
-            }
-        }
+        get { storage.withLock { Discord_ActivityParty_Privacy(&$0).swiftValue } }
         set {
             ensureUnique()
             storage.withLock { raw in

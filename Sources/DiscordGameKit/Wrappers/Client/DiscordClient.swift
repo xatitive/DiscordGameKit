@@ -204,7 +204,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
 
     /// Current status of the client.
     public var status: ClientStatus {
-        ClientStatus(rawValue: Int32(usingLock(Discord_Client_GetStatus).rawValue))!
+        usingLock(Discord_Client_GetStatus).swiftValue
     }
 
     /// Returns a list of all lobbies that the user is a member of and that the SDK has loaded.

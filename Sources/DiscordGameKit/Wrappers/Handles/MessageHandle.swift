@@ -141,10 +141,7 @@ public struct MessageHandle: DiscordObject, Identifiable {
     public var disclosureType: DisclosureType? {
         storage.withLock { raw in
             var type = Discord_DisclosureTypes_forceint
-            guard Discord_MessageHandle_DisclosureType(&raw, &type) else {
-                return nil
-            }
-            return DisclosureType(rawValue: Int32(type.rawValue))
+            return Discord_MessageHandle_DisclosureType(&raw, &type) ? type.swiftValue : nil
         }
     }
 

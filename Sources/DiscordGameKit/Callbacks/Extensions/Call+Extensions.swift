@@ -37,8 +37,8 @@ let speakingStatusChangedTrampoline: Discord_Call_OnSpeakingStatusChanged = { id
 
 let callStatusChangedTrampoline: Discord_Call_OnStatusChanged = { status, error, errDetail, ctx in
     CallbackBox<DiscordCall.StatusChanged>.from(opaque: ctx)?(
-        CallStatus(rawValue: Int32(status.rawValue))!,
-        CallError(rawValue: Int32(status.rawValue))!,
+        status.swiftValue,
+        error.swiftValue,
         errDetail
     )
 }

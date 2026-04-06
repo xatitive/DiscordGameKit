@@ -20,7 +20,7 @@ public struct AuthorizationCodeChallenge: DiscordObject {
     
     /// The method used to generate the challenge. The only method used by the SDK is `sha256`.
     public var method: AuthenticationCodeChallengeMethod {
-        get { AuthenticationCodeChallengeMethod(rawValue: Int32(usingLock(Discord_AuthorizationCodeChallenge_Method).rawValue))! }
+        get { usingLock(Discord_AuthorizationCodeChallenge_Method).swiftValue }
         set {
             ensureUnique()
             usingLock(Discord_AuthorizationCodeChallenge_SetMethod, newValue.discordValue)

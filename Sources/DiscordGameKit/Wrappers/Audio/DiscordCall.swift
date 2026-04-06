@@ -18,7 +18,7 @@ public final class DiscordCall: DiscordObject {
     ///
     /// A call is not ready to be used until the status changes to "Connected".
     public var status: CallStatus {
-        CallStatus(rawValue: Int32(usingLock(Discord_Call_GetStatus).rawValue))!
+        usingLock(Discord_Call_GetStatus).swiftValue
     }
     
     /// Returns the ID of the lobby with which this call is associated.
@@ -51,7 +51,7 @@ public final class DiscordCall: DiscordObject {
     ///
     /// If using push to talk you should set ``pttActive`` to true whenever the user presses their configured push to talk key.
     public var audioMode: AudioModeType {
-        get { AudioModeType(rawValue: Int32(usingLock(Discord_Call_GetAudioMode).rawValue))! }
+        get { usingLock(Discord_Call_GetAudioMode).swiftValue }
         set { usingLock(Discord_Call_SetAudioMode, newValue.discordValue) }
     }
     

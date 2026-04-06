@@ -46,13 +46,7 @@ public struct GuildChannel: DiscordObject, Identifiable {
 
     /// Type of the channel.
     public var type: ChannelType {
-        get {
-            storage.withLock { raw in
-                ChannelType(
-                    rawValue: Int32(Discord_GuildChannel_Type(&raw).rawValue)
-                )!
-            }
-        }
+        get { storage.withLock { Discord_GuildChannel_Type(&$0).swiftValue } }
         set {
             ensureUnique()
             usingLock(Discord_GuildChannel_SetType, newValue.discordValue)

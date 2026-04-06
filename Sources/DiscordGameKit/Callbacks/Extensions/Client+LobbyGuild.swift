@@ -315,6 +315,7 @@ public extension DiscordClient {
     /// - Parameters:
     ///   - lobby: The identifier of the lobby.
     ///   - body: Callback invoked with the result of the unlink operation.
+    @available(*, renamed: "unlinkChannelFromLobby(lobby:)")
     func unlinkChannelFromLobby(
         lobby: UInt64,
         _ body: @escaping LinkOrUnlinkChannelCallback

@@ -149,6 +149,7 @@ extension DiscordClient {
     
     /// If the Discord app is running on the user's computer and the SDK establishes a
     /// connection to it, this function will return the user that is currently logged in to the Discord app.
+    @available(*, renamed: "clientConnectedUser(for:)")
     public func clientConnectedUser(for application: UInt64, _ body: @escaping GetDiscordClientConnectedUserCallback) {
         let cb = CallbackBox(body)
         usingLock(

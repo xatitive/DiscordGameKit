@@ -211,6 +211,7 @@ public extension DiscordClient {
     /// cannot be set and will be overwritten by the SDK. See
     /// https://discord.com/developers/docs/rich-presence/using-with-the-game-sdk#partial-activity-struct
     /// for more information.
+    @available(*, renamed: "updateRichPresence(to:)")
     func updateRichPresence(
         to activity: Activity,
         _ body: @escaping UpdateRichPresenceCallback

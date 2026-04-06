@@ -38,8 +38,8 @@ let deviceChangeTrampoline: Discord_Client_DeviceChangeCallback = { i, o, ctx in
 }
 
 let setInputDeviceTrampoline: Discord_Client_SetInputDeviceCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.SetAudioDeviceCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.SetAudioDeviceCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let noAudioTrampoline: Discord_Client_NoAudioInputCallback = { detected, ctx in
@@ -47,8 +47,8 @@ let noAudioTrampoline: Discord_Client_NoAudioInputCallback = { detected, ctx in
 }
 
 let setOutputDeviceTrampoline: Discord_Client_SetOutputDeviceCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.SetAudioDeviceCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.SetAudioDeviceCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let voiceParticipantChangedTrampoline: Discord_Client_VoiceParticipantChangedCallback = { id1, id2, idk, ctx in
@@ -76,44 +76,36 @@ let userAudioRCapturedTrampoline: Discord_Client_UserAudioCapturedCallback = { d
 }
 
 let authorizationTrampoline: Discord_Client_AuthorizationCallback = { result, code, uri, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.AuthorizationCallback>.from(opaque: ctx)?(
-        result,
-        String(discordOwned: code),
-        String(discordOwned: uri),
-    )
+    guard let cb = CallbackBox<DiscordClient.AuthorizationCallback>.from(opaque: ctx) else { return }
+    clientResultHelper((code.toString(), uri.toString()), result, cb)
 }
 
 let exchangeChildTokenTrampoline: Discord_Client_ExchangeChildTokenCallback = { result, token, tokType, expiry, scopes, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.ExchangeChildTokenCallback>.from(opaque: ctx)?(
-        result,
-        String(discordOwned: token),
-        AuthorizationTokenType(rawValue: Int32(tokType.rawValue))!,
-        expiry,
-        String(discordOwned: scopes)
+    guard let cb = CallbackBox<DiscordClient.ExchangeChildTokenCallback>.from(opaque: ctx) else { return }
+    let exchange = DiscordClient.TokenExchange(
+        accessToken: token.toString(),
+        tokenType: tokType.swiftValue,
+        expiresIn: expiry,
+        scopes: scopes.toString()
     )
+    clientResultHelper(exchange, result, cb)
 }
 
 let fetchCurrentUserTrampoline: Discord_Client_FetchCurrentUserCallback = { result, id, name, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.FetchCurrentUserCallback>.from(opaque: ctx)?(
-        result,
-        id,
-        String(discordOwned: name)
-    )
+    guard let cb = CallbackBox<DiscordClient.FetchCurrentUserCallback>.from(opaque: ctx) else { return }
+    clientResultHelper((id, name.toString()), result, cb)
 }
 
 let tokenExchangeTrampoline: Discord_Client_TokenExchangeCallback = { result, accessToken, refreshToken, tokType, expiry, scopes, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.TokenExchangeCallback>.from(opaque: ctx)?(
-        result,
-        accessToken.toString(),
-        refreshToken.toString(),
-        AuthorizationTokenType(rawValue: Int32(tokType.rawValue))!,
-        expiry,
-        scopes.toString()
+    guard let cb = CallbackBox<DiscordClient.TokenExchangeCallback>.from(opaque: ctx) else { return }
+    let exchange = DiscordClient.TokenExchange(
+        accessToken: accessToken.toString(),
+        refreshToken: refreshToken.toString(),
+        tokenType: tokType.swiftValue,
+        expiresIn: expiry,
+        scopes: scopes.toString()
     )
+    clientResultHelper(exchange, result, cb)
 }
 
 let authRequestTrampoline: Discord_Client_AuthorizeRequestCallback = { ctx in
@@ -121,8 +113,8 @@ let authRequestTrampoline: Discord_Client_AuthorizeRequestCallback = { ctx in
 }
 
 let revokeTokenTrampoline: Discord_Client_RevokeTokenCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.RevokeTokenCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.RevokeTokenCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let authDeviceScreenClosedTrampoline: Discord_Client_AuthorizeDeviceScreenClosedCallback = { ctx in
@@ -134,49 +126,43 @@ let tokenExpirationTrampoline: Discord_Client_TokenExpirationCallback = { ctx in
 }
 
 let unmergeIntoProvisionalAccountTrampoline: Discord_Client_UnmergeIntoProvisionalAccountCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.UnmergeIntoProvisionalAccountCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.UnmergeIntoProvisionalAccountCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let updateProvisionalAccountDisplayNameTrampoline: Discord_Client_UpdateProvisionalAccountDisplayNameCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.UpdateProvisionalAccountDisplayNameCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.UpdateProvisionalAccountDisplayNameCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let updateTokenTrampoline: Discord_Client_UpdateTokenCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.UpdateTokenCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.UpdateTokenCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let deleteUserMessageTrampoline: Discord_Client_DeleteUserMessageCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.DeleteUserMessageCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.DeleteUserMessageCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let editUserMessageTrampoline: Discord_Client_EditUserMessageCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.EditUserMessageCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.EditUserMessageCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let sendUserMessageTrampoline: Discord_Client_SendUserMessageCallback = { result, id, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.SendUserMessageCallback>.from(opaque: ctx)?(result, id)
+    guard let cb = CallbackBox<DiscordClient.SendUserMessageCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(id, result, cb)
 }
 
 let userMessagesLimitedTrampoline: Discord_Client_UserMessagesWithLimitCallback = { result, span, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.UserMessagesWithLimitCallback>.from(opaque: ctx)?(
-        result,
-        span.converting()
-    )
+    guard let cb = CallbackBox<DiscordClient.UserMessagesWithLimitCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(span.converting(), result, cb)
 }
 
 let userMessageSummariesTrampoline: Discord_Client_UserMessageSummariesCallback = { result, span, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.UserMessageSummariesCallback>.from(opaque: ctx)?(
-        result,
-        span.converting()
-    )
+    guard let cb = CallbackBox<DiscordClient.UserMessageSummariesCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(span.converting(), result, cb)
 }
 
 let provisionalUserMergeTrampoline: Discord_Client_ProvisionalUserMergeRequiredCallback = { ctx in
@@ -184,16 +170,13 @@ let provisionalUserMergeTrampoline: Discord_Client_ProvisionalUserMergeRequiredC
 }
 
 let openMessageDiscordTrampoline: Discord_Client_OpenMessageInDiscordCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.ClientResultCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.ClientResultCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let lobbyMessagesTrampoline: Discord_Client_GetLobbyMessagesCallback = { result, span, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.GetLobbyMessagesCallback>.from(opaque: ctx)?(
-        result,
-        span.converting()
-    )
+    guard let cb = CallbackBox<DiscordClient.GetLobbyMessagesCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(span.converting(), result, cb)
 }
 
 let messageCreatedTrampoline: Discord_Client_MessageCreatedCallback = { id, ctx in
@@ -210,61 +193,50 @@ let messageUpdatedTrampoline: Discord_Client_MessageUpdatedCallback = { id, ctx 
 
 let logTrampoline: Discord_Client_LogCallback = { msg, sev, ctx in
     CallbackBox<DiscordClient.LogCallback>.from(opaque: ctx)?(
-        String(discordOwned: msg),
-        LoggingSeverity(rawValue: Int32(sev.rawValue))!
+        msg.toString(),
+        sev.swiftValue
     )
 }
 
 let openConnectedGameSettingsTrampoline: Discord_Client_OpenConnectedGamesSettingsInDiscordCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.OpenConnectedGamesSettingsInDiscordCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.OpenConnectedGamesSettingsInDiscordCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let statusChangedTrampoline: Discord_Client_OnStatusChanged = { cStatus, cError, details, ctx in
-    CallbackBox<DiscordClient.StatusChangedCallback>.from(opaque: ctx)?(
-        ClientStatus(rawValue: .init(cStatus.rawValue))!,
-        ClientError(rawValue: .init(cError.rawValue))!,
-        details
-    )
+    guard let cb = CallbackBox<DiscordClient.StatusChangedCallback>.from(opaque: ctx) else { return }
+    if cError != Discord_Client_Error_None { cb(.failure(cError.swiftValue)) }
+    cb(.success(cStatus.swiftValue))
 }
 
 let createOrJoinLobbyTrampoline: Discord_Client_CreateOrJoinLobbyCallback = { result, id, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.CreateOrJoinLobbyCallback>.from(opaque: ctx)?(result, id)
+    guard let cb = CallbackBox<DiscordClient.CreateOrJoinLobbyCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(id, result, cb)
 }
 
 let guildChannelsTrampoline: Discord_Client_GetGuildChannelsCallback = { result, span, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.GetGuildChannelsCallback>.from(opaque: ctx)?(
-        result,
-        span.converting()
-    )
+    guard let cb = CallbackBox<DiscordClient.GetGuildChannelsCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(span.converting(), result, cb)
 }
 
 let userGuildsTrampoline: Discord_Client_GetUserGuildsCallback = { result, span, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.GetUserGuildsCallback>.from(opaque: ctx)?(
-        result,
-        span.converting()
-    )
+    guard let cb = CallbackBox<DiscordClient.GetUserGuildsCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(span.converting(), result, cb)
 }
 
 let joinLinkedLobbyTrampoline: Discord_Client_JoinLinkedLobbyGuildCallback = { result, invite, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.JoinLinkedLobbyGuildCallback>.from(opaque: ctx)?(
-        result,
-        invite.toString()
-    )
+    guard let cb = CallbackBox<DiscordClient.JoinLinkedLobbyGuildCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(invite.toString(), result, cb)
 }
 
 let leaveLobbyTrampoline: Discord_Client_LeaveLobbyCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.LeaveLobbyCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.LeaveLobbyCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let linkUnlinkChannelTrampoline: Discord_Client_LinkOrUnlinkChannelCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.LinkOrUnlinkChannelCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.LinkOrUnlinkChannelCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let lobbyCreatedTrampoline: Discord_Client_LobbyCreatedCallback = { id, ctx in
@@ -296,16 +268,13 @@ let appInstalledTrampoline: Discord_Client_IsDiscordAppInstalledCallback = { ins
 }
 
 let acceptActivityInviteTrampoline: Discord_Client_AcceptActivityInviteCallback = { result, secret, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.AcceptActivityInviteCallback>.from(opaque: ctx)?(
-        result,
-        secret.toString()
-    )
+    guard let cb = CallbackBox<DiscordClient.AcceptActivityInviteCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(secret.toString(), result, cb)
 }
 
 let sendActivityInviteTrampoline: Discord_Client_SendActivityInviteCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.SendActivityInviteCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.SendActivityInviteCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let activityInviteTrampoline: Discord_Client_ActivityInviteCallback = { invite, ctx in
@@ -327,23 +296,23 @@ let activityJoinApplicationTrampoline: Discord_Client_ActivityJoinWithApplicatio
 }
 
 let updateStatusTrampoline: Discord_Client_UpdateStatusCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.UpdateStatusCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.UpdateStatusCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let updateRichPresenceTrampoline: Discord_Client_UpdateRichPresenceCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.UpdateStatusCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.UpdateRichPresenceCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let updateRelationshipTrampoline: Discord_Client_UpdateRelationshipCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.UpdateRelationshipCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.UpdateRelationshipCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let sendFriendReqTrampoline: Discord_Client_SendFriendRequestCallback = { result, ctx in
-    guard let result: ClientResult = convertRawObject(result) else { return }
-    CallbackBox<DiscordClient.SendFriendRequestCallback>.from(opaque: ctx)?(result)
+    guard let cb = CallbackBox<DiscordClient.SendFriendRequestCallback>.from(opaque: ctx) else { return }
+    clientResultHelper(result, cb)
 }
 
 let relationshipCreatedTrampoline: Discord_Client_RelationshipCreatedCallback = { id, discordRelated, ctx in
@@ -362,10 +331,10 @@ let relationshipDeletedTrampoline: Discord_Client_RelationshipDeletedCallback = 
 
 let connectedClientTrampoline: Discord_Client_GetDiscordClientConnectedUserCallback = { result, handle, ctx in
     guard
-        let result: ClientResult = convertRawObject(result),
+        let cb = CallbackBox<DiscordClient.GetDiscordClientConnectedUserCallback>.from(opaque: ctx),
         let handle: UserHandle = convertRawObject(handle)
     else { return }
-    CallbackBox<DiscordClient.GetDiscordClientConnectedUserCallback>.from(opaque: ctx)?(result, handle)
+    clientResultHelper(handle, result, cb)
 }
 
 let relationshipGroupUpdate: Discord_Client_RelationshipGroupsUpdatedCallback = { id, ctx in
@@ -374,6 +343,24 @@ let relationshipGroupUpdate: Discord_Client_RelationshipGroupsUpdatedCallback = 
 
 let userUpdatedTrampoline: Discord_Client_UserUpdatedCallback = { id, ctx in
     CallbackBox<DiscordClient.UserUpdatedCallback>.from(opaque: ctx)?(id)
+}
+
+
+func clientResultHelper(
+    _ rawClient: UnsafeMutablePointer<Discord_ClientResult>?,
+    _ cb: @escaping (Result<Void, ClientResult>) -> Void
+) {
+    guard let clientResult: ClientResult = convertRawObject(rawClient) else { return }
+    clientResult.isSuccessful ? cb(.success(())) : cb(.failure(clientResult))
+}
+
+func clientResultHelper<Input>(
+    _ input: Input,
+    _ rawClient: UnsafeMutablePointer<Discord_ClientResult>?,
+    _ cb: @escaping (Result<Input, ClientResult>) -> Void
+) {
+    guard let clientResult: ClientResult = convertRawObject(rawClient) else { return }
+    clientResult.isSuccessful ? cb(.success(input)) : cb(.failure(clientResult))
 }
 
 

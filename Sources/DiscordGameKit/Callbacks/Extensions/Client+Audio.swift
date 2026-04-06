@@ -160,24 +160,22 @@ extension DiscordClient {
     	received: @escaping UserAudioReceivedCallback,
         captured: @escaping UserAudioCapturedCallback
     ) -> DiscordCall? {
-        let (rec, cap) = (setCallback(received, to: \.audioReceived), setCallback(captured,to: \.audioCaptured))
+        let (rec, cap) = (CallbackBox(received), CallbackBox(captured))
         
-        let call = storage.withLock { raw -> DiscordCall? in
+        return storage.withLock { raw -> DiscordCall? in
             var call = Discord_Call()
             return Discord_Client_StartCallWithAudioCallbacks(
                 &raw,
                 id,
                 userAudioReceivedTrampoline,
-                nil,
-                rec,
+                freeBox,
+                rec.retainedOpaqueValue(),
                 userAudioRCapturedTrampoline,
-                nil,
-                cap,
+                freeBox,
+                cap.retainedOpaqueValue(),
                 &call
             ) ? DiscordCall(takingOwnership: call) : nil
-        } // TODO: Check this?
-        
-        return call
+        }
     }
     
     /// Threshold that can be set to indicate when no audio is being received by the user's mic.
@@ -196,5 +194,4 @@ extension DiscordClient {
             ptr
         )
     }
-    
 }

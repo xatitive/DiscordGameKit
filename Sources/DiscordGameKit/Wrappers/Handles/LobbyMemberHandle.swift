@@ -23,7 +23,7 @@
 /// having to re-create them. If the SDK instance is destroyed, but you still have a reference to a
 /// handle object, note that it will return the default value for all method calls (ie an empty
 /// string for methods that return a string).
-public struct LobbyMemberHandle: DiscordObject {
+public struct LobbyMemberHandle: DiscordObject, Sendable {
     var storage: DiscordStorage<Discord_LobbyMemberHandle>
     init(storage: DiscordStorage<Discord_LobbyMemberHandle>) {
         self.storage = storage

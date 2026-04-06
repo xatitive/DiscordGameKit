@@ -62,7 +62,7 @@ import Foundation
 /// having to re-create them. If the SDK instance is destroyed, but you still have a reference to a
 /// handle object, note that it will return the default value for all method calls (ie an empty
 /// string for methods that return a string).
-public struct MessageHandle: DiscordObject, Identifiable {
+public struct MessageHandle: DiscordObject, Identifiable, Sendable {
     var storage: DiscordStorage<Discord_MessageHandle>
     init(storage: DiscordStorage<Discord_MessageHandle>) {
         self.storage = storage

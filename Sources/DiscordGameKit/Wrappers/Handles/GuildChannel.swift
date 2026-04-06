@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Represents a channel in a guild that the current user is a member of and may be able to be linked to a lobby.
-public struct GuildChannel: DiscordObject, Identifiable {
+public struct GuildChannel: DiscordObject, Identifiable, Sendable {
     var storage: DiscordStorage<Discord_GuildChannel>
     init(storage: DiscordStorage<Discord_GuildChannel>) {
         self.storage = storage

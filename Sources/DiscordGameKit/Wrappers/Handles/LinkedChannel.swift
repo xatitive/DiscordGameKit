@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Struct that stores information about the channel that a lobby is linked to.
-public struct LinkedChannel: DiscordObject {
+public struct LinkedChannel: DiscordObject, Sendable {
     var storage: DiscordStorage<Discord_LinkedChannel>
     init(storage: DiscordStorage<Discord_LinkedChannel>) {
         self.storage = storage

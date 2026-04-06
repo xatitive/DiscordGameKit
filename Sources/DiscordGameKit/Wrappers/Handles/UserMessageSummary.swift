@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Represents a summary of a DM conversation with a user.
-public struct UserMessageSummary: DiscordObject {
+public struct UserMessageSummary: DiscordObject, Sendable {
     var storage: DiscordStorage<Discord_UserMessageSummary>
     init(storage: DiscordStorage<Discord_UserMessageSummary>) {
         self.storage = storage

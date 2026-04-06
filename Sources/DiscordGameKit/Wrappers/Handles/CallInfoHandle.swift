@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Convenience class that represents the state of a single Discord call in a lobby.
-public struct CallInfoHandle: DiscordObject {
+public struct CallInfoHandle: DiscordObject, Sendable {
     var storage: DiscordStorage<Discord_CallInfoHandle>
     init(storage: DiscordStorage<Discord_CallInfoHandle>) {
         self.storage = storage

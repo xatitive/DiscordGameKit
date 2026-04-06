@@ -252,7 +252,7 @@ public struct Activity: DiscordObject {
 
     /// Controls which field is used for the user's status message
     ///
-    /// See the docs on the Activity struct for more info.
+    /// See the docs on the struct for more info.
     public var statusDisplay: StatusDisplayType? {
         get {
             storage.withLock { raw in
@@ -449,7 +449,7 @@ public struct Activity: DiscordObject {
         get {
             storage.withLock { activityRaw in 
                 var raw = Discord_ActivityAssets()
-                return Discord_Activity_Assets(&activityRaw, &raw) ? ActivityAssets(storage: DiscordStorage(takingOwnership: raw)) : nil
+                return Discord_Activity_Assets(&activityRaw, &raw) ? ActivityAssets(takingOwnership: raw) : ActivityAssets()
             }
         }
         _modify {
@@ -477,7 +477,7 @@ public struct Activity: DiscordObject {
         get {
             storage.withLock { activityRaw in
                 var raw = Discord_ActivityTimestamps()
-                return Discord_Activity_Timestamps(&activityRaw, &raw) ? ActivityTimestamps(storage: DiscordStorage(takingOwnership: raw)) : nil
+                return Discord_Activity_Timestamps(&activityRaw, &raw) ? ActivityTimestamps(takingOwnership: raw) : ActivityTimestamps()
             }
         }
         _modify {
@@ -503,7 +503,7 @@ public struct Activity: DiscordObject {
         get {
             storage.withLock { activityRaw in
                 var raw = Discord_ActivityParty()
-                return Discord_Activity_Party(&activityRaw, &raw) ? ActivityParty(storage: DiscordStorage(takingOwnership: raw)) : nil
+                return Discord_Activity_Party(&activityRaw, &raw) ? ActivityParty(takingOwnership: raw) : ActivityParty()
             }
         }
         _modify {
@@ -515,6 +515,7 @@ public struct Activity: DiscordObject {
                 usingLock(Discord_Activity_SetParty, nil)
                 return
             }
+            
             storage.withLock { activityRaw in
                 value.storage.withLock { partyRaw in
                     Discord_Activity_SetParty(&activityRaw, &partyRaw)
@@ -528,7 +529,7 @@ public struct Activity: DiscordObject {
         get {
             storage.withLock { activityRaw in
                 var raw = Discord_ActivitySecrets()
-                return Discord_Activity_Secrets(&activityRaw, &raw) ? ActivitySecrets(takingOwnership: raw) : nil
+                return Discord_Activity_Secrets(&activityRaw, &raw) ? ActivitySecrets(takingOwnership: raw) : ActivitySecrets()
             }
         }
         _modify {

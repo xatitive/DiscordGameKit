@@ -453,7 +453,7 @@ extension DiscordClient {
         usingLock(
             Discord_Client_RegisterAuthorizeRequestCallback,
             authRequestTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -494,7 +494,7 @@ extension DiscordClient {
         usingLock(
             Discord_Client_SetAuthorizeDeviceScreenClosedCallback,
             authDeviceScreenClosedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -516,7 +516,7 @@ extension DiscordClient {
         usingLock(
             Discord_Client_SetTokenExpirationCallback,
             tokenExpirationTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }

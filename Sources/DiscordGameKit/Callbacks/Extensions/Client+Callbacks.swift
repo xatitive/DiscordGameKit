@@ -31,7 +31,7 @@ extension DiscordClient {
             Discord_Client_AddLogCallback(
                 &raw,
                 logTrampoline,
-                freeBox,
+                nil,
                 ptr,
                 severity.discordValue
             )
@@ -56,7 +56,7 @@ extension DiscordClient {
             Discord_Client_AddVoiceLogCallback(
                 &raw,
                 logTrampoline,
-                freeBox,
+                nil,
                 ptr,
                 severity.discordValue
             )
@@ -72,7 +72,7 @@ extension DiscordClient {
         usingLock(
             Discord_Client_SetStatusChangedCallback,
             statusChangedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
         return self

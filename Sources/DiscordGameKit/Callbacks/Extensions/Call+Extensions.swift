@@ -57,7 +57,7 @@ public extension DiscordCall {
         usingLock(
             Discord_Call_SetOnVoiceStateChangedCallback,
             voiceStateTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -70,7 +70,7 @@ public extension DiscordCall {
         usingLock(
             Discord_Call_SetParticipantChangedCallback,
             participantChangedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -85,7 +85,7 @@ public extension DiscordCall {
         usingLock(
             Discord_Call_SetSpeakingStatusChangedCallback,
             speakingStatusChangedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -98,7 +98,7 @@ public extension DiscordCall {
         usingLock(
             Discord_Call_SetStatusChangedCallback,
             callStatusChangedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }

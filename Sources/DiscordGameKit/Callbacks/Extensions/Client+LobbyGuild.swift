@@ -349,7 +349,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetLobbyCreatedCallback,
             lobbyCreatedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -371,7 +371,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetLobbyDeletedCallback,
             lobbyDeletedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -386,7 +386,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetLobbyUpdatedCallback,
             lobbyUpdatedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -406,7 +406,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetLobbyMemberAddedCallback,
             lobbyMemberAddedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -427,7 +427,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetLobbyMemberRemovedCallback,
             lobbyMemberRemovedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -446,7 +446,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetLobbyMemberUpdatedCallback,
             lobbyMemberUpdatedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }

@@ -142,7 +142,7 @@ extension DiscordClient {
         usingLock(
             Discord_Client_SetDeviceChangeCallback,
             deviceChangeTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -210,7 +210,7 @@ extension DiscordClient {
         usingLock(
             Discord_Client_SetVoiceParticipantChangedCallback,
         	voiceParticipantChangedTrampoline,
-        	freeBox,
+        	nil,
         	cb
         )
     }
@@ -246,14 +246,14 @@ extension DiscordClient {
                 &raw,
                 id,
                 userAudioReceivedTrampoline,
-                freeBox,
+                nil,
                 rec,
                 userAudioRCapturedTrampoline,
-                freeBox,
+                nil,
                 cap,
                 &call
             ) ? DiscordCall(takingOwnership: call) : nil
-        }
+        } // TODO: Check this?
         
         return call
     }
@@ -270,7 +270,7 @@ extension DiscordClient {
         usingLock(
             Discord_Client_SetNoAudioInputCallback,
             noAudioTrampoline,
-        	freeBox,
+        	nil,
             ptr
         )
     }

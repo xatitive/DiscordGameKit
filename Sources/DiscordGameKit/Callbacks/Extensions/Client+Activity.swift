@@ -101,7 +101,7 @@ public extension DiscordClient {
                     &raw,
                     &inv,
                     sendActivityInviteTrampoline,
-                    freeBox(_:),
+                    freeBox,
                     cb.retainedOpaqueValue()
                 )
             }
@@ -122,7 +122,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetActivityInviteCreatedCallback,
             activityInviteTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -140,7 +140,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetActivityInviteUpdatedCallback,
             activityInviteTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -158,7 +158,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetActivityJoinCallback,
             activityJoinTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -175,7 +175,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetActivityJoinWithApplicationCallback,
             activityJoinApplicationTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }

@@ -29,7 +29,10 @@ let package = Package(
         ),
         .executableTarget(
             name: "DiscordGameRunner",
-            dependencies: ["DiscordGameKit"]
+            dependencies: ["DiscordGameKit"],
+            swiftSettings: [
+                .define("asyncCallbacks")
+            ]
         ),
         .binaryTarget(name: "discord_partner_sdk", path: "discord_partner_sdk.xcframework")
     ],

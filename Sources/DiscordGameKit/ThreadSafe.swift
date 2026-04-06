@@ -17,45 +17,76 @@ import Foundation
 /// by implementing the `_modify` accessor, which allows the same memory
 /// address to be modified serially when accessed from multiple threads.
 /// See: https://forums.swift.org/t/modify-accessors/31872
-@propertyWrapper struct ThreadSafe<T> {
+//@propertyWrapper struct ThreadSafe<T> {
+//
+//    private var _value: T
+//    private let lock = NSLock()
+//    private let queue: DispatchQueue
+//
+//    public var wrappedValue: T {
+//        get {
+//            queue.sync { _value }
+//        }
+//        _modify {
+//            lock.lock()
+//            var tmp: T = _value
+//
+//            defer {
+//                _value = tmp
+//                lock.unlock()
+//            }
+//
+//            yield &tmp
+//        }
+//    }
+//
+//    public var projectedValue: Self {
+//        get { self }
+//        set { self = newValue }
+//    }
+//
+//    mutating func withLock<R>(_ body: (inout T) throws -> R) rethrows -> R {
+//        lock.lock()
+//        defer { lock.unlock() }
+//        return try body(&_value)
+//    }
+//
+//    init(wrappedValue: T, queue: DispatchQueue? = nil) {
+//        self._value = wrappedValue
+//        self.queue =
+//            queue
+//            ?? DispatchQueue(label: "ThreadSafe \(String(typeName: T.self))")
+//    }
+//}
+
+@propertyWrapper final class ThreadSafe<T>: @unchecked Sendable {
 
     private var _value: T
-    private let lock = NSLock()
-    private let queue: DispatchQueue
+    private var _lock = os_unfair_lock()
 
     public var wrappedValue: T {
         get {
-            queue.sync { _value }
+            os_unfair_lock_lock(&_lock)
+            defer { os_unfair_lock_unlock(&_lock) }
+            return _value
         }
         _modify {
-            lock.lock()
-            var tmp: T = _value
-
-            defer {
-                _value = tmp
-                lock.unlock()
-            }
-
-            yield &tmp
+            os_unfair_lock_lock(&_lock)
+            defer { os_unfair_lock_unlock(&_lock) }
+            yield &_value
         }
     }
+    
+    public var projectedValue: ThreadSafe<T> { self }
 
-    public var projectedValue: Self {
-        get { self }
-        set { self = newValue }
-    }
-
-    mutating func withLock<R>(_ body: (inout T) throws -> R) rethrows -> R {
-        lock.lock()
-        defer { lock.unlock() }
+    func withLock<R>(_ body: (inout T) throws -> R) rethrows -> R {
+        os_unfair_lock_lock(&_lock)
+        defer { os_unfair_lock_unlock(&_lock) }
         return try body(&_value)
     }
 
-    init(wrappedValue: T, queue: DispatchQueue? = nil) {
+    init(wrappedValue: T) {
         self._value = wrappedValue
-        self.queue =
-            queue
-            ?? DispatchQueue(label: "ThreadSafe \(String(typeName: T.self))")
     }
 }
 

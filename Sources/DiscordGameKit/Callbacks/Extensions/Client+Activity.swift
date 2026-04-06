@@ -77,7 +77,14 @@ public extension DiscordClient {
         to id: UInt64,
         _ body: @escaping SendActivityInviteCallback
     ) {
-        
+        let cb = CallbackBox(body)
+        usingLock(
+            Discord_Client_SendActivityJoinRequest,
+            id,
+            sendActivityInviteTrampoline,
+            freeBox,
+            cb.retainedOpaqueValue()
+        )
     }
     
     /// When another user requests to join the current user's party, this function is called

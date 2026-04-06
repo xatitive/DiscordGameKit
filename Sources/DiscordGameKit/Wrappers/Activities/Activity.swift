@@ -7,6 +7,8 @@
 
 @_implementationOnly import discord_partner_sdk
 
+// TODO: fix optional value setting
+
 /// An Activity represents one "thing" a user is doing on Discord and is part of their rich
 /// presence.
 ///
@@ -202,11 +204,11 @@ public struct Activity: DiscordObject {
     /// This field defaults to the name of the current game.
     public var name: String {
         get {
-            var ds = Discord_String()
             storage.withLock { raw in
+                var ds = Discord_String()
                 Discord_Activity_Name(&raw, &ds)
+                return ds.toString()
             }
-            return String(discordOwned: ds)
         }
         set {
             ensureUnique()
@@ -222,13 +224,7 @@ public struct Activity: DiscordObject {
     ///
     /// This should almost always be set to ``ActivityType/playing``
     public var type: ActivityType {
-        get {
-            storage.withLock { raw in
-                ActivityType(
-                    rawValue: Int32(Discord_Activity_Type(&raw).rawValue)
-                )!
-            }
-        }
+        get { storage.withLock { Discord_Activity_Type(&$0).swiftValue } }
         set {
             ensureUnique()
             storage.withLock { raw in
@@ -242,15 +238,7 @@ public struct Activity: DiscordObject {
     /// For example if a game is available on both PC and Mobile, but PC users cannot join Mobile users and vice versa, this field can be
     /// used so that an activity only shows as joinable on Discord if the user is on the appropriate platform.
     public var supportedPlatform: ActivityGamePlatform {
-        get {
-            storage.withLock { raw in
-                ActivityGamePlatform(
-                    rawValue: Int32(
-                        Discord_Activity_SupportedPlatforms(&raw).rawValue
-                    )
-                )
-            }
-        }
+        get { storage.withLock { Discord_Activity_SupportedPlatforms(&$0).swiftValue } }
         set {
             ensureUnique()
             storage.withLock { raw in
@@ -267,13 +255,10 @@ public struct Activity: DiscordObject {
     /// See the docs on the Activity struct for more info.
     public var statusDisplay: StatusDisplayType? {
         get {
-            var v = Discord_StatusDisplayTypes_forceint
-            guard storage.withLock({ raw in
-                Discord_Activity_StatusDisplayType(&raw, &v)
-            }) else {
-                return nil
+            storage.withLock { raw in
+                var v = Discord_StatusDisplayTypes_forceint
+                return Discord_Activity_StatusDisplayType(&raw, &v) ? v.swiftValue : nil
             }
-            return StatusDisplayType(rawValue: Int32(v.rawValue))
         }
         _modify {
             ensureUnique()
@@ -297,11 +282,10 @@ public struct Activity: DiscordObject {
     /// If specified, must be a string between 2 and 128 characters.
     public var state: String? {
         get {
-            var ds = Discord_String()
-            guard storage.withLock({ raw in
-                Discord_Activity_State(&raw, &ds)
-            }) else { return nil }
-            return String(discordOwned: ds)
+            storage.withLock { raw in
+                var ds = Discord_String()
+                return Discord_Activity_State(&raw, &ds) ? ds.toString() : nil
+            }
         }
         _modify {
             ensureUnique()
@@ -322,22 +306,18 @@ public struct Activity: DiscordObject {
     /// If specified, must be a string between 2 and 256 characters.
     public var stateUrl: String? {
         get {
-            var ds = Discord_String()
-            guard storage.withLock({ raw in
-                Discord_Activity_StateUrl(&raw, &ds)
-            }) else {
-                return nil
+            storage.withLock { raw in
+                var ds = Discord_String()
+                return Discord_Activity_StateUrl(&raw, &ds) ? ds.toString() : nil
             }
-            return String(discordOwned: ds)
         }
         _modify {
             ensureUnique()
             var value = self.state
             yield &value
-            value?.withDiscordString { str in
-                var str = str
+            value?.withDiscordStringPointer { str in
                 storage.withLock { raw in
-                    Discord_Activity_SetStateUrl(&raw, &str)
+                    Discord_Activity_SetStateUrl(&raw, str)
                 }
             }
         }
@@ -349,13 +329,10 @@ public struct Activity: DiscordObject {
     /// If specified, must be a string between 2 and 128 characters.
     public var details: String? {
         get {
-            var ds = Discord_String()
-            guard storage.withLock({ raw in
-                Discord_Activity_Details(&raw, &ds)
-            }) else {
-                return nil
+            storage.withLock { raw in
+            	var ds = Discord_String()
+                return Discord_Activity_Details(&raw, &ds) ? ds.toString() : nil
             }
-            return String(discordOwned: ds)
         }
         _modify {
             ensureUnique()
@@ -376,13 +353,10 @@ public struct Activity: DiscordObject {
     /// If specified, must be a string between 2 and 256 characters.
     public var detailsUrl: String? {
         get {
-            var ds = Discord_String()
-            guard storage.withLock({ raw in
-                Discord_Activity_DetailsUrl(&raw, &ds)
-            }) else {
-                return nil
+            storage.withLock { raw in
+                var ds = Discord_String()
+                return Discord_Activity_DetailsUrl(&raw, &ds) ? ds.toString() : nil
             }
-            return String(discordOwned: ds)
         }
         _modify {
             ensureUnique()
@@ -402,13 +376,10 @@ public struct Activity: DiscordObject {
     /// This field cannot be set by the SDK, and will always be the application ID of the current game or a game from the same publisher.
     public var applicationId: UInt64? {
         get {
-            var v = UInt64(0)
-            guard storage.withLock({ raw in
-                Discord_Activity_ApplicationId(&raw, &v)
-            }) else {
-                return nil
+            storage.withLock { raw in
+                var v: UInt64 = 0
+                return Discord_Activity_ApplicationId(&raw, &v) ? v : nil
             }
-            return v
         }
         _modify {
             ensureUnique()
@@ -432,13 +403,10 @@ public struct Activity: DiscordObject {
     /// This field cannot be set by the SDK, and will always be the application ID of the game's parent or unset if the game has no parent.
     public var parentApplicationId: UInt64? {
         get {
-            var v = UInt64(0)
-            guard storage.withLock({ raw in
-                Discord_Activity_ParentApplicationId(&raw, &v)
-            }) else {
-                return nil
+            storage.withLock { raw in
+                var v: UInt64 = 0
+                return Discord_Activity_ParentApplicationId(&raw, &v) ? v : nil
             }
-            return v
         }
         _modify {
             ensureUnique()
@@ -460,13 +428,10 @@ public struct Activity: DiscordObject {
     /// Images used to customize how the Activity is displayed in the Discord client.
     public var assets: ActivityAssets? {
         get {
-            var raw = Discord_ActivityAssets()
-            guard storage.withLock({ activityRaw in
-                Discord_Activity_Assets(&activityRaw, &raw)
-            }) else {
-                return nil
+            storage.withLock { activityRaw in 
+                var raw = Discord_ActivityAssets()
+                return Discord_Activity_Assets(&activityRaw, &raw) ? ActivityAssets(storage: DiscordStorage(takingOwnership: raw)) : nil
             }
-            return ActivityAssets(storage: DiscordStorage(takingOwnership: raw))
         }
         _modify {
             ensureUnique()
@@ -491,15 +456,10 @@ public struct Activity: DiscordObject {
     /// - a "time elapsed" countup timer (by specifying the ``ActivityTimestamps/start`` value)
     public var timestamps: ActivityTimestamps? {
         get {
-            var raw = Discord_ActivityTimestamps()
-            guard storage.withLock({ activityRaw in
-                Discord_Activity_Timestamps(&activityRaw, &raw)
-            }) else {
-                return nil
+            storage.withLock { activityRaw in
+                var raw = Discord_ActivityTimestamps()
+                return Discord_Activity_Timestamps(&activityRaw, &raw) ? ActivityTimestamps(storage: DiscordStorage(takingOwnership: raw)) : nil
             }
-            return ActivityTimestamps(
-                storage: DiscordStorage(takingOwnership: raw)
-            )
         }
         _modify {
             ensureUnique()
@@ -523,11 +483,10 @@ public struct Activity: DiscordObject {
     /// The party struct is used to indicate the size and members of the people the current user is playing with.
     public var party: ActivityParty? {
         get {
-            var raw = Discord_ActivityParty()
-            guard storage.withLock({ activityRaw in
-                Discord_Activity_Party(&activityRaw, &raw)
-            }) else { return nil }
-            return ActivityParty(storage: DiscordStorage(takingOwnership: raw))
+            storage.withLock { activityRaw in
+                var raw = Discord_ActivityParty()
+                return Discord_Activity_Party(&activityRaw, &raw) ? ActivityParty(storage: DiscordStorage(takingOwnership: raw)) : nil
+            }
         }
         _modify {
             ensureUnique()
@@ -549,9 +508,10 @@ public struct Activity: DiscordObject {
     /// The secrets struct is used in combination with the party struct to make an Activity joinable.
     public var secrets: ActivitySecrets? {
         get {
-            var raw = Discord_ActivitySecrets()
-            guard storage.withLock({ Discord_Activity_Secrets(&$0, &raw) }) else { return nil }
-            return ActivitySecrets(takingOwnership: raw)
+            storage.withLock { activityRaw in
+                var raw = Discord_ActivitySecrets()
+                return Discord_Activity_Secrets(&activityRaw, &raw) ? ActivitySecrets(takingOwnership: raw) : nil
+            }
         }
         _modify {
             ensureUnique()

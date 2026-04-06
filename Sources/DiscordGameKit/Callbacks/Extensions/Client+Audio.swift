@@ -184,7 +184,7 @@ extension DiscordClient {
     /// You can find the list of device IDs that can be passed in with ``inputDevices(_:)``.
     @_disfavoredOverload
     @discardableResult
-    public func setInputDevice(to id: String) async -> ClientResult {
+    public func setInputDevice(to id: String) async -> Result<Void, ClientResult> {
         await withCheckedContinuation { cont in
             setInputDevice(to: id) { cont.resume(returning: $0) }
         }
@@ -195,7 +195,7 @@ extension DiscordClient {
     /// You can find the list of device IDs that can be passed in with ``outputDevices(_:)``.
     @_disfavoredOverload
     @discardableResult
-    public func setOutputDevice(to id: String) async -> ClientResult {
+    public func setOutputDevice(to id: String) async -> Result<Void, ClientResult> {
         await withCheckedContinuation { cont in
             setOutputDevice(to: id) { cont.resume(returning: $0) }
         }
@@ -242,7 +242,7 @@ extension DiscordClient {
         
         let call = storage.withLock { raw -> DiscordCall? in
             var call = Discord_Call()
-            let result = Discord_Client_StartCallWithAudioCallbacks(
+            return Discord_Client_StartCallWithAudioCallbacks(
                 &raw,
                 id,
                 userAudioReceivedTrampoline,
@@ -252,10 +252,7 @@ extension DiscordClient {
                 freeBox,
                 cap,
                 &call
-            )
-            
-            guard result else { return nil }
-            return DiscordCall(takingOwnership: call)
+            ) ? DiscordCall(takingOwnership: call) : nil
         }
         
         return call

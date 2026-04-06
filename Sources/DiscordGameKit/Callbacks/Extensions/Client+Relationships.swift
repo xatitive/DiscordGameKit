@@ -289,7 +289,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetRelationshipCreatedCallback,
             relationshipCreatedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -304,7 +304,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetRelationshipDeletedCallback,
             relationshipDeletedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -321,7 +321,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetRelationshipGroupsUpdatedCallback,
             relationshipGroupUpdate,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -336,7 +336,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetUserUpdatedCallback,
             userUpdatedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }

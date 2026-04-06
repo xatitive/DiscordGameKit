@@ -93,7 +93,7 @@ extension DiscordClient {
     /// Android support for this flow requires the androidx.browser dependency (version 1.8.0).
     ///
     /// - seealso: [Discord OAuth2 Reference](https://discord.com/developers/docs/topics/oauth2)
-    public func authorize(args: AuthorizationArgs, _ body: @escaping AuthorizationCallback) {
+    public func authorize(with args: AuthorizationArgs, _ body: @escaping AuthorizationCallback) {
         let cb = CallbackBox(body)
         storage.withLock { client in
             args.storage.withLock { argPtr in
@@ -283,7 +283,7 @@ extension DiscordClient {
         }}}
     }
     
-    /// This function is a combination of ``authorize(args:_:)`` and ``getToken(application:code:codeVerifier:redirectUri:_:)``, but is used
+    /// This function is a combination of ``authorize(with:_:)`` and ``getToken(application:code:codeVerifier:redirectUri:_:)``, but is used
     /// for the case where the user is on a limited input device, such as a console or smart TV.
     ///
     /// The callback function will be invoked with two tokens:
@@ -322,7 +322,7 @@ extension DiscordClient {
         }
     }
     
-    /// This function is a combination of ``authorize(args:_:)`` and
+    /// This function is a combination of ``authorize(with:_:)`` and
     /// ``getTokenFromProvisionalMerge(application:code:verifier:redirectUri:authType:token:_:)``,
     /// but is used for the case where the user is on a limited input device, such as a console or smart TV.
     ///
@@ -378,7 +378,7 @@ extension DiscordClient {
         }}}
     }
     
-    /// This function should be used with the ``authorize(args:_:)`` function whenever a user with
+    /// This function should be used with the ``authorize(with:_:)`` function whenever a user with
     /// a provisional account wants to link to an existing Discord account or "upgrade" their
     /// provisional account into a "full" Discord account.
     ///
@@ -453,7 +453,7 @@ extension DiscordClient {
         usingLock(
             Discord_Client_RegisterAuthorizeRequestCallback,
             authRequestTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -494,7 +494,7 @@ extension DiscordClient {
         usingLock(
             Discord_Client_SetAuthorizeDeviceScreenClosedCallback,
             authDeviceScreenClosedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -516,7 +516,7 @@ extension DiscordClient {
         usingLock(
             Discord_Client_SetTokenExpirationCallback,
             tokenExpirationTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }

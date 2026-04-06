@@ -37,8 +37,8 @@ let speakingStatusChangedTrampoline: Discord_Call_OnSpeakingStatusChanged = { id
 
 let callStatusChangedTrampoline: Discord_Call_OnStatusChanged = { status, error, errDetail, ctx in
     CallbackBox<DiscordCall.StatusChanged>.from(opaque: ctx)?(
-        CallStatus(rawValue: Int32(status.rawValue))!,
-        CallError(rawValue: Int32(status.rawValue))!,
+        status.swiftValue,
+        error.swiftValue,
         errDetail
     )
 }
@@ -57,7 +57,7 @@ public extension DiscordCall {
         usingLock(
             Discord_Call_SetOnVoiceStateChangedCallback,
             voiceStateTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -70,7 +70,7 @@ public extension DiscordCall {
         usingLock(
             Discord_Call_SetParticipantChangedCallback,
             participantChangedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -85,7 +85,7 @@ public extension DiscordCall {
         usingLock(
             Discord_Call_SetSpeakingStatusChangedCallback,
             speakingStatusChangedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -98,7 +98,7 @@ public extension DiscordCall {
         usingLock(
             Discord_Call_SetStatusChangedCallback,
             callStatusChangedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }

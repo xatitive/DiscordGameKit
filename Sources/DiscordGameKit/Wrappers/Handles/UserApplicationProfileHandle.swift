@@ -59,13 +59,7 @@ public struct UserApplicationProfileHandle: DiscordObject {
 
     /// Type of the external identity provider.
     public var providerType: ExternalIdentityProviderType {
-        storage.withLock { raw in
-            ExternalIdentityProviderType(
-                rawValue: Int32(
-                    Discord_UserApplicationProfileHandle_ProviderType(&raw).rawValue
-                )
-            )!
-        }
+        storage.withLock { Discord_UserApplicationProfileHandle_ProviderType(&$0).swiftValue }
     }
 
     /// The user's in-game username.

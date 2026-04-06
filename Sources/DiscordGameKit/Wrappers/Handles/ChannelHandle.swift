@@ -49,10 +49,6 @@ public struct ChannelHandle: DiscordObject, Identifiable {
 
     /// Type of channel.
     public var type: ChannelType {
-        storage.withLock { raw in
-            ChannelType(
-                rawValue: Int32(Discord_ChannelHandle_Type(&raw).rawValue)
-            )!
-        }
+        storage.withLock { Discord_ChannelHandle_Type(&$0).swiftValue }
     }
 }

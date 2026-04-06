@@ -116,9 +116,7 @@ public struct UserHandle: DiscordObject, Identifiable {
 
     /// Returns the user's online/offline/idle status.
     public var status: StatusType {
-        storage.withLock { raw in
-            StatusType(rawValue: Int32(Discord_UserHandle_Status(&raw).rawValue))!
-        }
+        storage.withLock { Discord_UserHandle_Status(&$0).swiftValue }
     }
 
     /// Returns a list of UserApplicationProfileHandles for this user.

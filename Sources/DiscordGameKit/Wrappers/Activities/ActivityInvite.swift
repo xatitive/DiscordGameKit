@@ -55,13 +55,7 @@ public struct ActivityInvite: DiscordObject {
 
     /// The type of invite that was sent.
     public var type: ActivityActionType {
-        get {
-            storage.withLock { raw in
-                ActivityActionType(
-                    rawValue: Int32(Discord_ActivityInvite_Type(&raw).rawValue)
-                )!
-            }
-        }
+        get { storage.withLock { Discord_ActivityInvite_Type(&$0).swiftValue } }
         set {
             ensureUnique()
             storage.withLock { raw in

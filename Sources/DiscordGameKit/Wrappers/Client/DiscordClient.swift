@@ -186,8 +186,8 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
 
     /// Authorization helper property that can create a code challenge and verifier.
     ///
-    /// Used in the ``authorize(args:_:)`` + ``getToken(application:code:codeVerifier:redirectUri:_:)`` flow.
-    /// This returns a struct with two items, a ``AuthorizationCodeVerifier/challenge`` value to pass into ``authorize(args:_:)`` and
+    /// Used in the ``authorize(with:_:)`` + ``getToken(application:code:codeVerifier:redirectUri:_:)`` flow.
+    /// This returns a struct with two items, a ``AuthorizationCodeVerifier/challenge`` value to pass into ``authorize(with:_:)`` and
     ///  a ``AuthorizationCodeVerifier/verifier`` value to pass into ``getToken(application:code:codeVerifier:redirectUri:_:)``.
     public lazy var authorizationCodeVerifier: AuthorizationCodeVerifier = {
         storage.withLock { raw in
@@ -204,7 +204,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
 
     /// Current status of the client.
     public var status: ClientStatus {
-        ClientStatus(rawValue: Int32(usingLock(Discord_Client_GetStatus).rawValue))!
+        usingLock(Discord_Client_GetStatus).swiftValue
     }
 
     /// Returns a list of all lobbies that the user is a member of and that the SDK has loaded.

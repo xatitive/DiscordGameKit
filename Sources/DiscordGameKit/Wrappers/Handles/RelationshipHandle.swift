@@ -59,24 +59,12 @@ public struct RelationshipHandle: DiscordObject, Identifiable {
 
     /// Type of Discord relationship.
     public var discordRelationshipType: RelationshipType {
-        storage.withLock { raw in
-            RelationshipType(
-                rawValue: Int32(
-                    Discord_RelationshipHandle_DiscordRelationshipType(&raw).rawValue
-                )
-            )!
-        }
+        storage.withLock { Discord_RelationshipHandle_DiscordRelationshipType(&$0).swiftValue }
     }
 
     /// Type of Game relationship.
     public var gameRelationshipType: RelationshipType {
-        storage.withLock { raw in
-            RelationshipType(
-                rawValue: Int32(
-                    Discord_RelationshipHandle_GameRelationshipType(&raw).rawValue
-                )
-            )!
-        }
+        storage.withLock { Discord_RelationshipHandle_GameRelationshipType(&$0).swiftValue }
     }
 
     /// The handle to the target user in this relationship, if one is available.

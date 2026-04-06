@@ -71,15 +71,7 @@ extension DiscordClient {
         @available(iOS 18.2, *)
         @available(Android 11.0, *)
         public var experimentalAudioSystem: AudioSystem {
-            get {
-                storage.withLock { raw in
-                    AudioSystem(
-                        rawValue: Int32(
-                            Discord_ClientCreateOptions_ExperimentalAudioSystem(&raw).rawValue
-                        )
-                    )!
-                }
-            }
+            get { storage.withLock { Discord_ClientCreateOptions_ExperimentalAudioSystem(&$0).swiftValue } }
             set {
                 ensureUnique()
                 storage.withLock { raw in

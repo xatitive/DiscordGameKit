@@ -205,7 +205,7 @@ extension DiscordClient {
         usingLock(
             Discord_Client_SetMessageCreatedCallback,
             messageCreatedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -224,7 +224,7 @@ extension DiscordClient {
         usingLock(
             Discord_Client_SetMessageDeletedCallback,
             messageDeletedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -243,7 +243,7 @@ extension DiscordClient {
         usingLock(
             Discord_Client_SetMessageUpdatedCallback,
             messageUpdatedTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }

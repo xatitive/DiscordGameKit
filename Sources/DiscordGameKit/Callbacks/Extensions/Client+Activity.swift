@@ -77,7 +77,14 @@ public extension DiscordClient {
         to id: UInt64,
         _ body: @escaping SendActivityInviteCallback
     ) {
-        
+        let cb = CallbackBox(body)
+        usingLock(
+            Discord_Client_SendActivityJoinRequest,
+            id,
+            sendActivityInviteTrampoline,
+            freeBox,
+            cb.retainedOpaqueValue()
+        )
     }
     
     /// When another user requests to join the current user's party, this function is called
@@ -94,7 +101,7 @@ public extension DiscordClient {
                     &raw,
                     &inv,
                     sendActivityInviteTrampoline,
-                    freeBox(_:),
+                    freeBox,
                     cb.retainedOpaqueValue()
                 )
             }
@@ -115,7 +122,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetActivityInviteCreatedCallback,
             activityInviteTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -133,7 +140,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetActivityInviteUpdatedCallback,
             activityInviteTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -151,7 +158,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetActivityJoinCallback,
             activityJoinTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }
@@ -168,7 +175,7 @@ public extension DiscordClient {
         usingLock(
             Discord_Client_SetActivityJoinWithApplicationCallback,
             activityJoinApplicationTrampoline,
-            freeBox,
+            nil,
             ptr
         )
     }

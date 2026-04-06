@@ -20,13 +20,7 @@ public struct AdditionalContent: DiscordObject {
 
     /// Represents the type of additional content in the message.
     public var type: AdditionalContentType {
-        get {
-            storage.withLock { raw in
-                AdditionalContentType(
-                    rawValue: Int32(Discord_AdditionalContent_Type(&raw).rawValue)
-                )!
-            }
-        }
+        get { storage.withLock { Discord_AdditionalContent_Type(&$0).swiftValue } }
         set {
             ensureUnique()
             storage.withLock { raw in

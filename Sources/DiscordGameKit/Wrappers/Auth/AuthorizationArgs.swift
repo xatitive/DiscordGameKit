@@ -140,7 +140,7 @@ public struct AuthorizationArgs: DiscordObject {
         get {
             var integrationType = Discord_IntegrationType_forceint
             guard storage.withLock({ Discord_AuthorizationArgs_IntegrationType(&$0, &integrationType) }) else { return nil }
-            return IntegrationType(rawValue: Int32(integrationType.rawValue))!
+            return integrationType.swiftValue
         }
         _modify {
             ensureUnique()

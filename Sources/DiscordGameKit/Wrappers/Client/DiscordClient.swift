@@ -77,126 +77,6 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
         set { usingLock(Discord_Client_SetSelfMuteAll, newValue) }
     }
 
-    private var autoGain = true
-
-    /// Automatically adjusts the microphone volume to keep it clear and consistent.
-    /// - remark: Defaults to on. Generally this shouldn't need to be used unless you
-    /// are building a voice settings UI for the user to control, similar to Discord's voice settings.
-    public var isAutoGainEnabled: Bool {
-        get { autoGain }
-        set {
-            autoGain = newValue
-            usingLock(Discord_Client_SetAutomaticGainControl, autoGain)
-        }
-    }
-
-    private var echoCancel = true
-
-    /// Basic echo cancellation provided by the WebRTC library.
-    /// - remark: Defaults to on. Generally this shouldn't need to be used unless you
-    /// are building a voice settings UI for the user to control, similar to Discord's voice settings.
-    public var isEchoCancelling: Bool {
-        get { echoCancel }
-        set {
-            echoCancel = newValue
-            usingLock(Discord_Client_SetEchoCancellation, echoCancel)
-        }
-    }
-
-    private var engineManaged: Bool = false
-
-    /// On mobile devices, set whether the audio environment is managed by the engine or the SDK.
-    /// On Android, this entails AudioManager state and on iOS, this entails AVAudioSession activation.
-    ///
-    /// This method must be called before connecting to any Calls if the
-    /// application manages audio on its own, otherwise audio management
-    /// will be ended by the voice engine when the last Call is ended.
-    ///
-    /// The Unity plugin automatically calls this method if the native Unity
-    /// audio engine is enabled in the project settings.
-    ///
-    @available(iOS 18.5, *)
-    @available(Android 11.0, *)
-    public var isAudioEngineManagedSession: Bool {
-        get { engineManaged }
-        set {
-            engineManaged = newValue
-            usingLock(Discord_Client_SetEngineManagedAudioSession, engineManaged)
-        }
-    }
-
-    private var audioDBFS: Float = -100.0
-
-    /// Threshold to indicate when no audio is being received by the user's mic.
-    ///
-    /// An example of when this may be useful: When push to talk is being used and the user pushes
-    /// their talk key, but something is configured wrong and no audio is being received, this
-    /// threshold and callback can be used to detect that situation and notify the user. The
-    /// threshold is specified in DBFS, or decibels relative to full scale, and the range is
-    /// [-100.0, 100.0] It defaults to -100.0, so is disabled.
-    public var noAudioInputThreshold: Float {
-        get { audioDBFS }
-        set {
-            audioDBFS = newValue
-            usingLock(Discord_Client_SetNoAudioInputThreshold, audioDBFS)
-        }
-    }
-
-    private var supressingNoise: Bool = true
-
-    /// Enables basic background noise suppression.
-    /// - remark: Defaults to on.
-    /// Generally this shouldn't need to be used unless you are building a voice
-    /// settings UI for the user to control, similar to Discord's voice settings.
-    public var isNoiseSupressing: Bool {
-        get { supressingNoise }
-        set {
-            supressingNoise = newValue
-            usingLock(Discord_Client_SetNoiseSuppression, supressingNoise)
-        }
-    }
-
-    private var opusEncoding: Bool = true
-
-    /// Opus hardware encoding for audio, if available.
-    /// - remark: Defaults to on. This must be called immediately
-    /// 		  after constructing the Client. If called too late an error
-    /// 		  will be logged and the setting will not take effect.
-    public var opusEncodingEnabled: Bool {
-        get { opusEncoding }
-        set {
-            opusEncoding = newValue
-            usingLock(Discord_Client_SetOpusHardwareCoding, opusEncoding, opusDecoding)
-        }
-    }
-
-    private var opusDecoding: Bool = true
-
-    /// Opus hardware decoding for audio, if available.
-    /// - remark: Defaults to on. This must be called immediately
-    ///           after constructing the Client. If called too late an error
-    ///           will be logged and the setting will not take effect.
-    public var opusDecodingEnabled: Bool {
-        get { opusEncoding }
-        set {
-            opusEncoding = newValue
-            usingLock(Discord_Client_SetOpusHardwareCoding, opusEncoding, opusDecoding)
-        }
-    }
-
-    /// Authorization helper property that can create a code challenge and verifier.
-    ///
-    /// Used in the ``authorize(with:_:)`` + ``getToken(application:code:codeVerifier:redirectUri:_:)`` flow.
-    /// This returns a struct with two items, a ``AuthorizationCodeVerifier/challenge`` value to pass into ``authorize(with:_:)`` and
-    ///  a ``AuthorizationCodeVerifier/verifier`` value to pass into ``getToken(application:code:codeVerifier:redirectUri:_:)``.
-    public lazy var authorizationCodeVerifier: AuthorizationCodeVerifier = {
-        storage.withLock { raw in
-            var verifier = Discord_AuthorizationCodeVerifier()
-            Discord_Client_CreateAuthorizationCodeVerifier(&raw, &verifier)
-            return AuthorizationCodeVerifier(takingOwnership: verifier)
-        }
-    }()
-
     /// Returns true if the SDK has a non-empty OAuth2 token set, regardless of whether that token is valid or not.
     public var isAuthenticated: Bool {
         usingLock(Discord_Client_IsAuthenticated)
@@ -222,10 +102,140 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     public var currentUser: UserHandle? {
         storage.withLock { raw in
             var handle = Discord_UserHandle()
-            guard Discord_Client_GetCurrentUserV2(&raw, &handle) else { return nil }
-            return UserHandle(takingOwnership: handle)
+            return Discord_Client_GetCurrentUserV2(&raw, &handle) ? UserHandle(takingOwnership: handle) : nil
         }
     }
+    
+    /// A list of all of the relationships the current user has with others, including all Discord relationships and all Game relationships for the current game.
+    public var relationships: [RelationshipHandle] {
+        storage.withLock { raw in
+            var span = Discord_RelationshipHandleSpan()
+            Discord_Client_GetRelationships(&raw, &span)
+            return span.converting()
+        }
+    }
+    
+    
+    @ThreadSafe private var autoGain = true
+
+    /// Automatically adjusts the microphone volume to keep it clear and consistent.
+    /// - remark: Defaults to on. Generally this shouldn't need to be used unless you
+    /// are building a voice settings UI for the user to control, similar to Discord's voice settings.
+    public var isAutoGainEnabled: Bool {
+        get { autoGain }
+        set {
+            autoGain = newValue
+            usingLock(Discord_Client_SetAutomaticGainControl, autoGain)
+        }
+    }
+
+    @ThreadSafe private var echoCancel = true
+
+    /// Basic echo cancellation provided by the WebRTC library.
+    /// - remark: Defaults to on. Generally this shouldn't need to be used unless you
+    /// are building a voice settings UI for the user to control, similar to Discord's voice settings.
+    public var isEchoCancelling: Bool {
+        get { echoCancel }
+        set {
+            echoCancel = newValue
+            usingLock(Discord_Client_SetEchoCancellation, echoCancel)
+        }
+    }
+
+    @ThreadSafe private var engineManaged: Bool = false
+
+    /// On mobile devices, set whether the audio environment is managed by the engine or the SDK.
+    /// On Android, this entails AudioManager state and on iOS, this entails AVAudioSession activation.
+    ///
+    /// This method must be called before connecting to any Calls if the
+    /// application manages audio on its own, otherwise audio management
+    /// will be ended by the voice engine when the last Call is ended.
+    ///
+    /// The Unity plugin automatically calls this method if the native Unity
+    /// audio engine is enabled in the project settings.
+    ///
+    @available(iOS 18.5, *)
+    @available(Android 11.0, *)
+    public var isAudioEngineManagedSession: Bool {
+        get { engineManaged }
+        set {
+            engineManaged = newValue
+            usingLock(Discord_Client_SetEngineManagedAudioSession, engineManaged)
+        }
+    }
+
+    @ThreadSafe private var audioDBFS: Float = -100.0
+
+    /// Threshold to indicate when no audio is being received by the user's mic.
+    ///
+    /// An example of when this may be useful: When push to talk is being used and the user pushes
+    /// their talk key, but something is configured wrong and no audio is being received, this
+    /// threshold and callback can be used to detect that situation and notify the user. The
+    /// threshold is specified in DBFS, or decibels relative to full scale, and the range is
+    /// [-100.0, 100.0] It defaults to -100.0, so is disabled.
+    public var noAudioInputThreshold: Float {
+        get { audioDBFS }
+        set {
+            audioDBFS = newValue
+            usingLock(Discord_Client_SetNoAudioInputThreshold, audioDBFS)
+        }
+    }
+
+    @ThreadSafe private var supressingNoise: Bool = true
+
+    /// Enables basic background noise suppression.
+    /// - remark: Defaults to on.
+    /// Generally this shouldn't need to be used unless you are building a voice
+    /// settings UI for the user to control, similar to Discord's voice settings.
+    public var isNoiseSupressing: Bool {
+        get { supressingNoise }
+        set {
+            supressingNoise = newValue
+            usingLock(Discord_Client_SetNoiseSuppression, supressingNoise)
+        }
+    }
+
+    @ThreadSafe private var opusEncoding: Bool = true
+
+    /// Opus hardware encoding for audio, if available.
+    /// - remark: Defaults to on. This must be called immediately
+    /// 		  after constructing the Client. If called too late an error
+    /// 		  will be logged and the setting will not take effect.
+    public var opusEncodingEnabled: Bool {
+        get { opusEncoding }
+        set {
+            opusEncoding = newValue
+            usingLock(Discord_Client_SetOpusHardwareCoding, opusEncoding, opusDecoding)
+        }
+    }
+
+    @ThreadSafe private var opusDecoding: Bool = true
+
+    /// Opus hardware decoding for audio, if available.
+    /// - remark: Defaults to on. This must be called immediately
+    ///           after constructing the Client. If called too late an error
+    ///           will be logged and the setting will not take effect.
+    public var opusDecodingEnabled: Bool {
+        get { opusEncoding }
+        set {
+            opusEncoding = newValue
+            usingLock(Discord_Client_SetOpusHardwareCoding, opusEncoding, opusDecoding)
+        }
+    }
+
+    /// Authorization helper property that can create a code challenge and verifier.
+    ///
+    /// Used in the ``authorize(with:_:)`` + ``getToken(application:code:codeVerifier:redirectUri:_:)`` flow.
+    /// This returns a struct with two items, a ``AuthorizationCodeVerifier/challenge`` value to pass into ``authorize(with:_:)`` and
+    ///  a ``AuthorizationCodeVerifier/verifier`` value to pass into ``getToken(application:code:codeVerifier:redirectUri:_:)``.
+    public lazy var authorizationCodeVerifier: AuthorizationCodeVerifier = {
+        storage.withLock { raw in
+            var verifier = Discord_AuthorizationCodeVerifier()
+            Discord_Client_CreateAuthorizationCodeVerifier(&raw, &verifier)
+            return AuthorizationCodeVerifier(takingOwnership: verifier)
+        }
+    }()
+    
 
     // MARK: Methods
 
@@ -520,15 +530,6 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     @discardableResult
     public func registerLaunchSteamApplication(id: UInt64, steamId: UInt32) -> Bool {
         usingLock(Discord_Client_RegisterLaunchSteamApplication, id, steamId)
-    }
-
-    /// Returns a list of all of the relationships the current user has with others, including all Discord relationships and all Game relationships for the current game.
-    public func relationships() -> [RelationshipHandle] {
-        storage.withLock { raw in
-            var span = Discord_RelationshipHandleSpan()
-            Discord_Client_GetRelationships(&raw, &span)
-            return span.converting()
-        }
     }
 
     /// Returns a list of relationships that belong to the specified relationship group type.

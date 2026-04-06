@@ -2,6 +2,15 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+import Foundation
+
+let sourcesDirectory = URL(fileURLWithPath: #filePath)
+    .deletingLastPathComponent()
+    .appending(path: "Sources")
+
+let discordTBD = sourcesDirectory.appending(path: "CDiscord/libdiscord_partner_sdk.tbd")
+let discordLinkerSetting = LinkerSetting.unsafeFlags([discordTBD.path])
+
 
 let package = Package(
     name: "DiscordGameKit",
@@ -21,11 +30,12 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "DiscordGameKit",
-            dependencies: ["discord_partner_sdk"],
+            dependencies: ["CDiscord"],
             swiftSettings: [
                 .unsafeFlags(["-enable-library-evolution", "-emit-module-interface"]),
-                .define("asyncCallbacks")
+                .define("asyncCallbacks"),
             ],
+            linkerSettings: [discordLinkerSetting]
         ),
         .executableTarget(
             name: "DiscordGameRunner",
@@ -34,7 +44,8 @@ let package = Package(
                 .define("asyncCallbacks")
             ]
         ),
-        .binaryTarget(name: "discord_partner_sdk", path: "discord_partner_sdk.xcframework")
+        .systemLibrary(name: "CDiscord", path: nil, pkgConfig: nil, providers: nil),
+        //.binaryTarget(name: "discord_partner_sdk", path: "discord_partner_sdk.xcframework")
     ],
     swiftLanguageModes: [.v6]
 )

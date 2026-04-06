@@ -1,0 +1,5 @@
+
+module discord_partner_sdk {
+    umbrella header "cdiscord.h"
+    export *
+}

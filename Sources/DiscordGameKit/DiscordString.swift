@@ -24,42 +24,8 @@ extension String {
     }
 }
 
-// MARK: - Passing into Discord (Swift owns the memory)
 
 extension String {
-    //    func withDiscordString<T>(_ body: (Discord_String) throws -> T) rethrows
-    //        -> T
-    //    {
-    //        if let result = try utf8.withContiguousStorageIfAvailable({ buffer in
-    //            let ds = Discord_String(
-    //                ptr: UnsafeMutablePointer(mutating: buffer.baseAddress),
-    //                size: buffer.count
-    //            )
-    //            return try body(ds)
-    //        }) {
-    //            return result
-    //        }
-    //
-    //        // Fallback: explicitly scope the pointer lifetime with the array
-    //        var copy = Array(utf8)
-    //        return try copy.withUnsafeMutableBufferPointer { buffer in
-    //            let ds = Discord_String(ptr: buffer.baseAddress, size: buffer.count)
-    //            return try body(ds)
-    //        }
-    //    }
-    //
-    //    func withDiscordString<T>(_ body: (Discord_String) throws -> T) rethrows -> T
-    //    {
-    //        var mutableSelf = self
-    //        return try mutableSelf.withUTF8 { buffer in
-    //            let ds = Discord_String(
-    //                ptr: UnsafeMutablePointer(mutating: buffer.baseAddress),
-    //                size: buffer.count
-    //            )
-    //            return try body(ds)
-    //        }
-    //    }
-
     func withDiscordString<T>(_ body: (Discord_String) throws -> T) rethrows
         -> T
     {
@@ -87,7 +53,6 @@ extension String {
     }
 }
 
-// MARK: - Discord_Properties
 
 extension Dictionary where Key == String, Value == String {
     func withDiscordProperties<T>(

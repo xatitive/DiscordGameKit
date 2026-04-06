@@ -29,42 +29,6 @@
             }
         }
 
-        /// Asynchronously fetches the current audio input device in use by the client.
-        public func currentInputDevice() async -> AudioDevice {
-            await withCheckedContinuation { cont in
-                currentInputDevice { dev in
-                    cont.resume(returning: dev)
-                }
-            }
-        }
-
-        /// Asynchronously fetches the current audio output device in use by the client.
-        public func currentOutputDevice() async -> AudioDevice {
-            await withCheckedContinuation { cont in
-                currentOutputDevice { dev in
-                    cont.resume(returning: dev)
-                }
-            }
-        }
-
-        /// Asynchronously fetches the list of audio input devices available to the user.
-        public func inputDevices() async -> [AudioDevice] {
-            await withCheckedContinuation { cont in
-                inputDevices { devs in
-                    cont.resume(returning: devs)
-                }
-            }
-        }
-
-        /// Asynchronously fetches the list of audio output devices available to the user.
-        public func outputDevices() async -> [AudioDevice] {
-            await withCheckedContinuation { cont in
-                outputDevices { devs in
-                    cont.resume(returning: devs)
-                }
-            }
-        }
-
         /// Asynchronously changes the audio input device in use by the client to the specified device.
         ///
         /// You can find the list of device IDs that can be passed in with ``inputDevices(_:)``.
@@ -328,16 +292,6 @@
             return try await withCheckedThrowingContinuation { continuation in
                 openConnectedSettings { result in
                     continuation.resume(with: result)
-                }
-            }
-        }
-
-        @available(iOS 18.5, *)
-        @available(Android 11.0, *)
-        public func isDiscordInstalled() async -> Bool {
-            return await withCheckedContinuation { continuation in
-                isDiscordInstalled { result in
-                    continuation.resume(returning: result)
                 }
             }
         }
@@ -816,7 +770,7 @@ public extension DiscordClient {
     func onAuthorizeDeviceScreenClosed(
         _ body: @escaping @Sendable () async throws -> Void
     ) {
-        onAuthorizationRequest {
+            onAuthorizeDeviceScreenClosed {
             Task { try await body() }
         }
     }

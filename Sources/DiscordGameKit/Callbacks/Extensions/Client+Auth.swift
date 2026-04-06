@@ -265,11 +265,11 @@ extension DiscordClient {
         application id: UInt64,
         code: String,
         codeVerifier: String,
-        redirectUri: String,
+        redirectURI: String,
         _ body: @escaping TokenExchangeCallback
     ) {
         let cb = CallbackBox(body)
-        code.withDiscordString { dCode in codeVerifier.withDiscordString { dVerifier in redirectUri.withDiscordString { dUri in
+        code.withDiscordString { dCode in codeVerifier.withDiscordString { dVerifier in redirectURI.withDiscordString { dUri in
             usingLock(
                 Discord_Client_GetToken,
                 id,
@@ -584,6 +584,7 @@ extension DiscordClient {
     /// If your client is not connected, this function will only update the auth token, and so you
     /// must invoke ``connect()`` as well. You should wait for the given callback function to be
     /// invoked though so that the next ``connect()`` attempt uses the updated token.
+    @available(*, renamed: "updateToken(to:for:)")
     public func updateToken(
         to token: String,
         for type: AuthorizationTokenType,
@@ -601,5 +602,16 @@ extension DiscordClient {
             )
         }
     }
+    
+    public func updateToken(
+        to token: String,
+        for type: AuthorizationTokenType) async throws {
+            return try await withCheckedThrowingContinuation { continuation in
+                updateToken(to: token, for: type) { result in
+                    continuation.resume(with: result)
+                }
+            }
+        }
+    
     
 }

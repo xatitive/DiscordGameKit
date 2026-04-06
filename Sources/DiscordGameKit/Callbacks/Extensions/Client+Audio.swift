@@ -123,28 +123,6 @@ extension DiscordClient {
         }
     }
     
-    /// Asynchronously changes the audio input device in use by the client to the specified device.
-    ///
-    /// You can find the list of device IDs that can be passed in with ``inputDevices(_:)``.
-    @_disfavoredOverload
-    @discardableResult
-    public func setInputDevice(to id: String) async -> Result<Void, ClientResult> {
-        await withCheckedContinuation { cont in
-            setInputDevice(to: id) { cont.resume(returning: $0) }
-        }
-    }
-    
-    /// Asynchronously changes the audio output device in use by the client to the specified device.
-    ///
-    /// You can find the list of device IDs that can be passed in with ``outputDevices(_:)``.
-    @_disfavoredOverload
-    @discardableResult
-    public func setOutputDevice(to id: String) async -> Result<Void, ClientResult> {
-        await withCheckedContinuation { cont in
-            setOutputDevice(to: id) { cont.resume(returning: $0) }
-        }
-    }
-    
     /// Callback invoked whenever a user in a lobby joins or leaves a voice call.
     ///
     /// The main use case for this is to enable displaying which users are in voice in a lobby
@@ -218,6 +196,5 @@ extension DiscordClient {
             ptr
         )
     }
-    
     
 }

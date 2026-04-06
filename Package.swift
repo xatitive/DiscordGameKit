@@ -13,7 +13,8 @@ let package = Package(
         )
     ],
     traits: [
-        .trait(name: "asyncCallbacks")
+        .trait(name: "asyncCallbacks"),
+        .default(enabledTraits: ["asyncCallbacks"])
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -23,6 +24,7 @@ let package = Package(
             dependencies: ["discord_partner_sdk"],
             swiftSettings: [
                 .unsafeFlags(["-enable-library-evolution", "-emit-module-interface"]),
+                .define("asyncCallbacks")
             ],
         ),
         .executableTarget(

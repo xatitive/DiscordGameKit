@@ -59,7 +59,7 @@ import Foundation
 //    }
 //}
 
-@propertyWrapper final class ThreadSafe<T>: @unchecked Sendable {
+@propertyWrapper final class ThreadSafe<T> {
 
     private var _value: T
     private var _lock = os_unfair_lock()

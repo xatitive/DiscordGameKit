@@ -10,16 +10,16 @@
 public extension DiscordCall {
     
     /// Callback function for ``onVoiceStateChanged(_:)``
-    typealias VoiceStateChanged = (_ userId: UInt64) -> Void
+    typealias VoiceStateChanged = @Sendable (_ userId: UInt64) -> Void
     
     /// Callback function for ``onParticipantChanged(_:)``
-    typealias ParticipantChanged = (_ userId: UInt64, _ added: Bool) -> Void
+    typealias ParticipantChanged = @Sendable (_ userId: UInt64, _ added: Bool) -> Void
     
     /// Callback function for ``onSpeakingStatusChanged(_:)``
-    typealias SpeakingStatusChanged = (_ userId: UInt64, _ playingSound: Bool) -> Void
+    typealias SpeakingStatusChanged = @Sendable (_ userId: UInt64, _ playingSound: Bool) -> Void
     
     /// /// Callback function for ``onStatusChanged(_:)``
-    typealias StatusChanged = (_ status: CallStatus, _ error: CallError, _ errDetail: Int32) -> Void
+    typealias StatusChanged = @Sendable (_ status: CallStatus, _ error: CallError, _ errDetail: Int32) -> Void
     
 }
 

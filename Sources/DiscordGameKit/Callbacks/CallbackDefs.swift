@@ -16,22 +16,22 @@ import Foundation
 // Commonly reused callbacks within the SDK
 
 public extension DiscordClient {
-    typealias ClientResultCallback = (_ result: Result<Void, ClientResult>) -> Void
-    typealias VoidCallback = () -> Void
+    typealias ClientResultCallback = @Sendable (_ result: Result<Void, ClientResult>) -> Void
+    typealias VoidCallback = @Sendable () -> Void
     
     typealias EndCallCallback = VoidCallback
     typealias EndCallsCallback = VoidCallback
     
-    typealias CurrentAudioDeviceCallback = (AudioDevice) -> Void
-    typealias AudioDevicesCallback = ([AudioDevice]) -> Void
+    typealias CurrentAudioDeviceCallback = @Sendable (AudioDevice) -> Void
+    typealias AudioDevicesCallback = @Sendable ([AudioDevice]) -> Void
     
-    typealias MessagesCallback = (Result<[MessageHandle], ClientResult>) -> Void
+    typealias MessagesCallback = @Sendable (_ result: Result<[MessageHandle], ClientResult>) -> Void
     
-    typealias UserIdentifierCallback = (_ userId: UInt64) -> Void
-    typealias MessageIdentifierCallback = (_ messageID: UInt64) -> Void
-    typealias LobbyIdentifierCallback = (_ lobbyID: UInt64) -> Void
-    typealias LobbyMemberCallback = (_ lobbyID: UInt64, _ memberID: UInt64) -> Void
-    typealias RelationshipCallback = (_ userID: UInt64, _ isDiscordRelationshipUpdate: Bool) -> Void
+    typealias UserIdentifierCallback = @Sendable (_ userId: UInt64) -> Void
+    typealias MessageIdentifierCallback = @Sendable (_ messageID: UInt64) -> Void
+    typealias LobbyIdentifierCallback = @Sendable (_ lobbyID: UInt64) -> Void
+    typealias LobbyMemberCallback = @Sendable (_ lobbyID: UInt64, _ memberID: UInt64) -> Void
+    typealias RelationshipCallback = @Sendable (_ userID: UInt64, _ isDiscordRelationshipUpdate: Bool) -> Void
 }
 
 // ===============================
@@ -42,7 +42,7 @@ public extension DiscordClient {
     
     // MARK: Important
     /// Callback function invoked when a new log message is generated.
-    typealias LogCallback = (
+    typealias LogCallback = @Sendable (
         _ message: String,
         _ severity: LoggingSeverity
     ) -> Void
@@ -50,7 +50,7 @@ public extension DiscordClient {
     /// Callback function for ``onStatusChanged(_:)``.
     //// `errorDetail` will usually be one of the error code described here:
     //// https://discord.com/developers/docs/topics/opcodes-and-status-codes#gateway-gateway-close-event-codes
-    typealias StatusChangedCallback = (_ result: Result<ClientStatus, ClientError>, ) -> Void
+    typealias StatusChangedCallback = @Sendable (_ result: Result<ClientStatus, ClientError>, ) -> Void
     
     /// Callback function for when ``updateRichPresence(to:_:)`` completes.
     typealias UpdateRichPresenceCallback = ClientResultCallback
@@ -63,16 +63,14 @@ public extension DiscordClient {
     typealias UpdateStatusCallback = ClientResultCallback
     
     /// Callback invoked when the ``isDiscordInstalled(_:)`` function completes
-    typealias IsDiscordAppInstalledCallback = (_ isInstalled: Bool) -> Void
+    typealias IsDiscordAppInstalledCallback = @Sendable (_ isInstalled: Bool) -> Void
     
     /// Callback function for when `GetDiscordClientConnectedUser` completes.
-    typealias GetDiscordClientConnectedUserCallback = (_ result: Result<UserHandle?, ClientResult>)
+    typealias GetDiscordClientConnectedUserCallback = @Sendable (_ result: Result<UserHandle?, ClientResult>)
         -> Void
     
     /// Callback function for ``fetchCurrentUser(token:type:_:)``.
-    typealias FetchCurrentUserCallback = (
-        _ result: Result<(userID: UInt64, username: String), ClientResult>
-    ) -> Void
+    typealias FetchCurrentUserCallback = @Sendable (_ result: Result<(userID: UInt64, username: String), ClientResult>) -> Void
     
 }
 
@@ -97,7 +95,7 @@ public extension DiscordClient {
     typealias InputAudioDevicesCallback = AudioDevicesCallback
     
     /// Callback function for ``onDeviceChange(_:)``.
-    typealias AudioDeviceChangedCallback = (
+    typealias AudioDeviceChangedCallback = @Sendable (
         _ input: [AudioDevice],
         _ output: [AudioDevice]
     ) -> Void
@@ -106,16 +104,16 @@ public extension DiscordClient {
     typealias SetAudioDeviceCallback = ClientResultCallback
     
     /// Callback function for ``onNoAudioInput(_:)``.
-    typealias NoAudioInputCallback = (_ inputDetected: Bool) -> Void
+    typealias NoAudioInputCallback = @Sendable (_ inputDetected: Bool) -> Void
     
     /// Callback function for ``onVoiceParticipantChanged(_:)``.
-    typealias VoiceParticipantChangedCallback = (_ lobbyID: UInt64, _ userID: UInt64, _ added: Bool) -> Void
+    typealias VoiceParticipantChangedCallback = @Sendable (_ lobbyID: UInt64, _ userID: UInt64, _ added: Bool) -> Void
     
     // MARK: Audio Processing
     
     /// Callback function for ``call(lobby:received:captured:)``.
     /// The audio samples in `data` can be modified in-place to achieve simple DSP effects.
-    typealias UserAudioReceivedCallback = (
+    typealias UserAudioReceivedCallback = @Sendable (
         _ userId: UInt64,
         _ data: UnsafeMutablePointer<Int16>?,
         _ samplesPerChannel: UInt64,
@@ -126,7 +124,7 @@ public extension DiscordClient {
     
     /// Callback function for ``call(lobby:received:captured:)``.
     /// The audio samples in `data` can be modified in-place to achieve simple DSP effects.
-    typealias UserAudioCapturedCallback = (
+    typealias UserAudioCapturedCallback = @Sendable (
         _ data: UnsafeMutablePointer<Int16>?,
         _ samplesPerChannel: UInt64,
         _ sampleRate: Int32,
@@ -146,13 +144,13 @@ public extension DiscordClient {
     /// if the user cancelled the authorization. The second arg, code, contains an authorization
     /// _code_. This alone cannot be used to authorize with Discord, and instead must be exchanged
     /// for an access token later.
-    typealias AuthorizationCallback = (_ result: Result<(code: String, redirectURI: String), ClientResult>) -> Void
+    typealias AuthorizationCallback = @Sendable (_ result: Result<(code: String, redirectURI: String), ClientResult>) -> Void
     
     /// Callback for ``DiscordClient/exchangeChildToken(parentToken:childId:_:)``.
-    typealias ExchangeChildTokenCallback = (_ result: Result<TokenExchange, ClientResult>) -> Void
+    typealias ExchangeChildTokenCallback = @Sendable (_ result: Result<TokenExchange, ClientResult>) -> Void
     
-    /// Callback function for the token exchange APIs such as ``DiscordClient/getToken(application:code:codeVerifier:redirectUri:_:)``
-    typealias TokenExchangeCallback = (_ result: Result<TokenExchange, ClientResult>) -> Void
+    /// Callback function for the token exchange APIs such as ``DiscordClient/getToken(application:code:codeVerifier:redirectURI:_:)``
+    typealias TokenExchangeCallback = @Sendable (_ result: Result<TokenExchange, ClientResult>) -> Void
     
     /// Callback invoked when a user requests to initiate the authorization flow from the discord app
     /// The callback receives no args and must call the functions needed to initiate the auth flow
@@ -224,16 +222,16 @@ public extension DiscordClient {
     /// This is used for all kinds of 'send message' calls despite the name, to make sure
     /// engine bindings use the same delegate type declaration for all of them, which makes things
     /// nicer. `SendMessageCallback` was unavailable because it's a macro on Windows.
-    typealias SendUserMessageCallback = (_ result: Result<UInt64, ClientResult>) -> Void
+    typealias SendUserMessageCallback = @Sendable (_ result: Result<UInt64, ClientResult>) -> Void
     
     /// Callback function for ``userMessageSummaries(_:)``.
-    typealias UserMessageSummariesCallback = (_ result: Result<[UserMessageSummary], ClientResult>) -> Void
+    typealias UserMessageSummariesCallback = @Sendable (_ result: Result<[UserMessageSummary], ClientResult>) -> Void
     
     /// Callback function for ``onMessageCreated(_:)``.
     typealias MessageCreatedCallback = MessageIdentifierCallback
     
     /// Callback function for ``onMessageDeleted(_:)``.
-    typealias MessageDeletedCallback = (_ messageID: UInt64, _ channelID: UInt64) -> Void
+    typealias MessageDeletedCallback = @Sendable (_ messageID: UInt64, _ channelID: UInt64) -> Void
     
     /// Callback function for ``onMessageUpdated(_:)``.
     typealias MessageUpdatedCallback = MessageIdentifierCallback
@@ -250,10 +248,10 @@ public extension DiscordClient {
     typealias GetLobbyMessagesCallback = MessagesCallback
     
     /// Callback function for ``createOrJoinLobby(secret:_:)``.
-    typealias CreateOrJoinLobbyCallback = (_ result: Result<UInt64, ClientResult>) -> Void
+    typealias CreateOrJoinLobbyCallback = @Sendable (_ result: Result<UInt64, ClientResult>) -> Void
     
     /// Callback function for ``joinLinkedLobbyGuild(for:provisionalMerge:body:)``.
-    typealias JoinLinkedLobbyGuildCallback = (_ result: Result<String, ClientResult>) -> Void
+    typealias JoinLinkedLobbyGuildCallback = @Sendable (_ result: Result<String, ClientResult>) -> Void
     
     /// Callback function for ``leaveLobby(_:_:)``.
     typealias LeaveLobbyCallback = ClientResultCallback
@@ -280,10 +278,10 @@ public extension DiscordClient {
     typealias LobbyMemberUpdatedCallback = LobbyMemberCallback
     
     /// Callback function for ``guildChannels(for:_:)``.
-    typealias GetGuildChannelsCallback = (_ result: Result<[GuildChannel], ClientResult>) -> Void
+    typealias GetGuildChannelsCallback = @Sendable (_ result: Result<[GuildChannel], ClientResult>) -> Void
     
     /// Callback function for ``userGuilds(_:)``.
-    typealias GetUserGuildsCallback = (_ result: Result<[GuildMinimal], ClientResult>) -> Void
+    typealias GetUserGuildsCallback = @Sendable (_ result: Result<[GuildMinimal], ClientResult>) -> Void
     
 }
 
@@ -294,19 +292,19 @@ public extension DiscordClient {
 public extension DiscordClient {
     
     /// Callback function for ``acceptActivityInvite(for:_:)``.
-    typealias AcceptActivityInviteCallback = (_ result: Result<String, ClientResult>) -> Void
+    typealias AcceptActivityInviteCallback = @Sendable (_ result: Result<String, ClientResult>) -> Void
     
     /// Callback function for ``sendActivityInvite(to:content:_:)``, ``sendActivityJoinRequest(to:_:)``, and ``sendActivityJoinRequestReply(for:_:)``.
     typealias SendActivityInviteCallback = ClientResultCallback
     
     /// Callback function for ``onActivityInviteCreated(_:)`` and ``onActivityInviteUpdated(_:)``.
-    typealias ActivityInviteCallback = (_ invite: ActivityInvite) -> Void
+    typealias ActivityInviteCallback = @Sendable (_ invite: ActivityInvite) -> Void
     
     /// Callback function for `SetActivityCallback`.
-    typealias ActivityJoinCallback = (_ joinSecret: String) -> Void
+    typealias ActivityJoinCallback = @Sendable (_ joinSecret: String) -> Void
     
     /// Callback function for ``onActivityJoinWithApp(_:)``.
-    typealias ActivityJoinWithApplicationCallback = (_ applicationID: UInt64, _ joinSecret: String) -> Void
+    typealias ActivityJoinWithApplicationCallback = @Sendable (_ applicationID: UInt64, _ joinSecret: String) -> Void
     
 }
 

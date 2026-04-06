@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Arguments to ``DiscordClient/authorize(args:_:)``
-public struct AuthorizationArgs: DiscordObject {
+public struct AuthorizationArgs: DiscordObject, Sendable {
     var storage: DiscordStorage<Discord_AuthorizationArgs>
     init(storage: DiscordStorage<Discord_AuthorizationArgs>) {
         self.storage = storage

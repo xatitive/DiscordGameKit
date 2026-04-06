@@ -24,7 +24,7 @@ public struct ActivityButton: DiscordObject {
             storage.withLock {
                 var ds = Discord_String()
                 Discord_ActivityButton_Label(&$0, &ds)
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         set {
@@ -43,7 +43,7 @@ public struct ActivityButton: DiscordObject {
             storage.withLock {
                 var ds = Discord_String()
                 Discord_ActivityButton_Url(&$0, &ds)
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         set {

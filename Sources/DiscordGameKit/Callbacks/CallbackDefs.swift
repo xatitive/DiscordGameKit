@@ -16,7 +16,7 @@ import Foundation
 // Commonly reused callbacks within the SDK
 
 public extension DiscordClient {
-    typealias ClientResultCallback = (_ result: ClientResult) -> Void
+    typealias ClientResultCallback = (_ result: Result<Void, ClientResult>) -> Void
     typealias VoidCallback = () -> Void
     
     typealias EndCallCallback = VoidCallback
@@ -25,10 +25,7 @@ public extension DiscordClient {
     typealias CurrentAudioDeviceCallback = (AudioDevice) -> Void
     typealias AudioDevicesCallback = ([AudioDevice]) -> Void
     
-    typealias MessagesCallback = (
-        _ result: ClientResult,
-        _ messages: [MessageHandle]
-    ) -> Void
+    typealias MessagesCallback = (Result<[MessageHandle], ClientResult>) -> Void
     
     typealias UserIdentifierCallback = (_ userId: UInt64) -> Void
     typealias MessageIdentifierCallback = (_ messageID: UInt64) -> Void
@@ -51,13 +48,9 @@ public extension DiscordClient {
     ) -> Void
     
     /// Callback function for ``onStatusChanged(_:)``.
-    /// `errorDetail` will usually be one of the error code described here:
-    /// https://discord.com/developers/docs/topics/opcodes-and-status-codes#gateway-gateway-close-event-codes
-    typealias StatusChangedCallback = (
-        _ status: ClientStatus,
-        _ error: ClientError,
-        _ errorDetail: Int32
-    ) -> Void
+    //// `errorDetail` will usually be one of the error code described here:
+    //// https://discord.com/developers/docs/topics/opcodes-and-status-codes#gateway-gateway-close-event-codes
+    typealias StatusChangedCallback = (_ result: Result<ClientStatus, ClientError>, ) -> Void
     
     /// Callback function for when ``updateRichPresence(to:_:)`` completes.
     typealias UpdateRichPresenceCallback = ClientResultCallback
@@ -73,16 +66,12 @@ public extension DiscordClient {
     typealias IsDiscordAppInstalledCallback = (_ isInstalled: Bool) -> Void
     
     /// Callback function for when `GetDiscordClientConnectedUser` completes.
-    typealias GetDiscordClientConnectedUserCallback = (
-        _ result: ClientResult,
-        _ user: UserHandle?
-    ) -> Void
+    typealias GetDiscordClientConnectedUserCallback = (_ result: Result<UserHandle?, ClientResult>)
+        -> Void
     
     /// Callback function for ``fetchCurrentUser(token:type:_:)``.
     typealias FetchCurrentUserCallback = (
-        _ result: ClientResult,
-        _ id: UInt64,
-        _ username: String
+        _ result: Result<(userID: UInt64, username: String), ClientResult>
     ) -> Void
     
 }
@@ -157,30 +146,13 @@ public extension DiscordClient {
     /// if the user cancelled the authorization. The second arg, code, contains an authorization
     /// _code_. This alone cannot be used to authorize with Discord, and instead must be exchanged
     /// for an access token later.
-    typealias AuthorizationCallback = (
-        _ result: ClientResult,
-        _ code: String,
-        _ redirectURI: String
-    ) -> Void
+    typealias AuthorizationCallback = (_ result: Result<(code: String, redirectURI: String), ClientResult>) -> Void
     
     /// Callback for ``DiscordClient/exchangeChildToken(parentToken:childId:_:)``.
-    typealias ExchangeChildTokenCallback = (
-        _ result: ClientResult,
-        _ accessToken: String,
-        _ tokenType: AuthorizationTokenType,
-        _ expiresIn: Int32,
-        _ scopes: String
-    ) -> Void
+    typealias ExchangeChildTokenCallback = (_ result: Result<TokenExchange, ClientResult>) -> Void
     
     /// Callback function for the token exchange APIs such as ``DiscordClient/getToken(application:code:codeVerifier:redirectUri:_:)``
-    typealias TokenExchangeCallback = (
-        _ result: ClientResult,
-        _ accessToken: String,
-        _ refreshToken: String,
-        _ tokenType: AuthorizationTokenType,
-        _ expiresIn: Int32,
-        _ scopes: String
-    ) -> Void
+    typealias TokenExchangeCallback = (_ result: Result<TokenExchange, ClientResult>) -> Void
     
     /// Callback invoked when a user requests to initiate the authorization flow from the discord app
     /// The callback receives no args and must call the functions needed to initiate the auth flow
@@ -211,6 +183,27 @@ public extension DiscordClient {
     /// Callback function for when ``openConnectedSettings(_:)`` completes.
     typealias OpenConnectedGamesSettingsInDiscordCallback = ClientResultCallback
     
+    struct TokenExchange: Sendable {
+        public let accessToken: String
+        public let refreshToken: String?
+        public let tokenType: AuthorizationTokenType
+        public let expiresIn: Int32
+        public let scopes: String
+        
+        public init(
+            accessToken: String,
+            refreshToken: String? = nil,
+            tokenType: AuthorizationTokenType,
+            expiresIn: Int32,
+            scopes: String
+        ) {
+            self.accessToken = accessToken
+            self.refreshToken = refreshToken
+            self.tokenType = tokenType
+            self.expiresIn = expiresIn
+            self.scopes = scopes
+        }
+    }
 }
 
 // =========================
@@ -231,13 +224,10 @@ public extension DiscordClient {
     /// This is used for all kinds of 'send message' calls despite the name, to make sure
     /// engine bindings use the same delegate type declaration for all of them, which makes things
     /// nicer. `SendMessageCallback` was unavailable because it's a macro on Windows.
-    typealias SendUserMessageCallback = (_ result: ClientResult, _ messageID: UInt64) -> Void
+    typealias SendUserMessageCallback = (_ result: Result<UInt64, ClientResult>) -> Void
     
     /// Callback function for ``userMessageSummaries(_:)``.
-    typealias UserMessageSummariesCallback = (
-        _ result: ClientResult,
-        _ summaries: [UserMessageSummary]
-    ) -> Void
+    typealias UserMessageSummariesCallback = (_ result: Result<[UserMessageSummary], ClientResult>) -> Void
     
     /// Callback function for ``onMessageCreated(_:)``.
     typealias MessageCreatedCallback = MessageIdentifierCallback
@@ -260,10 +250,10 @@ public extension DiscordClient {
     typealias GetLobbyMessagesCallback = MessagesCallback
     
     /// Callback function for ``createOrJoinLobby(secret:_:)``.
-    typealias CreateOrJoinLobbyCallback = (_ result: ClientResult, _ lobbyID: UInt64) -> Void
+    typealias CreateOrJoinLobbyCallback = (_ result: Result<UInt64, ClientResult>) -> Void
     
     /// Callback function for ``joinLinkedLobbyGuild(for:provisionalMerge:body:)``.
-    typealias JoinLinkedLobbyGuildCallback = (_ result: ClientResult, _ inviteURL: String) -> Void
+    typealias JoinLinkedLobbyGuildCallback = (_ result: Result<String, ClientResult>) -> Void
     
     /// Callback function for ``leaveLobby(_:_:)``.
     typealias LeaveLobbyCallback = ClientResultCallback
@@ -290,10 +280,10 @@ public extension DiscordClient {
     typealias LobbyMemberUpdatedCallback = LobbyMemberCallback
     
     /// Callback function for ``guildChannels(for:_:)``.
-    typealias GetGuildChannelsCallback = (_ result: ClientResult, _ channels: [GuildChannel]) -> Void
+    typealias GetGuildChannelsCallback = (_ result: Result<[GuildChannel], ClientResult>) -> Void
     
     /// Callback function for ``userGuilds(_:)``.
-    typealias GetUserGuildsCallback = (_ result: ClientResult, _ guilds: [GuildMinimal]) -> Void
+    typealias GetUserGuildsCallback = (_ result: Result<[GuildMinimal], ClientResult>) -> Void
     
 }
 
@@ -304,7 +294,7 @@ public extension DiscordClient {
 public extension DiscordClient {
     
     /// Callback function for ``acceptActivityInvite(for:_:)``.
-    typealias AcceptActivityInviteCallback = (_ result: ClientResult, _ joinSecret: String) -> Void
+    typealias AcceptActivityInviteCallback = (_ result: Result<String, ClientResult>) -> Void
     
     /// Callback function for ``sendActivityInvite(to:content:_:)``, ``sendActivityJoinRequest(to:_:)``, and ``sendActivityJoinRequestReply(for:_:)``.
     typealias SendActivityInviteCallback = ClientResultCallback

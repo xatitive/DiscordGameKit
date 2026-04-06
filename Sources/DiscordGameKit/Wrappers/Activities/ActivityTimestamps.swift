@@ -1,0 +1,74 @@
+//
+//  ActivityTimestamps.swift
+//  dhinaSwifting
+//
+//  Created by Christian Norton on 3/29/26.
+//
+
+@_implementationOnly import discord_partner_sdk
+import Foundation
+
+/// See ``Activity/timestamps``
+public struct ActivityTimestamps: DiscordObject {
+    var storage: DiscordStorage<Discord_ActivityTimestamps>
+    init(storage: DiscordStorage<Discord_ActivityTimestamps>) {
+        self.storage = storage
+    }
+    
+    public init() {
+        self.storage = .init()
+    }
+    
+    /// The time the activity started, in milliseconds since Unix epoch.
+    ///
+    /// The SDK will try to convert seconds to milliseconds if a small-ish value is passed in.
+    /// If specified, the Discord client will render a count up timer showing how long the user has
+    /// been playing this activity.
+    public var start: Date? {
+        get {
+            let time = storage.withLock { raw in
+                TimeInterval(Discord_ActivityTimestamps_Start(&raw))
+            }
+            return Date(timeIntervalSince1970: time / 1000)
+        }
+        set {
+            if let newValue {
+                let time = UInt64(newValue.timeIntervalSince1970 * 1000)
+                storage.withLock { raw in
+                    Discord_ActivityTimestamps_SetStart(&raw, time)
+                }
+            } else {
+                storage.withLock { raw in
+                    Discord_ActivityTimestamps_SetStart(&raw, 0)
+                }
+            }
+        }
+    }
+
+    /// The time the activity will end at, in milliseconds since Unix epoch.
+    ///
+    /// The SDK will try to convert seconds to milliseconds if a small-ish value is passed in.
+    /// If specified, the Discord client will render a countdown timer showing how long until the
+    /// activity ends.
+    public var end: Date? {
+        get {
+            let time = storage.withLock { raw in
+                TimeInterval(Discord_ActivityTimestamps_End(&raw))
+            }
+            return Date(timeIntervalSince1970: time / 1000)
+        }
+        set {
+            if let newValue {
+                let time = UInt64(newValue.timeIntervalSince1970 * 1000)
+                storage.withLock { raw in
+                    Discord_ActivityTimestamps_SetEnd(&raw, time)
+                }
+            } else {
+                storage.withLock { raw in
+                    Discord_ActivityTimestamps_SetEnd(&raw, 0)
+                }
+            }
+        }
+    }
+    
+}

@@ -22,6 +22,7 @@ func applicationIdFromEnv(at path: String) throws -> UInt64 {
             in: .whitespaces
         )
         guard key == "DISCORD_APPLICATION_ID", let intValue = UInt64(value) else { throw "Couldn't convert to UInt64" }
+        return intValue
     }
     
     throw "No .env file found to get the key from!"

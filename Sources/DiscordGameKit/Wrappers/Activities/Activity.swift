@@ -460,7 +460,8 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { activityRaw in
                 var raw = Discord_ActivityAssets()
-                return activityRaw.assets(&raw) ? ActivityAssets(takingOwnership: raw) : nil
+                return activityRaw
+                    .assets(&raw) ? ActivityAssets(takingOwnership: raw) : ActivityAssets()
             }
         }
         _modify {
@@ -490,7 +491,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { activityRaw in
                 var raw = Discord_ActivityTimestamps()
-                return activityRaw.timestamps(&raw) ? ActivityTimestamps(takingOwnership: raw) : nil
+                return activityRaw.timestamps(&raw) ? ActivityTimestamps(takingOwnership: raw) : ActivityTimestamps()
             }
         }
         _modify {
@@ -518,7 +519,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { activityRaw in
                 var raw = Discord_ActivityParty()
-                return activityRaw.party(&raw) ? ActivityParty(takingOwnership: raw) : nil
+                return activityRaw.party(&raw) ? ActivityParty(takingOwnership: raw) : ActivityParty()
             }
         }
         _modify {
@@ -546,7 +547,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { activityRaw in
                 var raw = Discord_ActivitySecrets()
-                return activityRaw.secrets(&raw) ? ActivitySecrets(takingOwnership: raw) : nil
+                return activityRaw.secrets(&raw) ? ActivitySecrets(takingOwnership: raw) : ActivitySecrets()
             }
         }
         _modify {

@@ -8,7 +8,9 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Struct that encapsulates both parts of the code verification flow.
-public struct AuthorizationCodeVerifier: DiscordObject, Sendable, CustomStringConvertible {
+public struct AuthorizationCodeVerifier: DiscordObject, Sendable,
+    CustomStringConvertible
+{
     var storage: DiscordStorage<Discord_AuthorizationCodeVerifier>
     init(storage: DiscordStorage<Discord_AuthorizationCodeVerifier>) {
         self.storage = storage
@@ -41,17 +43,15 @@ public struct AuthorizationCodeVerifier: DiscordObject, Sendable, CustomStringCo
     public var verifier: String {
         get {
             storage.withLock { raw in
-                gettingString { span in
-                    raw.verifier(span: &span)
-                }
+                var ds = Discord_String()
+                raw.verifier(&ds)
+                return ds.toString()
             }
         }
         set {
             ensureUnique()
-            storage.withLock { raw in
-                settingString(newValue) { buf in
-                    raw.setVerifier(span: buf)
-                }
+            newValue.withDiscordString { str in
+                usingLock { $0.setVerifier(str) }
             }
         }
     }

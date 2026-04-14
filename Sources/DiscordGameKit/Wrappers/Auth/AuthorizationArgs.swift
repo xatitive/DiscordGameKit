@@ -8,16 +8,18 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Arguments to ``DiscordClient/authorize(with:_:)``
-public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertible {
+public struct AuthorizationArgs: DiscordObject, Sendable,
+    CustomStringConvertible
+{
     var storage: DiscordStorage<Discord_AuthorizationArgs>
     init(storage: DiscordStorage<Discord_AuthorizationArgs>) {
         self.storage = storage
     }
-    
+
     public init() {
         self.storage = .init()
     }
-    
+
     /// Optional. The Discord application ID for your game. Defaults to the value set by ``DiscordClient/applicationId``
     public var clientId: UInt64 {
         get { usingLock { $0.clientId() } }
@@ -26,7 +28,7 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             usingLock { $0.setClientId(newValue) }
         }
     }
-    
+
     /// Scopes is a space separated string of the oauth scopes your game is requesting.
     ///
     /// Most games should just pass in ``Discord/communicationScopes`` or
@@ -56,34 +58,32 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             }
         }
     }
-    
+
     /// See https://discord.com/developers/docs/topics/oauth2#state-and-security for details on this field.
     ///
     /// We recommend leaving this unset, and the SDK will automatically generate a secure random value for you.
     public var state: String? {
         get {
             storage.withLock { raw in
-                gettingString { span in
-                    raw.state(span: &span)
-                }
+                var ds = Discord_String()
+                guard raw.state(&ds) else { return nil }
+                return ds.toString()
             }
         }
         _modify {
-            ensureUnique()
             var value = self.state
             yield &value
             guard let value else {
-                usingLock { $0.setState(span: nil) }
+                usingLock { $0.setState(nil) }
                 return
             }
-            storage.withLock { raw in
-                settingString(value) { buf in
-                    raw.setState(span: buf)
-                }
+            value.withDiscordStringPointer { ptr in
+                usingLock { $0.setState(ptr) }
+
             }
         }
     }
-    
+
     /// The nonce field is generally only useful for backend integrations using ID tokens.
     ///
     /// For more information, see:
@@ -91,46 +91,48 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
     public var nonce: String? {
         get {
             storage.withLock { raw in
-                gettingString { span in
-                    raw.nonce(span: &span)
-                }
+                var ds = Discord_String()
+                guard raw.nonce(&ds) else { return nil }
+                return ds.toString()
             }
         }
         _modify {
-            ensureUnique()
             var value = self.nonce
             yield &value
             guard let value else {
-                usingLock { $0.setNonce(span: nil) }
+                usingLock { $0.setNonce(nil) }
                 return
             }
-            storage.withLock { raw in
-                settingString(value) { buf in
-                    raw.setNonce(span: buf)
-                }
+            value.withDiscordStringPointer { ptr in
+                usingLock { $0.setNonce(ptr) }
+
             }
         }
     }
-    
+
     /// If using the ``DiscordClient/getToken(application:code:codeVerifier:redirectURI:_:)`` flow, you will need to generate a code challenge and verifier.
     ///
     /// Use ``DiscordClient/authorizationCodeVerifier`` to generate these values and pass the challenge property here.
     public var codeChallenge: AuthorizationCodeChallenge? {
         get {
             var codeChallenge = Discord_AuthorizationCodeChallenge()
-            guard storage.withLock({ $0.codeChallenge(&codeChallenge) }) else { return nil }
-            return AuthorizationCodeChallenge(storage: .init(takingOwnership: codeChallenge))
+            guard storage.withLock({ $0.codeChallenge(&codeChallenge) }) else {
+                return nil
+            }
+            return AuthorizationCodeChallenge(
+                storage: .init(takingOwnership: codeChallenge)
+            )
         }
         _modify {
             ensureUnique()
             var value = self.codeChallenge
             yield &value
-            
+
             guard let value else {
                 usingLock { $0.setCodeChallenge(nil) }
                 return
             }
-            
+
             value.storage.withLock { challenge in
                 self.storage.withLock { raw in
                     raw.setCodeChallenge(&challenge)
@@ -138,14 +140,15 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             }
         }
     }
-    
+
     /// The type of integration the app will be installed as.
     ///
     /// - seealso: https://discord.com/developers/docs/resources/application#installation-context
     public var integrationType: IntegrationType? {
         get {
             var integrationType = IntegrationType.guildInstall.discordValue
-            guard storage.withLock({ $0.integrationType(&integrationType) }) else { return nil }
+            guard storage.withLock({ $0.integrationType(&integrationType) })
+            else { return nil }
             return integrationType.swiftValue
         }
         _modify {
@@ -162,7 +165,7 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             }
         }
     }
-    
+
     /// Custom URI scheme for mobile redirects.
     ///
     /// This allows games to specify a completely custom URI scheme for OAuth redirects.
@@ -177,27 +180,23 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
     public var customSchemeParam: String? {
         get {
             storage.withLock { raw in
-                gettingString { span in
-                    raw.customSchemeParam(span: &span)
-                }
+                var ds = Discord_String()
+                guard raw.customSchemeParam(&ds) else { return nil }
+                return ds.toString()
             }
         }
         _modify {
-            ensureUnique()
             var value = self.customSchemeParam
             yield &value
             guard let value else {
-                usingLock { $0.setCustomSchemeParam(span: nil) }
+                usingLock { $0.setCustomSchemeParam(nil) }
                 return
             }
-            storage.withLock { raw in
-                settingString(value) { buf in
-                    raw.setCustomSchemeParam(span: buf)
-                }
+            value.withDiscordStringPointer { ptr in
+                usingLock { $0.setCustomSchemeParam(ptr) }
             }
         }
     }
-
     public var description: String {
         "AuthorizationArgs(clientId: \(clientId), scopes: \(scopes), state: \(state, default: "N/A"), nonce: \(nonce, default: "N/A"), codeChallenge: \(codeChallenge, default: "N/A"), integrationType: \(integrationType, default: "N/A"), customSchemeParam: \(customSchemeParam, default: "N/A"))"
     }

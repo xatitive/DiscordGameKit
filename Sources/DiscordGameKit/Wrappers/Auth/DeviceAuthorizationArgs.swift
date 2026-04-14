@@ -13,11 +13,11 @@ public struct DeviceAuthorizationArgs: DiscordObject, CustomStringConvertible {
     init(storage: DiscordStorage<Discord_DeviceAuthorizationArgs>) {
         self.storage = storage
     }
-    
+
     public init() {
         self.storage = .init()
     }
-    
+
     /// Optional. The Discord application ID for your game. Defaults to the value set by ``DiscordClient/applicationId``
     public var clientId: UInt64 {
         get { usingLock { $0.clientId() } }
@@ -26,7 +26,7 @@ public struct DeviceAuthorizationArgs: DiscordObject, CustomStringConvertible {
             usingLock { $0.setClientId(newValue) }
         }
     }
-    
+
     /// Scopes is a space separated string of the oauth scopes your game is requesting.
     ///
     /// Most games should just pass in ``Discord/communicationScopes`` or
@@ -42,17 +42,15 @@ public struct DeviceAuthorizationArgs: DiscordObject, CustomStringConvertible {
     public var scopes: String {
         get {
             storage.withLock { raw in
-                gettingString { span in
-                    raw.scopes(span: &span)
-                }
+                var ds = Discord_String()
+                raw.scopes(&ds)
+                return ds.toString()
             }
         }
         set {
             ensureUnique()
-            storage.withLock { raw in
-                settingString(newValue) { buf in
-                    raw.setScopes(span: buf)
-                }
+            newValue.withDiscordString { str in
+                usingLock { $0.setScopes(str) }
             }
         }
     }

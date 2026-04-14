@@ -6,8 +6,10 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
 /// See ``Activity/secrets``
+@ViewConfigurable
 public struct ActivitySecrets: DiscordObject, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_ActivitySecrets>
     init(storage: DiscordStorage<Discord_ActivitySecrets>) {
@@ -16,6 +18,34 @@ public struct ActivitySecrets: DiscordObject, Sendable, CustomStringConvertible 
     
     public init() {
         self.storage = .init()
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration {
+        var join: String?
+    }
+
+    private mutating func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private mutating func applyViewConfigChanges() {
+        if let join = viewConfig.join {
+            self.join = join
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
     
     /// A secret string that is shared with users who are accepted into the party so the game knows how to join the user to the party.

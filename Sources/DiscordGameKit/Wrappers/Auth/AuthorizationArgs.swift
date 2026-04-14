@@ -6,8 +6,10 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
 /// Arguments to ``DiscordClient/authorize(with:_:)``
+@ViewConfigurable
 public struct AuthorizationArgs: DiscordObject, Sendable,
     CustomStringConvertible
 {
@@ -18,6 +20,58 @@ public struct AuthorizationArgs: DiscordObject, Sendable,
 
     public init() {
         self.storage = .init()
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration: @unchecked Sendable {
+        var clientId: UInt64?
+        var scopes: String?
+        var state: String?
+        var nonce: String?
+        var codeChallenge: AuthorizationCodeChallenge?
+        var integrationType: IntegrationType?
+        var customSchemeParam: String?
+    }
+
+    private mutating func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private mutating func applyViewConfigChanges() {
+        if let clientId = viewConfig.clientId {
+            self.clientId = clientId
+        }
+        if let scopes = viewConfig.scopes {
+            self.scopes = scopes
+        }
+        if let state = viewConfig.state {
+            self.state = state
+        }
+        if let nonce = viewConfig.nonce {
+            self.nonce = nonce
+        }
+        if let codeChallenge = viewConfig.codeChallenge {
+            self.codeChallenge = codeChallenge
+        }
+        if let integrationType = viewConfig.integrationType {
+            self.integrationType = integrationType
+        }
+        if let customSchemeParam = viewConfig.customSchemeParam {
+            self.customSchemeParam = customSchemeParam
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
 
     /// Optional. The Discord application ID for your game. Defaults to the value set by ``DiscordClient/applicationId``

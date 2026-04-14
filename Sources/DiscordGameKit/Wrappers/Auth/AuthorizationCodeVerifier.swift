@@ -6,9 +6,11 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
 /// Struct that encapsulates both parts of the code verification flow.
-public struct AuthorizationCodeVerifier: DiscordObject, Sendable,
+@ViewConfigurable
+public struct AuthorizationCodeVerifier: DiscordObject, @unchecked Sendable,
     CustomStringConvertible
 {
     var storage: DiscordStorage<Discord_AuthorizationCodeVerifier>
@@ -18,6 +20,38 @@ public struct AuthorizationCodeVerifier: DiscordObject, Sendable,
 
     public init() {
         self.storage = .init()
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration: @unchecked Sendable {
+        var challenge: AuthorizationCodeChallenge?
+        var verifier: String?
+    }
+
+    private mutating func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private mutating func applyViewConfigChanges() {
+        if let challenge = viewConfig.challenge {
+            self.challenge = challenge
+        }
+        if let verifier = viewConfig.verifier {
+            self.verifier = verifier
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
 
     /// The challenge part of the code verification flow.

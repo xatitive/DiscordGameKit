@@ -6,6 +6,7 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
 // TODO: fix optional value setting
 
@@ -189,6 +190,7 @@
 /// });
 /// \endcode
 ///
+@ViewConfigurable
 public struct Activity: DiscordObject, CustomStringConvertible {
     var storage: DiscordStorage<Discord_Activity>
     init(storage: DiscordStorage<Discord_Activity>) {
@@ -197,6 +199,86 @@ public struct Activity: DiscordObject, CustomStringConvertible {
 
     public init() {
         self.storage = .init()
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration {
+        var name: String?
+        var type: ActivityType?
+        var supportedPlatform: ActivityGamePlatform?
+        var statusDisplay: StatusDisplayType?
+        var state: String?
+        var stateUrl: String?
+        var details: String?
+        var detailsUrl: String?
+        var applicationId: UInt64?
+        var parentApplicationId: UInt64?
+        var assets: ActivityAssets?
+        var timestamps: ActivityTimestamps?
+        var party: ActivityParty?
+        var secrets: ActivitySecrets?
+    }
+
+    private mutating func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private mutating func applyViewConfigChanges() {
+        if let name = viewConfig.name {
+            self.name = name
+        }
+        if let type = viewConfig.type {
+            self.type = type
+        }
+        if let supportedPlatform = viewConfig.supportedPlatform {
+            self.supportedPlatform = supportedPlatform
+        }
+        if let statusDisplay = viewConfig.statusDisplay {
+            self.statusDisplay = statusDisplay
+        }
+        if let state = viewConfig.state {
+            self.state = state
+        }
+        if let stateUrl = viewConfig.stateUrl {
+            self.stateUrl = stateUrl
+        }
+        if let details = viewConfig.details {
+            self.details = details
+        }
+        if let detailsUrl = viewConfig.detailsUrl {
+            self.detailsUrl = detailsUrl
+        }
+        if let applicationId = viewConfig.applicationId {
+            self.applicationId = applicationId
+        }
+        if let parentApplicationId = viewConfig.parentApplicationId {
+            self.parentApplicationId = parentApplicationId
+        }
+        if let assets = viewConfig.assets {
+            self.assets = assets
+        }
+        if let timestamps = viewConfig.timestamps {
+            self.timestamps = timestamps
+        }
+        if let party = viewConfig.party {
+            self.party = party
+        }
+        if let secrets = viewConfig.secrets {
+            self.secrets = secrets
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
     
     /// The name of the game or application that the activity is associated with.

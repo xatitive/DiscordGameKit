@@ -6,8 +6,10 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
 /// Contains information about non-text content in a message that likely cannot be rendered in game such as images, videos, embeds, polls, and more.
+@ViewConfigurable
 public struct AdditionalContent: DiscordObject, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_AdditionalContent>
     init(storage: DiscordStorage<Discord_AdditionalContent>) {
@@ -16,6 +18,42 @@ public struct AdditionalContent: DiscordObject, Sendable, CustomStringConvertibl
 
     public init() {
         self.storage = .init()
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration {
+        var type: AdditionalContentType?
+        var title: String?
+        var count: UInt8?
+    }
+
+    private mutating func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private mutating func applyViewConfigChanges() {
+        if let type = viewConfig.type {
+            self.type = type
+        }
+        if let title = viewConfig.title {
+            self.title = title
+        }
+        if let count = viewConfig.count {
+            self.count = count
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
 
     /// Represents the type of additional content in the message.

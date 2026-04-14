@@ -6,8 +6,10 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
 /// Represents a channel in a guild that the current user is a member of and may be able to be linked to a lobby.
+@ViewConfigurable
 public struct GuildChannel: DiscordObject, Identifiable, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_GuildChannel>
     init(storage: DiscordStorage<Discord_GuildChannel>) {
@@ -16,6 +18,62 @@ public struct GuildChannel: DiscordObject, Identifiable, Sendable, CustomStringC
 
     public init() {
         self.storage = .init()
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration {
+        var id: UInt64?
+        var name: String?
+        var type: ChannelType?
+        var position: Int32?
+        var parentId: UInt64?
+        var isLinkable: Bool?
+        var isViewableAndWriteableByAllMembers: Bool?
+        var linkedLobby: LinkedLobby?
+    }
+
+    private mutating func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private mutating func applyViewConfigChanges() {
+        if let id = viewConfig.id {
+            self.id = id
+        }
+        if let name = viewConfig.name {
+            self.name = name
+        }
+        if let type = viewConfig.type {
+            self.type = type
+        }
+        if let position = viewConfig.position {
+            self.position = position
+        }
+        if let parentId = viewConfig.parentId {
+            self.parentId = parentId
+        }
+        if let isLinkable = viewConfig.isLinkable {
+            self.isLinkable = isLinkable
+        }
+        if let isViewableAndWriteableByAllMembers = viewConfig.isViewableAndWriteableByAllMembers {
+            self.isViewableAndWriteableByAllMembers = isViewableAndWriteableByAllMembers
+        }
+        if let linkedLobby = viewConfig.linkedLobby {
+            self.linkedLobby = linkedLobby
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
 
     /// ID of the channel.

@@ -6,12 +6,58 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
+@ViewConfigurable
 public final class DiscordCall: DiscordObject {
     var storage: DiscordStorage<Discord_Call>
     
     init(storage: DiscordStorage<Discord_Call>) {
         self.storage = storage
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration {
+        var selfMute: Bool?
+        var selfDeaf: Bool?
+        var audioMode: AudioModeType?
+        var pttActive: Bool?
+        var pttReleaseDelay: UInt32?
+    }
+
+    private func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private func applyViewConfigChanges() {
+        if let selfMute = viewConfig.selfMute {
+            self.selfMute = selfMute
+        }
+        if let selfDeaf = viewConfig.selfDeaf {
+            self.selfDeaf = selfDeaf
+        }
+        if let audioMode = viewConfig.audioMode {
+            self.audioMode = audioMode
+        }
+        if let pttActive = viewConfig.pttActive {
+            self.pttActive = pttActive
+        }
+        if let pttReleaseDelay = viewConfig.pttReleaseDelay {
+            self.pttReleaseDelay = pttReleaseDelay
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
     
     /// Returns the current call status.

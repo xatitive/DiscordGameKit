@@ -7,8 +7,10 @@
 
 @_implementationOnly import discord_partner_sdk
 public import Foundation
+public import ViewConfigurable
 
 /// See ``Activity/timestamps``
+@ViewConfigurable
 public struct ActivityTimestamps: DiscordObject, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_ActivityTimestamps>
     init(storage: DiscordStorage<Discord_ActivityTimestamps>) {
@@ -18,7 +20,39 @@ public struct ActivityTimestamps: DiscordObject, Sendable, CustomStringConvertib
     public init() {
         self.storage = .init()
     }
-    
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration {
+        var start: Date?
+        var end: Date?
+    }
+
+    private mutating func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private mutating func applyViewConfigChanges() {
+        if let start = viewConfig.start {
+            self.start = start
+        }
+        if let end = viewConfig.end {
+            self.end = end
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
+    }
+
     /// The time the activity started, in milliseconds since Unix epoch.
     ///
     /// The SDK will try to convert seconds to milliseconds if a small-ish value is passed in.
@@ -77,5 +111,13 @@ public struct ActivityTimestamps: DiscordObject, Sendable, CustomStringConvertib
     
     public var description: String {
         "ActivityTimestamps(start: \(start, default: "N/A"), end: \(end, default: "N/A"))"
+    }
+    
+    public static func start(_ date: Date?) -> Self {
+        return .init().start(date)
+    }
+
+    public static func end(_ date: Date?) -> Self {
+        return .init().end(date)
     }
 }

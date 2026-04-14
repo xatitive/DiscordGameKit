@@ -76,7 +76,7 @@ extension DiscordObject {
     func gettingString(
         _ fn: (inout MutableSpan<UInt8>) -> Void
     ) -> String {
-        var bytes: InlineArray<1024, UInt8> = .init(repeating: 0)
+        var bytes: InlineArray<512, UInt8> = .init(repeating: 0)
         var span: MutableSpan<UInt8> = bytes.mutableSpan
         fn(&span)
         let str = span.toString()
@@ -86,7 +86,7 @@ extension DiscordObject {
     func gettingString(
         _ fn: (inout MutableSpan<UInt8>) -> Bool
     ) -> String? {
-        var bytes: InlineArray<1024, UInt8> = .init(repeating: 0)
+        var bytes: InlineArray<512, UInt8> = .init(repeating: 0)
         var span: MutableSpan<UInt8> = bytes.mutableSpan
         return fn(&span) ? span.toString() : nil
     }

@@ -1,8 +1,8 @@
 // swift-tools-version: 6.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
-import PackageDescription
 import Foundation
+import PackageDescription
 
 let extraSettings: [SwiftSetting] = [
     .enableExperimentalFeature("SuppressedAssociatedTypes"),
@@ -23,9 +23,10 @@ let sourcesDirectory = URL(fileURLWithPath: #filePath)
     .deletingLastPathComponent()
     .appending(path: "Sources")
 
-let discordTBD = sourcesDirectory.appending(path: "discord_partner_sdk/libdiscord_partner_sdk.tbd")
+let discordTBD = sourcesDirectory.appending(
+    path: "discord_partner_sdk/libdiscord_partner_sdk.tbd"
+)
 let discordLinkerSetting = LinkerSetting.unsafeFlags([discordTBD.path])
-
 
 let package = Package(
     name: "DiscordGameKit",
@@ -38,7 +39,13 @@ let package = Package(
     ],
     traits: [
         .trait(name: "asyncCallbacks"),
-        .default(enabledTraits: ["asyncCallbacks"])
+        .default(enabledTraits: ["asyncCallbacks"]),
+    ],
+    dependencies: [
+        .package(
+            url: "https://github.com/grindrllc/view-configurable",
+            from: "0.1.1"
+        )
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -50,9 +57,14 @@ let package = Package(
         ),
         .target(
             name: "DiscordGameKit",
-            dependencies: ["discord_partner_sdk"],
+            dependencies: [
+                "discord_partner_sdk",
+                .product(name: "ViewConfigurable", package: "view-configurable")
+            ],
             swiftSettings: [
-                .unsafeFlags(["-enable-library-evolution", "-emit-module-interface"]),
+                .unsafeFlags([
+                    "-enable-library-evolution", "-emit-module-interface",
+                ]),
                 .define("asyncCallbacks"),
             ] + extraSettings,
         ),

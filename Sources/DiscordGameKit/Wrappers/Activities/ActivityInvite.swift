@@ -6,10 +6,12 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
 /// When one user invites another to join their game on Discord, it will send a message to
 /// that user. The SDK will parse those messages for you automatically, and this struct contains all
 /// of the relevant invite information which is needed to later accept that invite.
+@ViewConfigurable
 public struct ActivityInvite: DiscordObject, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_ActivityInvite>
     init(storage: DiscordStorage<Discord_ActivityInvite>) {
@@ -18,6 +20,66 @@ public struct ActivityInvite: DiscordObject, Sendable, CustomStringConvertible {
 
     public init() {
         self.storage = .init()
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration {
+        var senderId: UInt64?
+        var channelId: UInt64?
+        var messageId: UInt64?
+        var type: ActivityActionType?
+        var applicationId: UInt64?
+        var parentApplicationId: UInt64?
+        var partyId: String?
+        var sessionId: String?
+        var isValid: Bool?
+    }
+
+    private mutating func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private mutating func applyViewConfigChanges() {
+        if let senderId = viewConfig.senderId {
+            self.senderId = senderId
+        }
+        if let channelId = viewConfig.channelId {
+            self.channelId = channelId
+        }
+        if let messageId = viewConfig.messageId {
+            self.messageId = messageId
+        }
+        if let type = viewConfig.type {
+            self.type = type
+        }
+        if let applicationId = viewConfig.applicationId {
+            self.applicationId = applicationId
+        }
+        if let parentApplicationId = viewConfig.parentApplicationId {
+            self.parentApplicationId = parentApplicationId
+        }
+        if let partyId = viewConfig.partyId {
+            self.partyId = partyId
+        }
+        if let sessionId = viewConfig.sessionId {
+            self.sessionId = sessionId
+        }
+        if let isValid = viewConfig.isValid {
+            self.isValid = isValid
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
 
     /// The user id of the user who sent the invite.

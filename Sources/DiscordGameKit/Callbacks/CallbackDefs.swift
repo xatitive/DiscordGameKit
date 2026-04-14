@@ -51,6 +51,9 @@ public extension DiscordClient {
     //// `errorDetail` will usually be one of the error code described here:
     //// https://discord.com/developers/docs/topics/opcodes-and-status-codes#gateway-gateway-close-event-codes
     typealias StatusChangedCallback = @Sendable (_ result: Result<ClientStatus, ClientError>, ) -> Void
+
+    /// Callback function for ``onReady(_:)``.
+    typealias ReadyCallback = VoidCallback
     
     /// Callback function for when ``updateRichPresence(to:_:)`` completes.
     typealias UpdateRichPresenceCallback = ClientResultCallback

@@ -6,8 +6,10 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
 /// See ``Activity``
+@ViewConfigurable
 public struct ActivityButton: DiscordObject, CustomStringConvertible {
     var storage: DiscordStorage<Discord_ActivityButton>
     init(storage: DiscordStorage<Discord_ActivityButton>) {
@@ -16,6 +18,38 @@ public struct ActivityButton: DiscordObject, CustomStringConvertible {
 
     public init() {
         self.storage = .init()
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration {
+        var label: String?
+        var url: String?
+    }
+
+    private mutating func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private mutating func applyViewConfigChanges() {
+        if let label = viewConfig.label {
+            self.label = label
+        }
+        if let url = viewConfig.url {
+            self.url = url
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
 
     /// The label of the button.

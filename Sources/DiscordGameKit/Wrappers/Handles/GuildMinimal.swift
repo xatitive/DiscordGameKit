@@ -6,9 +6,11 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
 /// Represents a guild (also knowns as a Discord server), that the current user is a member
 /// of, that contains channels that can be linked to a lobby.
+@ViewConfigurable
 public struct GuildMinimal: DiscordObject, Identifiable, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_GuildMinimal>
     init(storage: DiscordStorage<Discord_GuildMinimal>) {
@@ -17,6 +19,38 @@ public struct GuildMinimal: DiscordObject, Identifiable, Sendable, CustomStringC
 
     public init() {
         self.storage = .init()
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration {
+        var id: UInt64?
+        var name: String?
+    }
+
+    private mutating func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private mutating func applyViewConfigChanges() {
+        if let id = viewConfig.id {
+            self.id = id
+        }
+        if let name = viewConfig.name {
+            self.name = name
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
 
     /// ID of the guild.

@@ -6,8 +6,10 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
 /// Settings for the void auto detection threshold for picking up activity from a user's mic.
+@ViewConfigurable
 public final class VADThresholdSettings: DiscordObject {
     var storage: DiscordStorage<Discord_VADThresholdSettings>
     init(storage: DiscordStorage<Discord_VADThresholdSettings>) {
@@ -16,6 +18,38 @@ public final class VADThresholdSettings: DiscordObject {
     
     public init() {
         self.storage = .init()
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration {
+        var automatic: Bool?
+        var threshold: Float?
+    }
+
+    private func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private func applyViewConfigChanges() {
+        if let automatic = viewConfig.automatic {
+            self.automatic = automatic
+        }
+        if let threshold = viewConfig.threshold {
+            self.threshold = threshold
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
     
     /// Whether or not Discord is currently automatically setting and detecting the appropriate threshold to use.

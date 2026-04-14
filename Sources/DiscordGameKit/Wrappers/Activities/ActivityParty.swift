@@ -6,8 +6,10 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
 /// See ``Activity/party``
+@ViewConfigurable
 public struct ActivityParty: DiscordObject, Identifiable, Sendable, CustomStringConvertible {
     var storage: DiscordStorage<Discord_ActivityParty>
     init(storage: DiscordStorage<Discord_ActivityParty>) {
@@ -16,6 +18,46 @@ public struct ActivityParty: DiscordObject, Identifiable, Sendable, CustomString
     
     public init(){
         self.storage = .init()
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration {
+        var id: String?
+        var currentSize: Int32?
+        var maxSize: Int32?
+        var privacy: ActivityPartyPrivacy?
+    }
+
+    private mutating func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private mutating func applyViewConfigChanges() {
+        if let id = viewConfig.id {
+            self.id = id
+        }
+        if let currentSize = viewConfig.currentSize {
+            self.currentSize = currentSize
+        }
+        if let maxSize = viewConfig.maxSize {
+            self.maxSize = maxSize
+        }
+        if let privacy = viewConfig.privacy {
+            self.privacy = privacy
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
     
     /// Specifies the id of the party. "Party" is used colloquially to refer to a group of players in a shared context. This could be a lobby id, server id, team id, etc.

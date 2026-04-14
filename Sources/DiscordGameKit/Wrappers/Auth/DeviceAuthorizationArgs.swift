@@ -6,8 +6,10 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
 /// Arguments to ``DiscordClient/getTokenFromDevice(args:_:)``
+@ViewConfigurable
 public struct DeviceAuthorizationArgs: DiscordObject, CustomStringConvertible {
     var storage: DiscordStorage<Discord_DeviceAuthorizationArgs>
     init(storage: DiscordStorage<Discord_DeviceAuthorizationArgs>) {
@@ -16,6 +18,38 @@ public struct DeviceAuthorizationArgs: DiscordObject, CustomStringConvertible {
 
     public init() {
         self.storage = .init()
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration {
+        var clientId: UInt64?
+        var scopes: String?
+    }
+
+    private mutating func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private mutating func applyViewConfigChanges() {
+        if let clientId = viewConfig.clientId {
+            self.clientId = clientId
+        }
+        if let scopes = viewConfig.scopes {
+            self.scopes = scopes
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
 
     /// Optional. The Discord application ID for your game. Defaults to the value set by ``DiscordClient/applicationId``

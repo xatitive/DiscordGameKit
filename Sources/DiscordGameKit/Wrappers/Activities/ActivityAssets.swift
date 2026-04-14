@@ -6,6 +6,7 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
 /// Struct which controls what your rich presence looks like in the Discord client. If you don't specify any values, the icon and name of your application will be used as defaults.
 ///
@@ -21,6 +22,7 @@
 /// See https://discord.com/developers/docs/rich-presence/overview#adding-custom-art-assets
 /// for more information on using custom art assets, as well as for visual
 /// examples of what each field does.
+@ViewConfigurable
 public struct ActivityAssets: DiscordObject, CustomStringConvertible {
     var storage: DiscordStorage<Discord_ActivityAssets>
     init(storage: DiscordStorage<Discord_ActivityAssets>) {
@@ -29,6 +31,58 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
 
     public init() {
         self.storage = .init()
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration {
+        var largeImage: String?
+        var largeText: String?
+        var largeUrl: String?
+        var smallImage: String?
+        var smallText: String?
+        var smallUrl: String?
+        var inviteCoverImage: String?
+    }
+
+    private mutating func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private mutating func applyViewConfigChanges() {
+        if let largeImage = viewConfig.largeImage {
+            self.largeImage = largeImage
+        }
+        if let largeText = viewConfig.largeText {
+            self.largeText = largeText
+        }
+        if let largeUrl = viewConfig.largeUrl {
+            self.largeUrl = largeUrl
+        }
+        if let smallImage = viewConfig.smallImage {
+            self.smallImage = smallImage
+        }
+        if let smallText = viewConfig.smallText {
+            self.smallText = smallText
+        }
+        if let smallUrl = viewConfig.smallUrl {
+            self.smallUrl = smallUrl
+        }
+        if let inviteCoverImage = viewConfig.inviteCoverImage {
+            self.inviteCoverImage = inviteCoverImage
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
 
     /// The primary image identifier or URL, rendered as a large square icon on a user's rich presence.

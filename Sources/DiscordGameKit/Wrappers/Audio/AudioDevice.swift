@@ -6,15 +6,53 @@
 //
 
 @_implementationOnly import discord_partner_sdk
+public import ViewConfigurable
 
 /// Represents a single input or output audio device available to the user.
 ///
 /// Discord will initialize the audio engine with the system default input and output devices.
 /// You can change the device through the Client by passing the id of the desired audio device.
+@ViewConfigurable
 public struct AudioDevice: DiscordObject, Identifiable, Sendable {
     var storage: DiscordStorage<Discord_AudioDevice>
     init(storage: DiscordStorage<Discord_AudioDevice>) {
         self.storage = storage
+    }
+
+    private var isApplyingViewConfig = false
+    private var viewConfig = ViewConfiguration() {
+        didSet {
+            guard !isApplyingViewConfig else { return }
+            applyViewConfigChanges()
+        }
+    }
+
+    private struct ViewConfiguration {
+        var id: String?
+        var name: String?
+        var isDefault: Bool?
+    }
+
+    private mutating func withViewConfigApplicationDisabled(
+        _ body: (inout ViewConfiguration) -> Void
+    ) {
+        isApplyingViewConfig = true
+        body(&viewConfig)
+        isApplyingViewConfig = false
+    }
+
+    private mutating func applyViewConfigChanges() {
+        if let id = viewConfig.id {
+            self.id = id
+        }
+        if let name = viewConfig.name {
+            self.name = name
+        }
+        if let isDefault = viewConfig.isDefault {
+            self.isDefault = isDefault
+        }
+
+        withViewConfigApplicationDisabled { $0 = .init() }
     }
     
     /// The ID of the audio device.

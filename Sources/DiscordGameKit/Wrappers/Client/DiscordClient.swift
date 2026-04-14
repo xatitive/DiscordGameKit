@@ -591,6 +591,17 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
         persistent[keyPath: kp].callback = cb
         return persistent[keyPath: kp].unretainedOpaqueValue()
     }
+
+    func dispatchStatusCallbacks(
+        _ result: Result<ClientStatus, ClientError>
+    ) {
+        persistent.statusChanged.callback?(result)
+
+        guard case .success(let status) = result, status == .ready else {
+            return
+        }
+        persistent.ready.callback?()
+    }
 }
 
 extension DiscordClient {
@@ -626,7 +637,9 @@ extension DiscordClient {
         var userUpdated = CallbackBox<UserUpdatedCallback>()
 
         // Auth / Connection
+        var statusChangedBridge = CallbackBox<StatusChangedCallback>()
         var statusChanged = CallbackBox<StatusChangedCallback>()
+        var ready = CallbackBox<ReadyCallback>()
         var tokenExpiration = CallbackBox<TokenExpirationCallback>()
         var authorizeRequest = CallbackBox<AuthorizeRequestCallback>()
         var authorizeDeviceClosed = CallbackBox<AuthorizeDeviceScreenClosedCallback>()

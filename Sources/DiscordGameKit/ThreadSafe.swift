@@ -66,13 +66,13 @@ import Foundation
 
     public var wrappedValue: T {
         get {
-            os_unfair_lock_lock(&_lock)
-            defer { os_unfair_lock_unlock(&_lock) }
+            unsafe os_unfair_lock_lock(&_lock)
+            defer { unsafe os_unfair_lock_unlock(&_lock) }
             return _value
         }
         _modify {
-            os_unfair_lock_lock(&_lock)
-            defer { os_unfair_lock_unlock(&_lock) }
+            unsafe os_unfair_lock_lock(&_lock)
+            defer { unsafe os_unfair_lock_unlock(&_lock) }
             yield &_value
         }
     }
@@ -80,8 +80,8 @@ import Foundation
     public var projectedValue: ThreadSafe<T> { self }
 
     func withLock<R>(_ body: (inout T) throws -> R) rethrows -> R {
-        os_unfair_lock_lock(&_lock)
-        defer { os_unfair_lock_unlock(&_lock) }
+        unsafe os_unfair_lock_lock(&_lock)
+        defer { unsafe os_unfair_lock_unlock(&_lock) }
         return try body(&_value)
     }
 

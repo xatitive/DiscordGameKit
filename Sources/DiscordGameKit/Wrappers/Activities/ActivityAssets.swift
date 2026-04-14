@@ -58,7 +58,7 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
             }
         }
     }
-	
+    
     /// A tooltip string that is shown when the user hovers over the large image.
     ///
     /// If specified, must be a string between 2 and 128 characters.
@@ -71,7 +71,7 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
         }
         _modify {
             ensureUnique()
-            var value = self.largeImage
+            var value = self.largeText
             yield &value
             guard let value else {
                 storage.withLock { raw in
@@ -87,7 +87,7 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
         }
     }
 
-	/// A URL that opens when the user clicks/taps the large image.
+    /// A URL that opens when the user clicks/taps the large image.
     ///
     /// If specified, must be a string between 1 and 256 characters.
     public var largeUrl: String? {
@@ -182,7 +182,7 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
     /// If specified, must be a string between 1 and 256 characters.
     public var smallUrl: String? {
         get {
-            storage.withLock{ raw in
+            storage.withLock { raw in
                 var ds = Discord_String()
                 return raw.smallUrl(&ds) ? ds.toString() : nil
             }

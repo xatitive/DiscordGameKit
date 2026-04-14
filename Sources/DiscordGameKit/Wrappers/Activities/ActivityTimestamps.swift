@@ -26,15 +26,23 @@ public struct ActivityTimestamps: DiscordObject, Sendable, CustomStringConvertib
     /// been playing this activity.
     public var start: Date? {
         get {
-            let time = TimeInterval(usingLock(Discord_ActivityTimestamps_Start))
-            return Date(timeIntervalSince1970: time / 1000)
+            storage.withLock { raw in
+                let time = TimeInterval(raw.start())
+                guard time > 0 else { return nil }
+                return Date(timeIntervalSince1970: time / 1000)
+            }
         }
         set {
+            ensureUnique()
             if let newValue {
                 let time = UInt64(newValue.timeIntervalSince1970 * 1000)
-				usingLock(Discord_ActivityTimestamps_SetStart, time)
+                storage.withLock { raw in
+                    raw.setStart(time)
+                }
             } else {
-                usingLock(Discord_ActivityTimestamps_SetStart, 0)
+                storage.withLock { raw in
+                    raw.setStart(0)
+                }
             }
         }
     }
@@ -46,15 +54,23 @@ public struct ActivityTimestamps: DiscordObject, Sendable, CustomStringConvertib
     /// activity ends.
     public var end: Date? {
         get {
-            let time = TimeInterval(usingLock(Discord_ActivityTimestamps_End))
-            return Date(timeIntervalSince1970: time / 1000)
+            storage.withLock { raw in
+                let time = TimeInterval(raw.end())
+                guard time > 0 else { return nil }
+                return Date(timeIntervalSince1970: time / 1000)
+            }
         }
         set {
+            ensureUnique()
             if let newValue {
                 let time = UInt64(newValue.timeIntervalSince1970 * 1000)
-                usingLock(Discord_ActivityTimestamps_SetEnd, time)
+                storage.withLock { raw in
+                    raw.setEnd(time)
+                }
             } else {
-                usingLock(Discord_ActivityTimestamps_SetEnd, 0)
+                storage.withLock { raw in
+                    raw.setEnd(0)
+                }
             }
         }
     }

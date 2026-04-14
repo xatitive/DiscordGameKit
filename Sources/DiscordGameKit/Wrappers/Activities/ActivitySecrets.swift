@@ -24,17 +24,17 @@ public struct ActivitySecrets: DiscordObject, Sendable, CustomStringConvertible 
     /// If specified, must be a string between 2 and 128 characters.
     public var join: String {
         get {
-            storage.withLock {
+            storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_ActivitySecrets_Join(&$0, &ds)
+                raw.join(&ds)
                 return ds.toString()
             }
         }
         set {
             ensureUnique()
             newValue.withDiscordString { str in
-                storage.withLock {
-                    Discord_ActivitySecrets_SetJoin(&$0, str)
+                storage.withLock { raw in
+                    raw.setJoin(str)
                 }
             }
         }

@@ -21,9 +21,9 @@ public struct ActivityButton: DiscordObject, CustomStringConvertible {
     /// The label of the button.
     public var label: String {
         get {
-            storage.withLock {
+            storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_ActivityButton_Label(&$0, &ds)
+                raw.label(&ds)
                 return ds.toString()
             }
         }
@@ -31,7 +31,7 @@ public struct ActivityButton: DiscordObject, CustomStringConvertible {
             ensureUnique()
             storage.withLock { raw in
                 newValue.withDiscordString { str in
-                    Discord_ActivityButton_SetLabel(&raw, str)
+                    raw.setLabel(str)
                 }
             }
         }
@@ -40,9 +40,9 @@ public struct ActivityButton: DiscordObject, CustomStringConvertible {
     /// The url of the button.
     public var url: String {
         get {
-            storage.withLock {
+            storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_ActivityButton_Url(&$0, &ds)
+                raw.url(&ds)
                 return ds.toString()
             }
         }
@@ -50,7 +50,7 @@ public struct ActivityButton: DiscordObject, CustomStringConvertible {
             ensureUnique()
             storage.withLock { raw in
                 newValue.withDiscordString { str in
-                    Discord_ActivityButton_SetUrl(&raw, str)
+                    raw.setUrl(str)
                 }
             }
         }

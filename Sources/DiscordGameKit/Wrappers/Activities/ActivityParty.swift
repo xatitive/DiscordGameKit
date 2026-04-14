@@ -27,7 +27,7 @@ public struct ActivityParty: DiscordObject, Identifiable, Sendable, CustomString
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_ActivityParty_Id(&raw, &ds)
+                raw.id(&ds)
                 return ds.toString()
             }
         }
@@ -35,7 +35,7 @@ public struct ActivityParty: DiscordObject, Identifiable, Sendable, CustomString
             ensureUnique()
             newValue.withDiscordString { str in
                 storage.withLock { raw in
-                    Discord_ActivityParty_SetId(&raw, str)
+                    raw.setId(str)
                 }
             }
         }
@@ -43,33 +43,33 @@ public struct ActivityParty: DiscordObject, Identifiable, Sendable, CustomString
     
     /// The number of people currently in the party, must be at least 1.
     public var currentSize: Int32 {
-        get { storage.withLock { raw in Discord_ActivityParty_CurrentSize(&raw) } }
+        get { storage.withLock { raw in raw.currentSize() } }
         set {
             ensureUnique()
             storage.withLock { raw in
-                Discord_ActivityParty_SetCurrentSize(&raw, newValue)
+                raw.setCurrentSize(newValue)
             }
         }
     }
     
     /// The maximum number of people that can be in the party, must be at least 0. When 0, the UI will not display a maximum.
     public var maxSize: Int32 {
-        get { storage.withLock { raw in Discord_ActivityParty_MaxSize(&raw) } }
+        get { storage.withLock { raw in raw.maxSize() } }
         set {
             ensureUnique()
             storage.withLock { raw in
-                Discord_ActivityParty_SetMaxSize(&raw, newValue)
+                raw.setMaxSize(newValue)
             }
         }
     }
     
     /// The privacy of the party.
     public var privacy: ActivityPartyPrivacy {
-        get { storage.withLock { Discord_ActivityParty_Privacy(&$0).swiftValue } }
+        get { storage.withLock { $0.privacy().swiftValue } }
         set {
             ensureUnique()
             storage.withLock { raw in
-                Discord_ActivityParty_SetPrivacy(&raw, newValue.discordValue)
+                raw.setPrivacy(newValue.discordValue)
             }
         }
     }

@@ -53,7 +53,9 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
             }
             
             storage.withLock { raw in
-                raw.setLargeImage(span: value.utf8Span.span)
+                settingString(value) { buf in
+                    raw.setLargeImage(span: buf)
+                }
             }
         }
     }
@@ -80,7 +82,9 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
             }
             
             storage.withLock { raw in
-                raw.setLargeText(span: value.utf8Span.span)
+                settingString(value) { buf in
+                    raw.setLargeText(span: buf)
+                }
             }
         }
     }
@@ -107,7 +111,9 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
             }
             
             storage.withLock { raw in
-                raw.setLargeUrl(span: value.utf8Span.span)
+                settingString(value) { buf in
+                    raw.setLargeUrl(span: buf)
+                }
             }
         }
     }
@@ -134,7 +140,9 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
             }
             
             storage.withLock { raw in
-                raw.setSmallImage(span: value.utf8Span.span)
+                settingString(value) { buf in
+                    raw.setSmallImage(span: buf)
+                }
             }
         }
     }
@@ -161,7 +169,9 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
             }
             
             storage.withLock { raw in
-                raw.setSmallText(span: value.utf8Span.span)
+                settingString(value) { buf in
+                    raw.setSmallText(span: buf)
+                }
             }
         }
     }
@@ -188,7 +198,9 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
             }
             
             storage.withLock { raw in
-                raw.setSmallUrl(span: value.utf8Span.span)
+                settingString(value) { buf in
+                    raw.setSmallUrl(span: buf)
+                }
             }
         }
     }
@@ -215,7 +227,9 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
             }
             
             storage.withLock { raw in
-                raw.setInviteCoverImage(span: value.utf8Span.span)
+                settingString(value) { buf in
+                    raw.setInviteCoverImage(span: buf)
+                }
             }
         }
     }

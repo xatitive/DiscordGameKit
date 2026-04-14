@@ -25,16 +25,16 @@ public struct ActivitySecrets: DiscordObject, Sendable, CustomStringConvertible 
     public var join: String {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                raw.join(&ds)
-                return ds.toString()
+                gettingString { span in
+                    raw.join(span: &span)
+                }
             }
         }
         set {
             ensureUnique()
-            newValue.withDiscordString { str in
-                storage.withLock { raw in
-                    raw.setJoin(str)
+            storage.withLock { raw in
+                settingString(newValue) { span in
+                    raw.setJoin(span: span)
                 }
             }
         }

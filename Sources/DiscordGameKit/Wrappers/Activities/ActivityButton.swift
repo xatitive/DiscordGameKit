@@ -22,16 +22,16 @@ public struct ActivityButton: DiscordObject, CustomStringConvertible {
     public var label: String {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                raw.label(&ds)
-                return ds.toString()
+                gettingString { span in
+                    raw.label(span: &span)
+                }
             }
         }
         set {
             ensureUnique()
             storage.withLock { raw in
-                newValue.withDiscordString { str in
-                    raw.setLabel(str)
+                settingString(newValue) { span in
+                    raw.setLabel(span: span)
                 }
             }
         }
@@ -41,16 +41,16 @@ public struct ActivityButton: DiscordObject, CustomStringConvertible {
     public var url: String {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                raw.url(&ds)
-                return ds.toString()
+                gettingString { span in
+                    raw.url(span: &span)
+                }
             }
         }
         set {
             ensureUnique()
             storage.withLock { raw in
-                newValue.withDiscordString { str in
-                    raw.setUrl(str)
+                settingString(newValue) { span in
+                    raw.setUrl(span: span)
                 }
             }
         }

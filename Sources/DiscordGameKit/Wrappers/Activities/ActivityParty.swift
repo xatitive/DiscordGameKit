@@ -26,16 +26,16 @@ public struct ActivityParty: DiscordObject, Identifiable, Sendable, CustomString
     public var id: String {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                raw.id(&ds)
-                return ds.toString()
+                gettingString { span in
+                    raw.id(span: &span)
+                }
             }
         }
         set {
             ensureUnique()
-            newValue.withDiscordString { str in
-                storage.withLock { raw in
-                    raw.setId(str)
+            storage.withLock { raw in
+                settingString(newValue) { span in
+                    raw.setId(span: span)
                 }
             }
         }

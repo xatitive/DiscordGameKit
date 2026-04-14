@@ -20,14 +20,14 @@ public struct VADThresholdSettings: DiscordObject {
     
     /// Whether or not Discord is currently automatically setting and detecting the appropriate threshold to use.
     public var automatic: Bool {
-        get { usingLock(Discord_VADThresholdSettings_Automatic) }
-        set { usingLock(Discord_VADThresholdSettings_SetAutomatic, newValue) }
+        get { usingLock { $0.automatic() } }
+        set { usingLock { $0.setAutomatic(newValue) } }
     }
     
     /// The current void auto detection threshold value, has a range of -100, 0 and defaults to -60.
     public var threshold: Float {
-        get { usingLock(Discord_VADThresholdSettings_VadThreshold) }
-        set { usingLock(Discord_VADThresholdSettings_SetVadThreshold, newValue) }
+        get { usingLock { $0.vadThreshold() } }
+        set { usingLock { $0.setVadThreshold(newValue) } }
     }
     
     public var description: String {

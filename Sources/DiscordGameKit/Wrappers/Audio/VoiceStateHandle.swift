@@ -25,12 +25,12 @@ public struct VoiceStateHandle: DiscordObject {
     
     /// Returns true if the given user has deafened themselves so that no one else in the call can hear them and so that they do not hear anyone else in the call either.
     public var selfDeaf: Bool {
-        usingLock(Discord_VoiceStateHandle_SelfDeaf)
+        usingLock { $0.selfDeaf() }
     }
     
     /// Returns true if the given user has muted themselves so that no one else in the call can hear them.
     public var selfMute: Bool {
-        usingLock(Discord_VoiceStateHandle_SelfMute)
+        usingLock { $0.selfMute() }
     }
     
     public var description: String {

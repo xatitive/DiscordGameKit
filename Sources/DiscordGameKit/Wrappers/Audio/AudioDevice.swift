@@ -20,15 +20,18 @@ public struct AudioDevice: DiscordObject, Identifiable, Sendable {
     /// The ID of the audio device.
     public var id: String {
         get {
-            storage.withLock {
+            storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_AudioDevice_Id(&$0, &ds)
+                raw.id(&ds)
                 return String(discordOwned: ds)
             }
         }
         set {
+            ensureUnique()
             newValue.withDiscordString { str in
-                usingLock(Discord_AudioDevice_SetId, str)
+                storage.withLock { raw in
+                    raw.setId(str)
+                }
             }
         }
     }
@@ -36,23 +39,29 @@ public struct AudioDevice: DiscordObject, Identifiable, Sendable {
     /// The display name of the audio device.
     public var name: String {
         get {
-            storage.withLock {
+            storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_AudioDevice_Name(&$0, &ds)
+                raw.name(&ds)
                 return String(discordOwned: ds)
             }
         }
         set {
+            ensureUnique()
             newValue.withDiscordString { str in
-                usingLock(Discord_AudioDevice_SetName, str)
+                storage.withLock { raw in
+                    raw.setName(str)
+                }
             }
         }
     }
     
     /// Whether the audio device is the system default device.
     public var isDefault: Bool {
-        get { usingLock(Discord_AudioDevice_IsDefault) }
-        set { usingLock(Discord_AudioDevice_SetIsDefault, newValue) }
+        get { usingLock { $0.isDefault() } }
+        set {
+            ensureUnique()
+            usingLock { $0.setIsDefault(newValue) }
+        }
     }
     
     public var description: String {
@@ -62,6 +71,9 @@ public struct AudioDevice: DiscordObject, Identifiable, Sendable {
 
 extension AudioDevice: Equatable {
     public static func == (lhs: AudioDevice, rhs: AudioDevice) -> Bool {
-        compare(lhs.storage, to: rhs.storage, Discord_AudioDevice_Equals)
+        compare(lhs.storage, to: rhs.storage) { (lhsPtr: UnsafeMutablePointer<Discord_AudioDevice>?, rhsPtr: UnsafePointer<Discord_AudioDevice>?) -> Bool in
+            guard let lhsPtr else { return false }
+            return lhsPtr.pointee.equals(rhsPtr)
+        }
     }
 }

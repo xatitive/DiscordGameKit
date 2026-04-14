@@ -24,16 +24,16 @@ extension DiscordClient {
         public var webBase: String {
             get {
                 storage.withLock { raw in
-                    var ds = Discord_String()
-                    raw.webBase(&ds)
-                    return ds.toString()
+                    gettingString { span in
+                        raw.webBase(span: &span)
+                    }
                 }
             }
             set {
                 ensureUnique()
-                newValue.withDiscordString { str in
-                    storage.withLock { raw in
-                        raw.setWebBase(str)
+                storage.withLock { raw in
+                    settingString(newValue) { buf in
+                        raw.setWebBase(span: buf)
                     }
                 }
             }
@@ -43,16 +43,16 @@ extension DiscordClient {
         public var apiBase: String {
             get {
                 storage.withLock { raw in
-                    var ds = Discord_String()
-                    raw.apiBase(&ds)
-                    return ds.toString()
+                    gettingString { span in
+                        raw.apiBase(span: &span)
+                    }
                 }
             }
             set {
                 ensureUnique()
-                newValue.withDiscordString { str in
-                    storage.withLock { raw in
-                        raw.setApiBase(str)
+                storage.withLock { raw in
+                    settingString(newValue) { buf in
+                        raw.setApiBase(span: buf)
                     }
                 }
             }

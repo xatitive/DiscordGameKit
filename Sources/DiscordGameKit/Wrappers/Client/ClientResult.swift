@@ -48,15 +48,17 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable, Er
     public var error: String {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                raw.error(&ds)
-                return ds.toString()
+                gettingString { span in
+                    raw.error(span: &span)
+                }
             }
         }
         set {
             ensureUnique()
-            newValue.withDiscordString { str in
-                usingLock { $0.setError(str) }
+            storage.withLock { raw in
+                settingString(newValue) { buf in
+                    raw.setError(span: buf)
+                }
             }
         }
     }
@@ -71,15 +73,17 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable, Er
     public var responseBody: String {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                raw.responseBody(&ds)
-                return ds.toString()
+                gettingString { span in
+                    raw.responseBody(span: &span)
+                }
             }
         }
         set {
             ensureUnique()
-            newValue.withDiscordString { str in
-                usingLock { $0.setResponseBody(str) }
+            storage.withLock { raw in
+                settingString(newValue) { buf in
+                    raw.setResponseBody(span: buf)
+                }
             }
         }
     }
@@ -126,9 +130,9 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable, Er
     /// Error message if any of the ClientResult.
     public var description: String {
         storage.withLock { raw in
-            var ds = Discord_String()
-            raw.toString(&ds)
-            return ds.toString()
+            gettingString { span in
+                raw.toString(span: &span)
+            }
         }
     }
 }

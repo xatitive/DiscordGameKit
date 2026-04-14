@@ -1,7 +1,7 @@
 Name: discord_partner_sdk
 
 # Enums
-#
+
 Tags:
 - Name: Discord_ActivityActionTypes
   EnumKind: NSEnum

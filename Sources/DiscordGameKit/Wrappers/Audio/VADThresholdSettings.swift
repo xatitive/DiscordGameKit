@@ -8,7 +8,7 @@
 @_implementationOnly import discord_partner_sdk
 
 /// Settings for the void auto detection threshold for picking up activity from a user's mic.
-public struct VADThresholdSettings: DiscordObject {
+public final class VADThresholdSettings: DiscordObject {
     var storage: DiscordStorage<Discord_VADThresholdSettings>
     init(storage: DiscordStorage<Discord_VADThresholdSettings>) {
         self.storage = storage

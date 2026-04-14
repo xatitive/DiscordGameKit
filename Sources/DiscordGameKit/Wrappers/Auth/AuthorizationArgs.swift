@@ -138,7 +138,7 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
     /// - seealso: https://discord.com/developers/docs/resources/application#installation-context
     public var integrationType: IntegrationType? {
         get {
-            var integrationType = Discord_IntegrationType_forceint
+            var integrationType = Discord_IntegrationType.forceint
             guard storage.withLock({ Discord_AuthorizationArgs_IntegrationType(&$0, &integrationType) }) else { return nil }
             return integrationType.swiftValue
         }

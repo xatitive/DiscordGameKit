@@ -205,7 +205,7 @@ let openConnectedGameSettingsTrampoline: Discord_Client_OpenConnectedGamesSettin
 
 let statusChangedTrampoline: Discord_Client_OnStatusChanged = { cStatus, cError, details, ctx in
     guard let cb = CallbackBox<DiscordClient.StatusChangedCallback>.from(opaque: ctx) else { return }
-    if cError != Discord_Client_Error_None {
+    if cError != Discord_Client_Error.none {
         cb(.failure(cError.swiftValue))
     } else {
         cb(.success(cStatus.swiftValue))

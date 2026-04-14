@@ -256,7 +256,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
     public var statusDisplay: StatusDisplayType? {
         get {
             storage.withLock { raw in
-                var v = Discord_StatusDisplayTypes_forceint
+                var v = StatusDisplayType.details.discordValue
                 return Discord_Activity_StatusDisplayType(&raw, &v) ? v.swiftValue : nil
             }
         }

@@ -1,0 +1,59 @@
+Name: discord_partner_sdk
+
+# Enums
+#
+Tags:
+- Name: Discord_ActivityActionTypes
+  EnumKind: NSEnum
+- Name: Discord_ActivityPartyPrivacy
+  EnumKind: NSEnum
+- Name: Discord_ActivityTypes
+  EnumKind: NSEnum
+- Name: Discord_StatusDisplayTypes
+  EnumKind: NSEnum
+- Name: Discord_ActivityGamePlatforms
+  EnumKind: NSEnum
+- Name: Discord_ErrorType
+  EnumKind: NSEnum
+- Name: Discord_HttpStatusCode
+  EnumKind: NSEnum
+- Name: Discord_AuthenticationCodeChallengeMethod
+  EnumKind: NSEnum
+- Name: Discord_IntegrationType
+  EnumKind: NSEnum
+- Name: Discord_ChannelType
+  EnumKind: NSEnum
+- Name: Discord_AdditionalContentType
+  EnumKind: NSEnum
+- Name: Discord_AudioSystem
+  EnumKind: NSEnum
+- Name: Discord_Call_Error
+  EnumKind: NSEnum
+- Name: Discord_AudioModeType
+  EnumKind: NSEnum
+- Name: Discord_Call_Status
+  EnumKind: NSEnum
+- Name: Discord_RelationshipType
+  EnumKind: NSEnum
+- Name: Discord_ExternalIdentityProviderType
+  EnumKind: NSEnum
+- Name: Discord_UserHandle_AvatarType
+  EnumKind: NSEnum
+- Name: Discord_StatusType
+  EnumKind: NSEnum
+- Name: Discord_DisclosureTypes
+  EnumKind: NSEnum
+- Name: Discord_Client_Error
+  EnumKind: NSEnum
+- Name: Discord_Client_Status
+  EnumKind: NSEnum
+- Name: Discord_Client_Thread
+  EnumKind: NSEnum
+- Name: Discord_AuthorizationTokenType
+  EnumKind: NSEnum
+- Name: Discord_AuthenticationExternalAuthType
+  EnumKind: NSEnum
+- Name: Discord_LoggingSeverity
+  EnumKind: NSEnum
+- Name: Discord_RelationshipGroupType
+  EnumKind: NSEnum

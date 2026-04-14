@@ -137,10 +137,10 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
         }
     }
 
-    /// f this is an auto-generated message that is explaining some integration behavior to users, this method will return the type of disclosure so you can customize it.
+    /// This is an auto-generated message that is explaining some integration behavior to users, this method will return the type of disclosure so you can customize it.
     public var disclosureType: DisclosureType? {
         storage.withLock { raw in
-            var type = Discord_DisclosureTypes_forceint
+            var type = Discord_DisclosureTypes.forceint
             return Discord_MessageHandle_DisclosureType(&raw, &type) ? type.swiftValue : nil
         }
     }

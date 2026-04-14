@@ -96,15 +96,6 @@ extension DiscordObject {
     ) {
         fn(value.utf8Span.span)
     }
-    
-    mutating func settingString(
-        _ value: String,
-        _ fn: (UnsafeMutableBufferPointer<UInt8>) -> Void
-    ) {
-        value.utf8.withContiguousStorageIfAvailable { buf in
-            fn(.init(mutating: buf))
-        }
-    }
 }
 
 extension DiscordObject where Object: DiscordRawCopyable {

@@ -37,24 +37,23 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
     public var largeImage: String? {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                return raw.largeImage(&ds) ? ds.toString() : nil
+                gettingString { span in
+                    raw.largeImage(span: &span)
+                }
             }
         }
         _modify {
             ensureUnique()
             var value = self.largeImage
             yield &value
+            
             guard let value else {
-                storage.withLock { raw in
-                    raw.setLargeImage(nil)
-                }
+                storage.withLock { $0.setLargeImage(span: nil) }
                 return
             }
-            value.withDiscordStringPointer { ptr in
-                storage.withLock { raw in
-                    raw.setLargeImage(ptr)
-                }
+            
+            storage.withLock { raw in
+                raw.setLargeImage(span: value.utf8Span.span)
             }
         }
     }
@@ -65,24 +64,23 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
     public var largeText: String? {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                return raw.largeText(&ds) ? ds.toString() : nil
+                gettingString { span in
+                    raw.largeText(span: &span)
+                }
             }
         }
         _modify {
             ensureUnique()
             var value = self.largeText
             yield &value
+            
             guard let value else {
-                storage.withLock { raw in
-                    raw.setLargeText(nil)
-                }
+                storage.withLock { $0.setLargeText(span: nil) }
                 return
             }
-            value.withDiscordStringPointer { ptr in
-                storage.withLock { raw in
-                    raw.setLargeText(ptr)
-                }
+            
+            storage.withLock { raw in
+                raw.setLargeText(span: value.utf8Span.span)
             }
         }
     }
@@ -93,8 +91,9 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
     public var largeUrl: String? {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                return raw.largeUrl(&ds) ? ds.toString() : nil
+                gettingString { span in
+                    raw.largeUrl(span: &span)
+                }
             }
         }
         _modify {
@@ -103,16 +102,12 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
             yield &value
             
             guard let value else {
-                storage.withLock { raw in
-                    raw.setLargeUrl(nil)
-                }
+                storage.withLock { $0.setLargeUrl(span: nil) }
                 return
             }
             
-            value.withDiscordStringPointer { str in
-                storage.withLock { raw in
-                    raw.setLargeUrl(str)
-                }
+            storage.withLock { raw in
+                raw.setLargeUrl(span: value.utf8Span.span)
             }
         }
     }
@@ -123,8 +118,9 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
     public var smallImage: String? {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                return raw.smallImage(&ds) ? ds.toString() : nil
+                gettingString { span in
+                    raw.smallImage(span: &span)
+                }
             }
         }
         _modify {
@@ -133,16 +129,12 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
             yield &value
             
             guard let value else {
-                storage.withLock { raw in
-                    raw.setSmallImage(nil)
-                }
+                storage.withLock { $0.setSmallImage(span: nil) }
                 return
             }
             
-            value.withDiscordStringPointer { str in
-                storage.withLock { raw in
-                    raw.setSmallImage(str)
-                }
+            storage.withLock { raw in
+                raw.setSmallImage(span: value.utf8Span.span)
             }
         }
     }
@@ -153,8 +145,9 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
     public var smallText: String? {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                return raw.smallText(&ds) ? ds.toString() : nil
+                gettingString { span in
+                    raw.smallText(span: &span)
+                }
             }
         }
         _modify {
@@ -163,16 +156,12 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
             yield &value
             
             guard let value else {
-                storage.withLock { raw in
-                    raw.setSmallText(nil)
-                }
+                storage.withLock { $0.setSmallText(span: nil) }
                 return
             }
             
-            value.withDiscordStringPointer { str in
-                storage.withLock { raw in
-                    raw.setSmallText(str)
-                }
+            storage.withLock { raw in
+                raw.setSmallText(span: value.utf8Span.span)
             }
         }
     }
@@ -183,8 +172,9 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
     public var smallUrl: String? {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                return raw.smallUrl(&ds) ? ds.toString() : nil
+                gettingString { span in
+                    raw.smallUrl(span: &span)
+                }
             }
         }
         _modify {
@@ -193,16 +183,12 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
             yield &value
             
             guard let value else {
-                storage.withLock { raw in
-                    raw.setSmallUrl(nil)
-                }
+                storage.withLock { $0.setSmallUrl(span: nil) }
                 return
             }
             
-            value.withDiscordStringPointer { str in
-                storage.withLock { raw in
-                    raw.setSmallUrl(str)
-                }
+            storage.withLock { raw in
+                raw.setSmallUrl(span: value.utf8Span.span)
             }
         }
     }
@@ -213,8 +199,9 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
     public var inviteCoverImage: String? {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                return raw.inviteCoverImage(&ds) ? ds.toString() : nil
+                gettingString { span in
+                    raw.inviteCoverImage(span: &span)
+                }
             }
         }
         _modify {
@@ -223,16 +210,12 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
             yield &value
             
             guard let value else {
-                storage.withLock { raw in
-                    raw.setInviteCoverImage(nil)
-                }
+                storage.withLock { $0.setInviteCoverImage(span: nil) }
                 return
             }
             
-            value.withDiscordStringPointer { str in
-                storage.withLock { raw in
-                    raw.setInviteCoverImage(str)
-                }
+            storage.withLock { raw in
+                raw.setInviteCoverImage(span: value.utf8Span.span)
             }
         }
     }

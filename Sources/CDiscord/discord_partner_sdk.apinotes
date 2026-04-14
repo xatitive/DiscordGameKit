@@ -1,7 +1,7 @@
 Name: discord_partner_sdk
+SwiftInferImportAsMember: true
 
 # Enums
-
 Tags:
 - Name: Discord_ActivityActionTypes
   EnumKind: NSEnum
@@ -57,3 +57,100 @@ Tags:
   EnumKind: NSEnum
 - Name: Discord_RelationshipGroupType
   EnumKind: NSEnum
+
+# Hide C enum sentinel values from Swift imports.
+Enumerators:
+- Name: Discord_ActivityActionTypes_forceint
+  SwiftPrivate: true
+- Name: Discord_ActivityPartyPrivacy_forceint
+  SwiftPrivate: true
+- Name: Discord_ActivityTypes_forceint
+  SwiftPrivate: true
+- Name: Discord_StatusDisplayTypes_forceint
+  SwiftPrivate: true
+- Name: Discord_ActivityGamePlatforms_forceint
+  SwiftPrivate: true
+- Name: Discord_ErrorType_forceint
+  SwiftPrivate: true
+- Name: Discord_HttpStatusCode_forceint
+  SwiftPrivate: true
+- Name: Discord_AuthenticationCodeChallengeMethod_forceint
+  SwiftPrivate: true
+- Name: Discord_IntegrationType_forceint
+  SwiftPrivate: true
+- Name: Discord_ChannelType_forceint
+  SwiftPrivate: true
+- Name: Discord_AdditionalContentType_forceint
+  SwiftPrivate: true
+- Name: Discord_AudioSystem_forceint
+  SwiftPrivate: true
+- Name: Discord_Call_Error_forceint
+  SwiftPrivate: true
+- Name: Discord_AudioModeType_forceint
+  SwiftPrivate: true
+- Name: Discord_Call_Status_forceint
+  SwiftPrivate: true
+- Name: Discord_RelationshipType_forceint
+  SwiftPrivate: true
+- Name: Discord_ExternalIdentityProviderType_forceint
+  SwiftPrivate: true
+- Name: Discord_UserHandle_AvatarType_forceint
+  SwiftPrivate: true
+- Name: Discord_StatusType_forceint
+  SwiftPrivate: true
+- Name: Discord_DisclosureTypes_forceint
+  SwiftPrivate: true
+- Name: Discord_Client_Error_forceint
+  SwiftPrivate: true
+- Name: Discord_Client_Status_forceint
+  SwiftPrivate: true
+- Name: Discord_Client_Thread_forceint
+  SwiftPrivate: true
+- Name: Discord_AuthorizationTokenType_forceint
+  SwiftPrivate: true
+- Name: Discord_AuthenticationExternalAuthType_forceint
+  SwiftPrivate: true
+- Name: Discord_LoggingSeverity_forceint
+  SwiftPrivate: true
+- Name: Discord_RelationshipGroupType_forceint
+  SwiftPrivate: true
+
+## Objects
+
+Functions:
+- Name: Discord_ActivityInvite_SetSenderId
+  SwiftName: Discord_ActivityInvite.setSenderId(self:_:)
+- Name: Discord_ActivityInvite_SenderId
+  SwiftName: Discord_ActivityInvite.senderId(self:)
+- Name: Discord_ActivityInvite_SetChannelId
+  SwiftName: Discord_ActivityInvite.setChannelId(self:_:)
+- Name: Discord_ActivityInvite_ChannelId
+  SwiftName: Discord_ActivityInvite.channelId(self:)
+- Name: Discord_ActivityInvite_SetMessageId
+  SwiftName: Discord_ActivityInvite.setMessageId(self:_:)
+- Name: Discord_ActivityInvite_MessageId
+  SwiftName: Discord_ActivityInvite.messageId(self:)
+- Name: Discord_ActivityInvite_SetType
+  SwiftName: Discord_ActivityInvite.setType(self:_:)
+- Name: Discord_ActivityInvite_Type
+  SwiftName: Discord_ActivityInvite.type(self:)
+- Name: Discord_ActivityInvite_SetApplicationId
+  SwiftName: Discord_ActivityInvite.setApplicationId(self:_:)
+- Name: Discord_ActivityInvite_ApplicationId
+  SwiftName: Discord_ActivityInvite.applicationId(self:)
+- Name: Discord_ActivityInvite_SetParentApplicationId
+  SwiftName: Discord_ActivityInvite.setParentApplicationId(self:_:)
+- Name: Discord_ActivityInvite_ParentApplicationId
+  SwiftName: Discord_ActivityInvite.parentApplicationId(self:)
+- Name: Discord_ActivityInvite_SetPartyId
+  SwiftName: Discord_ActivityInvite.setPartyId(self:_:)
+- Name: Discord_ActivityInvite_PartyId
+  SwiftName: Discord_ActivityInvite.partyId(self:_:)
+- Name: Discord_ActivityInvite_SetSessionId
+  SwiftName: Discord_ActivityInvite.setSessionId(self:_:)
+- Name: Discord_ActivityInvite_SessionId
+  SwiftName: Discord_ActivityInvite.sessionId(self:_:)
+- Name: Discord_ActivityInvite_SetIsValid
+  SwiftName: Discord_ActivityInvite.setIsValid(self:_:)
+- Name: Discord_ActivityInvite_IsValid
+  SwiftName: Discord_ActivityInvite.isValid(self:)

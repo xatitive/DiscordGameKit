@@ -22,66 +22,66 @@ public struct ActivityInvite: DiscordObject, Sendable, CustomStringConvertible {
 
     /// The user id of the user who sent the invite.
     public var senderId: UInt64 {
-        get { storage.withLock { raw in Discord_ActivityInvite_SenderId(&raw) } }
+        get { storage.withLock { raw in raw.senderId() } }
         set {
             ensureUnique()
             storage.withLock { raw in
-                Discord_ActivityInvite_SetSenderId(&raw, newValue)
+                raw.setSenderId(newValue)
             }
         }
     }
 
     /// The id of the Discord channel in which the invite was sent.
     public var channelId: UInt64 {
-        get { storage.withLock { raw in Discord_ActivityInvite_ChannelId(&raw) } }
+        get { storage.withLock { raw in raw.channelId() } }
         set {
             ensureUnique()
             storage.withLock { raw in
-                Discord_ActivityInvite_SetChannelId(&raw, newValue)
+                raw.setChannelId(newValue)
             }
         }
     }
 
     /// The id of the Discord message that contains the invite.
     public var messageId: UInt64 {
-        get { storage.withLock { raw in Discord_ActivityInvite_MessageId(&raw) } }
+        get { storage.withLock { raw in raw.messageId() } }
         set {
             ensureUnique()
             storage.withLock { raw in
-                Discord_ActivityInvite_SetMessageId(&raw, newValue)
+                raw.setMessageId(newValue)
             }
         }
     }
 
     /// The type of invite that was sent.
     public var type: ActivityActionType {
-        get { storage.withLock { Discord_ActivityInvite_Type(&$0).swiftValue } }
+        get { storage.withLock { $0.type().swiftValue } }
         set {
             ensureUnique()
             storage.withLock { raw in
-                Discord_ActivityInvite_SetType(&raw, newValue.discordValue)
+                raw.setType(newValue.discordValue)
             }
         }
     }
 
     /// The target application of the invite.
     public var applicationId: UInt64 {
-        get { storage.withLock { raw in Discord_ActivityInvite_ApplicationId(&raw) } }
+        get { storage.withLock { raw in raw.applicationId() } }
         set {
             ensureUnique()
             storage.withLock { raw in
-                Discord_ActivityInvite_SetApplicationId(&raw, newValue)
+                raw.setApplicationId(newValue)
             }
         }
     }
 
     /// The application id of the parent - this is only applicable if there is a parent for a publisher's suite of applications.
     public var parentApplicationId: UInt64 {
-        get { storage.withLock { raw in Discord_ActivityInvite_ParentApplicationId(&raw) } }
+        get { storage.withLock { raw in raw.parentApplicationId() } }
         set {
             ensureUnique()
             storage.withLock { raw in
-                Discord_ActivityInvite_SetParentApplicationId(&raw, newValue)
+                raw.setParentApplicationId(newValue)
             }
         }
     }
@@ -91,7 +91,7 @@ public struct ActivityInvite: DiscordObject, Sendable, CustomStringConvertible {
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_ActivityInvite_PartyId(&raw, &ds)
+                raw.partyId(&ds)
                 return String(discordOwned: ds)
             }
         }
@@ -99,7 +99,7 @@ public struct ActivityInvite: DiscordObject, Sendable, CustomStringConvertible {
             ensureUnique()
             newValue.withDiscordString { str in
                 storage.withLock { raw in
-                    Discord_ActivityInvite_SetPartyId(&raw, str)
+                    raw.setPartyId(str)
                 }
             }
         }
@@ -110,7 +110,7 @@ public struct ActivityInvite: DiscordObject, Sendable, CustomStringConvertible {
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_ActivityInvite_SessionId(&raw, &ds)
+                raw.sessionId(&ds)
                 return String(discordOwned: ds)
             }
         }
@@ -118,7 +118,7 @@ public struct ActivityInvite: DiscordObject, Sendable, CustomStringConvertible {
             ensureUnique()
             newValue.withDiscordString { str in
                 storage.withLock { raw in
-                    Discord_ActivityInvite_SetSessionId(&raw, str)
+                    raw.setSessionId(str)
                 }
             }
         }
@@ -126,11 +126,11 @@ public struct ActivityInvite: DiscordObject, Sendable, CustomStringConvertible {
 
     /// Whether or not this invite is currently joinable. An invite becomes invalid if it was sent more than 6 hours ago or if the sender is no longer playing the game the invite is for.
     public var isValid: Bool {
-        get { storage.withLock { raw in Discord_ActivityInvite_IsValid(&raw) } }
+        get { storage.withLock { raw in raw.isValid() } }
         set {
             ensureUnique()
             storage.withLock { raw in
-                Discord_ActivityInvite_SetIsValid(&raw, newValue)
+                raw.setIsValid(newValue)
             }
         }
     }

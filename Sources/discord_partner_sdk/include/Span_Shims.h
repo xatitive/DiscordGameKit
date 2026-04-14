@@ -575,6 +575,305 @@ static inline void Discord_Client_ThreadToString_Span(Discord_Client_Thread type
     size = str.size;
 };
 
+// MARK: - Channel Handle
+static inline void Discord_ChannelHandle_Name_Span(Discord_ChannelHandle*__nonnull self,
+                                                   uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                   size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_ChannelHandle_Name(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+// MARK: - Guild Minimal
+static inline void Discord_GuildMinimal_SetName_Span(Discord_GuildMinimal*__nonnull self,
+                                                     const uint8_t *__nullable __counted_by_or_null(size) ptr __noescape,
+                                                     size_t size)
+{
+    Discord_String str = { (uint8_t*)ptr, size };
+    Discord_GuildMinimal_SetName(self, str);
+};
+
+static inline void Discord_GuildMinimal_Name_Span(Discord_GuildMinimal*__nonnull self,
+                                                  uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                  size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_GuildMinimal_Name(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+// MARK: - Guild Channel
+static inline void Discord_GuildChannel_SetName_Span(Discord_GuildChannel*__nonnull self,
+                                                     const uint8_t *__nullable __counted_by_or_null(size) ptr __noescape,
+                                                     size_t size)
+{
+    Discord_String str = { (uint8_t*)ptr, size };
+    Discord_GuildChannel_SetName(self, str);
+};
+
+static inline void Discord_GuildChannel_Name_Span(Discord_GuildChannel*__nonnull self,
+                                                  uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                  size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_GuildChannel_Name(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+// MARK: - User Application Profile Handle
+static inline void Discord_UserApplicationProfileHandle_AvatarHash_Span(
+    Discord_UserApplicationProfileHandle*__nonnull self,
+    uint8_t *__nonnull __counted_by(size) output __noescape,
+    size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_UserApplicationProfileHandle_AvatarHash(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+static inline void Discord_UserApplicationProfileHandle_Metadata_Span(
+    Discord_UserApplicationProfileHandle*__nonnull self,
+    uint8_t *__nonnull __counted_by(size) output __noescape,
+    size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_UserApplicationProfileHandle_Metadata(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+static inline bool Discord_UserApplicationProfileHandle_ProviderId_Span(
+    Discord_UserApplicationProfileHandle*__nonnull self,
+    uint8_t *__nonnull __counted_by(size) output __noescape,
+    size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    bool hasValue = Discord_UserApplicationProfileHandle_ProviderId(self, &str);
+    output = str.ptr;
+    size = str.size;
+    return hasValue;
+};
+
+static inline void Discord_UserApplicationProfileHandle_ProviderIssuedUserId_Span(
+    Discord_UserApplicationProfileHandle*__nonnull self,
+    uint8_t *__nonnull __counted_by(size) output __noescape,
+    size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_UserApplicationProfileHandle_ProviderIssuedUserId(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+static inline void Discord_UserApplicationProfileHandle_Username_Span(
+    Discord_UserApplicationProfileHandle*__nonnull self,
+    uint8_t *__nonnull __counted_by(size) output __noescape,
+    size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_UserApplicationProfileHandle_Username(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+// MARK: - User Handle
+static inline bool Discord_UserHandle_Avatar_Span(Discord_UserHandle*__nonnull self,
+                                                  uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                  size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    bool hasValue = Discord_UserHandle_Avatar(self, &str);
+    output = str.ptr;
+    size = str.size;
+    return hasValue;
+};
+
+static inline void Discord_UserHandle_AvatarUrl_Span(Discord_UserHandle*__nonnull self,
+                                                     Discord_UserHandle_AvatarType animatedType,
+                                                     Discord_UserHandle_AvatarType staticType,
+                                                     uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                     size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_UserHandle_AvatarUrl(self, animatedType, staticType, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+static inline void Discord_UserHandle_DisplayName_Span(Discord_UserHandle*__nonnull self,
+                                                       uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                       size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_UserHandle_DisplayName(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+static inline bool Discord_UserHandle_GlobalName_Span(Discord_UserHandle*__nonnull self,
+                                                      uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                      size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    bool hasValue = Discord_UserHandle_GlobalName(self, &str);
+    output = str.ptr;
+    size = str.size;
+    return hasValue;
+};
+
+static inline void Discord_UserHandle_Username_Span(Discord_UserHandle*__nonnull self,
+                                                    uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                    size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_UserHandle_Username(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+// MARK: - Additional Content
+static inline void Discord_AdditionalContent_SetTitle_Span(Discord_AdditionalContent*__nonnull self,
+                                                           const uint8_t *__nullable __counted_by_or_null(size) ptr __noescape,
+                                                           size_t size)
+{
+    if (ptr == NULL) {
+        Discord_AdditionalContent_SetTitle(self, NULL);
+        return;
+    }
+    Discord_String str = { (uint8_t*)ptr, size };
+    Discord_AdditionalContent_SetTitle(self, &str);
+};
+
+static inline bool Discord_AdditionalContent_Title_Span(Discord_AdditionalContent*__nonnull self,
+                                                        uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                        size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    bool hasValue = Discord_AdditionalContent_Title(self, &str);
+    output = str.ptr;
+    size = str.size;
+    return hasValue;
+};
+
+// MARK: - Linked Channel
+static inline void Discord_LinkedChannel_SetName_Span(Discord_LinkedChannel*__nonnull self,
+                                                      const uint8_t *__nullable __counted_by_or_null(size) ptr __noescape,
+                                                      size_t size)
+{
+    Discord_String str = { (uint8_t*)ptr, size };
+    Discord_LinkedChannel_SetName(self, str);
+};
+
+static inline void Discord_LinkedChannel_Name_Span(Discord_LinkedChannel*__nonnull self,
+                                                   uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                   size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_LinkedChannel_Name(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+// MARK: - Message Handle
+static inline void Discord_MessageHandle_Content_Span(Discord_MessageHandle*__nonnull self,
+                                                      uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                      size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_MessageHandle_Content(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+static inline void Discord_MessageHandle_RawContent_Span(Discord_MessageHandle*__nonnull self,
+                                                         uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                         size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_MessageHandle_RawContent(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+// MARK: - Audio Device
+static inline void Discord_AudioDevice_SetId_Span(Discord_AudioDevice*__nonnull self,
+                                                  const uint8_t *__nullable __counted_by_or_null(size) ptr __noescape,
+                                                  size_t size)
+{
+    Discord_String str = { (uint8_t*)ptr, size };
+    Discord_AudioDevice_SetId(self, str);
+};
+
+static inline void Discord_AudioDevice_Id_Span(Discord_AudioDevice*__nonnull self,
+                                               uint8_t *__nonnull __counted_by(size) output __noescape,
+                                               size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_AudioDevice_Id(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+static inline void Discord_AudioDevice_SetName_Span(Discord_AudioDevice*__nonnull self,
+                                                    const uint8_t *__nullable __counted_by_or_null(size) ptr __noescape,
+                                                    size_t size)
+{
+    Discord_String str = { (uint8_t*)ptr, size };
+    Discord_AudioDevice_SetName(self, str);
+};
+
+static inline void Discord_AudioDevice_Name_Span(Discord_AudioDevice*__nonnull self,
+                                                 uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                 size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_AudioDevice_Name(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+// MARK: - Client Create Options
+static inline void Discord_ClientCreateOptions_SetWebBase_Span(Discord_ClientCreateOptions*__nonnull self,
+                                                               const uint8_t *__nullable __counted_by_or_null(size) ptr __noescape,
+                                                               size_t size)
+{
+    Discord_String str = { (uint8_t*)ptr, size };
+    Discord_ClientCreateOptions_SetWebBase(self, str);
+};
+
+static inline void Discord_ClientCreateOptions_WebBase_Span(Discord_ClientCreateOptions*__nonnull self,
+                                                            uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                            size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_ClientCreateOptions_WebBase(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
+static inline void Discord_ClientCreateOptions_SetApiBase_Span(Discord_ClientCreateOptions*__nonnull self,
+                                                               const uint8_t *__nullable __counted_by_or_null(size) ptr __noescape,
+                                                               size_t size)
+{
+    Discord_String str = { (uint8_t*)ptr, size };
+    Discord_ClientCreateOptions_SetApiBase(self, str);
+};
+
+static inline void Discord_ClientCreateOptions_ApiBase_Span(Discord_ClientCreateOptions*__nonnull self,
+                                                            uint8_t *__nonnull __counted_by(size) output __noescape,
+                                                            size_t size)
+{
+    Discord_String str = { NULL, 0 };
+    Discord_ClientCreateOptions_ApiBase(self, &str);
+    output = str.ptr;
+    size = str.size;
+};
+
 
 //// TODO: Figure out how to convert Discord_Properties
 //// MARK: -  Funcs to convert to a span equivalent.
@@ -716,25 +1015,25 @@ static inline void Discord_Client_ThreadToString_Span(Discord_Client_Thread type
 //
 //// MARK: Call
 //
-//void DISCORD_API Discord_Call_ErrorToString(Discord_Call_Error type, Discord_String* returnValue);
-//void DISCORD_API Discord_Call_StatusToString(Discord_Call_Status type, Discord_String* returnValue);
+//void DISCORD_API Discord_Call_ErrorToString(Discord_Call_Error type, Discord_String* returnValue); ƒ
+//void DISCORD_API Discord_Call_StatusToString(Discord_Call_Status type, Discord_String* returnValue); ƒ
 //
 //// MARK: Channel Handle
 //
 //void DISCORD_API Discord_ChannelHandle_Name(Discord_ChannelHandle* self,
-//                                            Discord_String* returnValue);
+//                                            Discord_String* returnValue); ƒ
 //void DISCORD_API Discord_ChannelHandle_Recipients(Discord_ChannelHandle* self,
-//                                                  Discord_UInt64Span* returnValue);
+//                                                  Discord_UInt64Span* returnValue); ƒ
 //
 //// MARK: Guild Minimal
 //
-//void DISCORD_API Discord_GuildMinimal_SetName(Discord_GuildMinimal* self, Discord_String value);
-//void DISCORD_API Discord_GuildMinimal_Name(Discord_GuildMinimal* self, Discord_String* returnValue);
+//void DISCORD_API Discord_GuildMinimal_SetName(Discord_GuildMinimal* self, Discord_String value); ƒ
+//void DISCORD_API Discord_GuildMinimal_Name(Discord_GuildMinimal* self, Discord_String* returnValue); ƒ
 //
 //// MARK: Guild Channel
 //
-//void DISCORD_API Discord_GuildChannel_SetName(Discord_GuildChannel* self, Discord_String value);
-//void DISCORD_API Discord_GuildChannel_Name(Discord_GuildChannel* self, Discord_String* returnValue);
+//void DISCORD_API Discord_GuildChannel_SetName(Discord_GuildChannel* self, Discord_String value); ƒ
+//void DISCORD_API Discord_GuildChannel_Name(Discord_GuildChannel* self, Discord_String* returnValue); ƒ
 //
 //// MARK: Linked Channel
 //
@@ -745,45 +1044,45 @@ static inline void Discord_Client_ThreadToString_Span(Discord_Client_Thread type
 //// MARK: User Application Profile Handle
 //
 //void DISCORD_API Discord_UserApplicationProfileHandle_AvatarHash(Discord_UserApplicationProfileHandle* self,
-//                                                                 Discord_String* returnValue);
+//                                                                 Discord_String* returnValue); ƒ
 //
 //void DISCORD_API Discord_UserApplicationProfileHandle_Metadata(Discord_UserApplicationProfileHandle* self,
-//                                                               Discord_String* returnValue);
+//                                                               Discord_String* returnValue); ƒ
 //
 //bool DISCORD_API Discord_UserApplicationProfileHandle_ProviderId(Discord_UserApplicationProfileHandle* self,
-//                                                                 Discord_String* returnValue);
+//                                                                 Discord_String* returnValue); ƒ
 //
 //void DISCORD_API Discord_UserApplicationProfileHandle_ProviderIssuedUserId(Discord_UserApplicationProfileHandle* self,
-//                                                                           Discord_String* returnValue);
+//                                                                           Discord_String* returnValue); ƒ
 //
 //void DISCORD_API Discord_UserApplicationProfileHandle_Username(Discord_UserApplicationProfileHandle* self,
-//                                                               Discord_String* returnValue);
+//                                                               Discord_String* returnValue); ƒ
 //
 //// MARK: User Handle
 //
-//bool DISCORD_API Discord_UserHandle_Avatar(Discord_UserHandle* self, Discord_String* returnValue);
+//bool DISCORD_API Discord_UserHandle_Avatar(Discord_UserHandle* self, Discord_String* returnValue); ƒ
 //void DISCORD_API Discord_UserHandle_AvatarTypeToString(Discord_UserHandle_AvatarType type,
-//                                                       Discord_String* returnValue);
+//                                                       Discord_String* returnValue); ƒ
 //void DISCORD_API Discord_UserHandle_AvatarUrl(Discord_UserHandle* self,
 //                                              Discord_UserHandle_AvatarType animatedType,
 //                                              Discord_UserHandle_AvatarType staticType,
-//                                              Discord_String* returnValue);
+//                                              Discord_String* returnValue); ƒ
 //void DISCORD_API Discord_UserHandle_DisplayName(Discord_UserHandle* self,
-//                                                Discord_String* returnValue);
+//                                                Discord_String* returnValue); ƒ
 //bool DISCORD_API Discord_UserHandle_GameActivity(Discord_UserHandle* self,
-//                                                 Discord_Activity* returnValue);
+//                                                 Discord_Activity* returnValue); ƒ
 //bool DISCORD_API Discord_UserHandle_GlobalName(Discord_UserHandle* self,
-//                                               Discord_String* returnValue);
-//void DISCORD_API Discord_UserHandle_Username(Discord_UserHandle* self, Discord_String* returnValue);
+//                                               Discord_String* returnValue); ƒ
+//void DISCORD_API Discord_UserHandle_Username(Discord_UserHandle* self, Discord_String* returnValue); ƒ
 //
 //// MARK: Additional Content
 //
 //void DISCORD_API Discord_AdditionalContent_TypeToString(Discord_AdditionalContentType type,
-//                                                        Discord_String* returnValue);
+//                                                        Discord_String* returnValue); ƒ
 //void DISCORD_API Discord_AdditionalContent_SetTitle(Discord_AdditionalContent* self,
-//                                                    Discord_String* value);
+//                                                    Discord_String* value); ƒ
 //bool DISCORD_API Discord_AdditionalContent_Title(Discord_AdditionalContent* self,
-//                                                 Discord_String* returnValue);
+//                                                 Discord_String* returnValue); ƒ
 //
 //// MARK: Message Handle
 //

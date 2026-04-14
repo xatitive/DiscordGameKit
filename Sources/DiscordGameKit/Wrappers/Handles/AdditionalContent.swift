@@ -33,9 +33,9 @@ public struct AdditionalContent: DiscordObject, Sendable, CustomStringConvertibl
     public var title: String? {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                guard raw.title(&ds) else { return nil }
-                return ds.toString()
+                gettingString { span in
+                    raw.title(span: &span)
+                }
             }
         }
         _modify {
@@ -43,12 +43,12 @@ public struct AdditionalContent: DiscordObject, Sendable, CustomStringConvertibl
             var value = self.title
             yield &value
             guard let value else {
-                usingLock { $0.setTitle(nil) }
+                usingLock { $0.setTitle(span: nil) }
                 return
             }
-            value.withDiscordStringPointer { ptr in
-                storage.withLock { raw in
-                    raw.setTitle(ptr)
+            storage.withLock { raw in
+                settingString(value) { buf in
+                    raw.setTitle(span: buf)
                 }
             }
         }

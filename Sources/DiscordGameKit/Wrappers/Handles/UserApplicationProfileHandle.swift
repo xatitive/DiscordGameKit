@@ -24,36 +24,36 @@ public struct UserApplicationProfileHandle: DiscordObject, Sendable, CustomStrin
     /// The user's in-game avatar hash.
     public var avatarHash: String {
         storage.withLock { raw in
-            var ds = Discord_String()
-            raw.avatarHash(&ds)
-            return ds.toString()
+            gettingString { span in
+                raw.avatarHash(span: &span)
+            }
         }
     }
     
 	/// Metadata set by the developer.
     public var metadata: String {
         storage.withLock { raw in
-            var ds = Discord_String()
-            raw.metadata(&ds)
-            return ds.toString()
+            gettingString { span in
+                raw.metadata(span: &span)
+            }
         }
     }
 
     /// The user's external identity provider ID if it exists.
     public var providerId: String? {
         storage.withLock { raw in
-            var ds = Discord_String()
-            guard raw.providerId(&ds) else { return nil }
-            return ds.toString()
+            gettingString { span in
+                raw.providerId(span: &span)
+            }
         }
     }
 
     /// The user's external identity provider issued user ID.
     public var providerIssuedUserId: String {
         storage.withLock { raw in
-            var ds = Discord_String()
-            raw.providerIssuedUserId(&ds)
-            return ds.toString()
+            gettingString { span in
+                raw.providerIssuedUserId(span: &span)
+            }
         }
     }
 
@@ -65,9 +65,9 @@ public struct UserApplicationProfileHandle: DiscordObject, Sendable, CustomStrin
     /// The user's in-game username.
     public var username: String {
         storage.withLock { raw in
-            var ds = Discord_String()
-            raw.username(&ds)
-            return ds.toString()
+            gettingString { span in
+                raw.username(span: &span)
+            }
         }
     }
 

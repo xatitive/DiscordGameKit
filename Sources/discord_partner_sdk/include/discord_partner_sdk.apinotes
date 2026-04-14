@@ -1114,3 +1114,71 @@ Functions:
   SwiftName: Discord_DeviceAuthorizationArgs.setScopes(self:span:_:)
 - Name: Discord_DeviceAuthorizationArgs_Scopes_Span
   SwiftName: Discord_DeviceAuthorizationArgs.scopes(self:span:_:)
+
+- Name: Discord_ChannelHandle_Name_Span
+  SwiftName: Discord_ChannelHandle.name(self:span:_:)
+
+- Name: Discord_GuildMinimal_SetName_Span
+  SwiftName: Discord_GuildMinimal.setName(self:span:_:)
+- Name: Discord_GuildMinimal_Name_Span
+  SwiftName: Discord_GuildMinimal.name(self:span:_:)
+
+- Name: Discord_GuildChannel_SetName_Span
+  SwiftName: Discord_GuildChannel.setName(self:span:_:)
+- Name: Discord_GuildChannel_Name_Span
+  SwiftName: Discord_GuildChannel.name(self:span:_:)
+
+- Name: Discord_UserApplicationProfileHandle_AvatarHash_Span
+  SwiftName: Discord_UserApplicationProfileHandle.avatarHash(self:span:_:)
+- Name: Discord_UserApplicationProfileHandle_Metadata_Span
+  SwiftName: Discord_UserApplicationProfileHandle.metadata(self:span:_:)
+- Name: Discord_UserApplicationProfileHandle_ProviderId_Span
+  SwiftName: Discord_UserApplicationProfileHandle.providerId(self:span:_:)
+- Name: Discord_UserApplicationProfileHandle_ProviderIssuedUserId_Span
+  SwiftName: Discord_UserApplicationProfileHandle.providerIssuedUserId(self:span:_:)
+- Name: Discord_UserApplicationProfileHandle_Username_Span
+  SwiftName: Discord_UserApplicationProfileHandle.username(self:span:_:)
+
+- Name: Discord_UserHandle_Avatar_Span
+  SwiftName: Discord_UserHandle.avatar(self:span:_:)
+- Name: Discord_UserHandle_AvatarUrl_Span
+  SwiftName: Discord_UserHandle.avatarUrl(self:_:_:span:_:)
+- Name: Discord_UserHandle_DisplayName_Span
+  SwiftName: Discord_UserHandle.displayName(self:span:_:)
+- Name: Discord_UserHandle_GlobalName_Span
+  SwiftName: Discord_UserHandle.globalName(self:span:_:)
+- Name: Discord_UserHandle_Username_Span
+  SwiftName: Discord_UserHandle.username(self:span:_:)
+
+- Name: Discord_AdditionalContent_SetTitle_Span
+  SwiftName: Discord_AdditionalContent.setTitle(self:span:_:)
+- Name: Discord_AdditionalContent_Title_Span
+  SwiftName: Discord_AdditionalContent.title(self:span:_:)
+
+- Name: Discord_LinkedChannel_SetName_Span
+  SwiftName: Discord_LinkedChannel.setName(self:span:_:)
+- Name: Discord_LinkedChannel_Name_Span
+  SwiftName: Discord_LinkedChannel.name(self:span:_:)
+
+- Name: Discord_MessageHandle_Content_Span
+  SwiftName: Discord_MessageHandle.content(self:span:_:)
+- Name: Discord_MessageHandle_RawContent_Span
+  SwiftName: Discord_MessageHandle.rawContent(self:span:_:)
+
+- Name: Discord_AudioDevice_SetId_Span
+  SwiftName: Discord_AudioDevice.setId(self:span:_:)
+- Name: Discord_AudioDevice_Id_Span
+  SwiftName: Discord_AudioDevice.id(self:span:_:)
+- Name: Discord_AudioDevice_SetName_Span
+  SwiftName: Discord_AudioDevice.setName(self:span:_:)
+- Name: Discord_AudioDevice_Name_Span
+  SwiftName: Discord_AudioDevice.name(self:span:_:)
+
+- Name: Discord_ClientCreateOptions_SetWebBase_Span
+  SwiftName: Discord_ClientCreateOptions.setWebBase(self:span:_:)
+- Name: Discord_ClientCreateOptions_WebBase_Span
+  SwiftName: Discord_ClientCreateOptions.webBase(self:span:_:)
+- Name: Discord_ClientCreateOptions_SetApiBase_Span
+  SwiftName: Discord_ClientCreateOptions.setApiBase(self:span:_:)
+- Name: Discord_ClientCreateOptions_ApiBase_Span
+  SwiftName: Discord_ClientCreateOptions.apiBase(self:span:_:)

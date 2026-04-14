@@ -31,15 +31,17 @@ public struct GuildChannel: DiscordObject, Identifiable, Sendable, CustomStringC
     public var name: String {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                raw.name(&ds)
-                return ds.toString()
+                gettingString { span in
+                    raw.name(span: &span)
+                }
             }
         }
         set {
             ensureUnique()
-            newValue.withDiscordString { str in
-                usingLock { $0.setName(str) }
+            storage.withLock { raw in
+                settingString(newValue) { buf in
+                    raw.setName(span: buf)
+                }
             }
         }
     }

@@ -32,9 +32,9 @@ public struct ChannelHandle: DiscordObject, Identifiable, Sendable, CustomString
     /// Generally only channels in servers have names, although Discord may generate a display name for some channels as well.
     public var name: String {
         storage.withLock { raw in
-            var ds = Discord_String()
-            raw.name(&ds)
-            return ds.toString()
+            gettingString { span in
+                raw.name(span: &span)
+            }
         }
     }
 

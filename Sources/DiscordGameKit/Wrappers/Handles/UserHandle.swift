@@ -26,9 +26,9 @@ public struct UserHandle: DiscordObject, Identifiable, Sendable, CustomStringCon
     /// The hash of the user's Discord profile avatar, if one is set.
     public var avatar: String? {
         storage.withLock { raw in
-            var ds = Discord_String()
-            guard raw.avatar(&ds) else { return nil }
-            return ds.toString()
+            gettingString { span in
+                raw.avatar(span: &span)
+            }
         }
     }
 
@@ -40,22 +40,22 @@ public struct UserHandle: DiscordObject, Identifiable, Sendable, CustomStringCon
         staticType: AvatarType = .png
     ) -> String {
         storage.withLock { raw in
-            var ds = Discord_String()
-            raw.avatarUrl(
-                animatedType.discordValue,
-                staticType.discordValue,
-                &ds
-            )
-            return ds.toString()
+            gettingString { span in
+                raw.avatarUrl(
+                    animatedType.discordValue,
+                    staticType.discordValue,
+                    span: &span
+                )
+            }
         }
     }
 
     /// Returns the user's preferred name, if one is set, otherwise returns their unique username.
     public var displayName: String {
         storage.withLock { raw in
-            var ds = Discord_String()
-            raw.displayName(&ds)
-            return ds.toString()
+            gettingString { span in
+                raw.displayName(span: &span)
+            }
         }
     }
 
@@ -86,9 +86,9 @@ public struct UserHandle: DiscordObject, Identifiable, Sendable, CustomStringCon
     /// https://discord.com/developers/docs/resources/user
     public var globalName: String? {
         storage.withLock { raw in
-            var ds = Discord_String()
-            guard raw.globalName(&ds) else { return nil }
-            return ds.toString()
+            gettingString { span in
+                raw.globalName(span: &span)
+            }
         }
     }
 
@@ -137,9 +137,9 @@ public struct UserHandle: DiscordObject, Identifiable, Sendable, CustomStringCon
     /// https://discord.com/developers/docs/resources/user
     public var username: String {
         storage.withLock { raw in
-            var ds = Discord_String()
-            raw.username(&ds)
-            return ds.toString()
+            gettingString { span in
+                raw.username(span: &span)
+            }
         }
     }
 

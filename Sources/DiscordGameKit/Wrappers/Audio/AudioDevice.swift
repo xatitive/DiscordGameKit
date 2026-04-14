@@ -21,16 +21,16 @@ public struct AudioDevice: DiscordObject, Identifiable, Sendable {
     public var id: String {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                raw.id(&ds)
-                return ds.toString()
+                gettingString { span in
+                    raw.id(span: &span)
+                }
             }
         }
         set {
             ensureUnique()
-            newValue.withDiscordString { str in
-                storage.withLock { raw in
-                    raw.setId(str)
+            storage.withLock { raw in
+                settingString(newValue) { buf in
+                    raw.setId(span: buf)
                 }
             }
         }
@@ -40,16 +40,16 @@ public struct AudioDevice: DiscordObject, Identifiable, Sendable {
     public var name: String {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                raw.name(&ds)
-                return ds.toString()
+                gettingString { span in
+                    raw.name(span: &span)
+                }
             }
         }
         set {
             ensureUnique()
-            newValue.withDiscordString { str in
-                storage.withLock { raw in
-                    raw.setName(str)
+            storage.withLock { raw in
+                settingString(newValue) { buf in
+                    raw.setName(span: buf)
                 }
             }
         }

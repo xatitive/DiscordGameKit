@@ -131,9 +131,9 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
     /// replaced with a more human readable form, such as `@username` or `:emoji_name:`.
     public var content: String {
         storage.withLock { raw in
-            var ds = Discord_String()
-            raw.content(&ds)
-            return ds.toString()
+            gettingString { span in
+                raw.content(span: &span)
+            }
         }
     }
 
@@ -201,9 +201,9 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
     /// A message can be blank if it was sent from Discord but only contains content such as image attachments.
     public var rawContent: String {
         storage.withLock { raw in
-            var ds = Discord_String()
-            raw.rawContent(&ds)
-            return ds.toString()
+            gettingString { span in
+                raw.rawContent(span: &span)
+            }
         }
     }
 

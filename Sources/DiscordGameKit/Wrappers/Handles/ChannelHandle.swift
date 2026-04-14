@@ -9,7 +9,7 @@
 
 /// All messages sent on Discord are done so in a Channel. ``MessageHandle/channelId`` will
 /// contain the ID of the channel a message was sent in, and Client::GetChannelHandle will return an
-/// instance of this class.
+/// instance of this struct.
 ///
 /// Handle objects in the SDK hold a reference both to the underlying data, and to the SDK instance.
 /// Changes to the underlying data will generally be available on existing handles objects without
@@ -24,16 +24,16 @@ public struct ChannelHandle: DiscordObject, Identifiable, Sendable, CustomString
 
     /// ID of the channel.
     public var id: UInt64 {
-        usingLock(Discord_ChannelHandle_Id)
+        usingLock { $0.id() }
     }
     
-	/// Name of the channel.
+    /// Name of the channel.
     ///
     /// Generally only channels in servers have names, although Discord may generate a display name for some channels as well.
     public var name: String {
         storage.withLock { raw in
             var ds = Discord_String()
-            Discord_ChannelHandle_Name(&raw, &ds)
+            raw.name(&ds)
             return String(discordOwned: ds)
         }
     }
@@ -42,14 +42,14 @@ public struct ChannelHandle: DiscordObject, Identifiable, Sendable, CustomString
     public var recipients: [UInt64] {
         storage.withLock { raw in
             var span = Discord_UInt64Span()
-            Discord_ChannelHandle_Recipients(&raw, &span)
+            raw.recipients(&span)
             return span.converting()
         }
     }
 
     /// Type of channel.
     public var type: ChannelType {
-        storage.withLock { Discord_ChannelHandle_Type(&$0).swiftValue }
+        storage.withLock { $0.type().swiftValue }
     }
 
     public var description: String {

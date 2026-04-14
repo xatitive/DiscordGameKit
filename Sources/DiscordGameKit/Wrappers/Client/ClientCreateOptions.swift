@@ -26,7 +26,7 @@ extension DiscordClient {
                 storage.withLock { raw in
                     var ds = Discord_String()
                     raw.webBase(&ds)
-                    return String(discordOwned: ds)
+                    return ds.toString()
                 }
             }
             set {
@@ -45,7 +45,7 @@ extension DiscordClient {
                 storage.withLock { raw in
                     var ds = Discord_String()
                     raw.apiBase(&ds)
-                    return String(discordOwned: ds)
+                    return ds.toString()
                 }
             }
             set {

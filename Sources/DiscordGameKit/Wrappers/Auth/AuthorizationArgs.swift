@@ -44,7 +44,7 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             storage.withLock { raw in
                 var ds = Discord_String()
                 raw.scopes(&ds)
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         set {
@@ -63,7 +63,7 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             storage.withLock { raw in
                 var ds = Discord_String()
                 guard raw.state(&ds) else { return nil }
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         _modify {
@@ -89,7 +89,7 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             storage.withLock { raw in
                 var ds = Discord_String()
                 guard raw.nonce(&ds) else { return nil }
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         _modify {
@@ -173,7 +173,7 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             storage.withLock { raw in
                 var ds = Discord_String()
                 guard raw.customSchemeParam(&ds) else { return nil }
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         _modify {

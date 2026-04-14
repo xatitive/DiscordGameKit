@@ -23,7 +23,7 @@ public struct AudioDevice: DiscordObject, Identifiable, Sendable {
             storage.withLock { raw in
                 var ds = Discord_String()
                 raw.id(&ds)
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         set {
@@ -42,7 +42,7 @@ public struct AudioDevice: DiscordObject, Identifiable, Sendable {
             storage.withLock { raw in
                 var ds = Discord_String()
                 raw.name(&ds)
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         set {

@@ -21,10 +21,10 @@ public struct GuildMinimal: DiscordObject, Identifiable, Sendable, CustomStringC
 
     /// ID of the guild.
     public var id: UInt64 {
-        get { usingLock(Discord_GuildMinimal_Id) }
+        get { usingLock { $0.id() } }
         set {
             ensureUnique()
-            usingLock(Discord_GuildMinimal_SetId, newValue)
+            usingLock { $0.setId(newValue) }
         }
     }
 
@@ -33,14 +33,14 @@ public struct GuildMinimal: DiscordObject, Identifiable, Sendable, CustomStringC
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_GuildMinimal_Name(&raw, &ds)
-                return String(discordOwned: ds)
+                raw.name(&ds)
+                return ds.toString()
             }
         }
         set {
             ensureUnique()
             newValue.withDiscordString { str in
-                usingLock(Discord_GuildMinimal_SetName, str)
+                usingLock { $0.setName(str) }
             }
         }
     }

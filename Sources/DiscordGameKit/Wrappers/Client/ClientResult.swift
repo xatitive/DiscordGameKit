@@ -50,7 +50,7 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable, Er
             storage.withLock { raw in
                 var ds = Discord_String()
                 raw.error(&ds)
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         set {
@@ -73,7 +73,7 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable, Er
             storage.withLock { raw in
                 var ds = Discord_String()
                 raw.responseBody(&ds)
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         set {
@@ -128,7 +128,7 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable, Er
         storage.withLock { raw in
             var ds = Discord_String()
             raw.toString(&ds)
-            return String(discordOwned: ds)
+            return ds.toString()
         }
     }
 }

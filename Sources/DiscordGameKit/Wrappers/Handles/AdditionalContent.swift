@@ -20,11 +20,11 @@ public struct AdditionalContent: DiscordObject, Sendable, CustomStringConvertibl
 
     /// Represents the type of additional content in the message.
     public var type: AdditionalContentType {
-        get { storage.withLock { Discord_AdditionalContent_Type(&$0).swiftValue } }
+        get { storage.withLock { $0.type().swiftValue } }
         set {
             ensureUnique()
             storage.withLock { raw in
-                Discord_AdditionalContent_SetType(&raw, newValue.discordValue)
+                raw.setType(newValue.discordValue)
             }
         }
     }
@@ -34,8 +34,8 @@ public struct AdditionalContent: DiscordObject, Sendable, CustomStringConvertibl
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                guard Discord_AdditionalContent_Title(&raw, &ds) else { return nil }
-                return String(discordOwned: ds)
+                guard raw.title(&ds) else { return nil }
+                return ds.toString()
             }
         }
         _modify {
@@ -43,12 +43,12 @@ public struct AdditionalContent: DiscordObject, Sendable, CustomStringConvertibl
             var value = self.title
             yield &value
             guard let value else {
-                usingLock(Discord_AdditionalContent_SetTitle, nil)
+                usingLock { $0.setTitle(nil) }
                 return
             }
             value.withDiscordStringPointer { ptr in
                 storage.withLock { raw in
-                    Discord_AdditionalContent_SetTitle(&raw, ptr)
+                    raw.setTitle(ptr)
                 }
             }
         }
@@ -56,10 +56,10 @@ public struct AdditionalContent: DiscordObject, Sendable, CustomStringConvertibl
 
     /// Represents the number of pieces of additional content so you could for example render "2 additional images".
     public var count: UInt8 {
-        get { usingLock(Discord_AdditionalContent_Count) }
+        get { usingLock { $0.count() } }
         set {
             ensureUnique()
-            usingLock(Discord_AdditionalContent_SetCount, newValue)
+            usingLock { $0.setCount(newValue) }
         }
     }
 
@@ -70,6 +70,9 @@ public struct AdditionalContent: DiscordObject, Sendable, CustomStringConvertibl
 
 extension AdditionalContent: Equatable {
     public static func == (lhs: AdditionalContent, rhs: AdditionalContent) -> Bool {
-        compare(lhs.storage, to: rhs.storage, Discord_AdditionalContent_Equals)
+        compare(lhs.storage, to: rhs.storage) { (lhsPtr: UnsafeMutablePointer<Discord_AdditionalContent>?, rhsPtr: UnsafePointer<Discord_AdditionalContent>?) -> Bool in
+            guard let lhsPtr else { return false }
+            return lhsPtr.pointee.equals(rhsPtr)
+        }
     }
 }

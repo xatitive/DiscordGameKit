@@ -20,19 +20,19 @@ public struct LinkedLobby: DiscordObject, Sendable, CustomStringConvertible {
 
     /// The ID of the application that owns the lobby.
     public var applicationId: UInt64 {
-        get { usingLock(Discord_LinkedLobby_ApplicationId) }
+        get { usingLock { $0.applicationId() } }
         set {
             ensureUnique()
-            usingLock(Discord_LinkedLobby_SetApplicationId, newValue)
+            usingLock { $0.setApplicationId(newValue) }
         }
     }
 
     /// ID of the lobby.
     public var lobbyId: UInt64 {
-        get { usingLock(Discord_LinkedLobby_LobbyId) }
+        get { usingLock { $0.lobbyId() } }
         set {
             ensureUnique()
-            usingLock(Discord_LinkedLobby_SetLobbyId, newValue)
+            usingLock { $0.setLobbyId(newValue) }
         }
     }
 

@@ -16,10 +16,10 @@ public struct LinkedChannel: DiscordObject, Sendable, CustomStringConvertible {
 
     /// ID of the linked channel.
     public var id: UInt64 {
-        get { usingLock(Discord_LinkedChannel_Id) }
+        get { usingLock { $0.id() } }
         set {
             ensureUnique()
-            usingLock(Discord_LinkedChannel_SetId, newValue)
+            usingLock { $0.setId(newValue) }
         }
     }
 
@@ -28,24 +28,24 @@ public struct LinkedChannel: DiscordObject, Sendable, CustomStringConvertible {
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_LinkedChannel_Name(&raw, &ds)
-                return String(discordOwned: ds)
+                raw.name(&ds)
+                return ds.toString()
             }
         }
         set {
             ensureUnique()
             newValue.withDiscordString { str in
-                usingLock(Discord_LinkedChannel_SetName, str)
+                usingLock { $0.setName(str) }
             }
         }
     }
 
     /// ID of the guild (aka server) that owns the linked channel.
     public var guildId: UInt64 {
-        get { usingLock(Discord_LinkedChannel_GuildId) }
+        get { usingLock { $0.guildId() } }
         set {
             ensureUnique()
-            usingLock(Discord_LinkedChannel_SetGuildId, newValue)
+            usingLock { $0.setGuildId(newValue) }
         }
     }
 

@@ -20,10 +20,10 @@ public struct GuildChannel: DiscordObject, Identifiable, Sendable, CustomStringC
 
     /// ID of the channel.
     public var id: UInt64 {
-        get { usingLock(Discord_GuildChannel_Id) }
+        get { usingLock { $0.id() } }
         set {
             ensureUnique()
-            usingLock(Discord_GuildChannel_SetId, newValue)
+            usingLock { $0.setId(newValue) }
         }
     }
 
@@ -32,33 +32,33 @@ public struct GuildChannel: DiscordObject, Identifiable, Sendable, CustomStringC
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_GuildChannel_Name(&raw, &ds)
-                return String(discordOwned: ds)
+                raw.name(&ds)
+                return ds.toString()
             }
         }
         set {
             ensureUnique()
             newValue.withDiscordString { str in
-                usingLock(Discord_GuildChannel_SetName, str)
+                usingLock { $0.setName(str) }
             }
         }
     }
 
     /// Type of the channel.
     public var type: ChannelType {
-        get { storage.withLock { Discord_GuildChannel_Type(&$0).swiftValue } }
+        get { storage.withLock { $0.type().swiftValue } }
         set {
             ensureUnique()
-            usingLock(Discord_GuildChannel_SetType, newValue.discordValue)
+            usingLock { $0.setType(newValue.discordValue) }
         }
     }
 
     /// The position of the channel in the guild's channel list.
     public var position: Int32 {
-        get { usingLock(Discord_GuildChannel_Position) }
+        get { usingLock { $0.position() } }
         set {
             ensureUnique()
-            usingLock(Discord_GuildChannel_SetPosition, newValue)
+            usingLock { $0.setPosition(newValue) }
         }
     }
 
@@ -67,7 +67,7 @@ public struct GuildChannel: DiscordObject, Identifiable, Sendable, CustomStringC
         get {
             storage.withLock { raw in
                 var id = UInt64(0)
-                guard Discord_GuildChannel_ParentId(&raw, &id) else { return nil }
+                guard raw.parentId(&id) else { return nil }
                 return id
             }
         }
@@ -76,11 +76,11 @@ public struct GuildChannel: DiscordObject, Identifiable, Sendable, CustomStringC
             var value = self.parentId
             yield &value
             guard var value else {
-                usingLock(Discord_GuildChannel_SetParentId, nil)
+                usingLock { $0.setParentId(nil) }
                 return
             }
             storage.withLock { raw in
-                Discord_GuildChannel_SetParentId(&raw, &value)
+                raw.setParentId(&value)
             }
         }
     }
@@ -96,10 +96,10 @@ public struct GuildChannel: DiscordObject, Identifiable, Sendable, CustomStringC
     ///   - View Channel
     ///   - Send Messages
     public var isLinkable: Bool {
-        get { usingLock(Discord_GuildChannel_IsLinkable) }
+        get { usingLock { $0.isLinkable() } }
         set {
             ensureUnique()
-            usingLock(Discord_GuildChannel_SetIsLinkable, newValue)
+            usingLock { $0.setIsLinkable(newValue) }
         }
     }
 
@@ -117,10 +117,10 @@ public struct GuildChannel: DiscordObject, Identifiable, Sendable, CustomStringC
     /// This may be more complexity than a game wants to take on, so instead you can only allow
     /// linking of channels that are fully public in the server so there is no confusion.
     public var isViewableAndWriteableByAllMembers: Bool {
-        get { usingLock(Discord_GuildChannel_IsViewableAndWriteableByAllMembers) }
+        get { usingLock { $0.isViewableAndWriteableByAllMembers() } }
         set {
             ensureUnique()
-            usingLock(Discord_GuildChannel_SetIsViewableAndWriteableByAllMembers, newValue)
+            usingLock { $0.setIsViewableAndWriteableByAllMembers(newValue) }
         }
     }
 
@@ -131,7 +131,7 @@ public struct GuildChannel: DiscordObject, Identifiable, Sendable, CustomStringC
         get {
             storage.withLock { raw -> LinkedLobby? in
                 var lobby = Discord_LinkedLobby()
-                guard Discord_GuildChannel_LinkedLobby(&raw, &lobby) else { return nil }
+                guard raw.linkedLobby(&lobby) else { return nil }
                 return LinkedLobby(takingOwnership: lobby)
             }
         }
@@ -140,12 +140,12 @@ public struct GuildChannel: DiscordObject, Identifiable, Sendable, CustomStringC
             var value = self.linkedLobby
             yield &value
             guard let value else {
-                usingLock(Discord_GuildChannel_SetLinkedLobby, nil)
+                usingLock { $0.setLinkedLobby(nil) }
                 return
             }
             value.storage.withLock { lobby in
                 self.storage.withLock { raw in
-                    Discord_GuildChannel_SetLinkedLobby(&raw, &lobby)
+                    raw.setLinkedLobby(&lobby)
                 }
             }
         }

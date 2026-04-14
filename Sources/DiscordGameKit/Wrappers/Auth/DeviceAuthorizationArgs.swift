@@ -44,7 +44,7 @@ public struct DeviceAuthorizationArgs: DiscordObject, CustomStringConvertible {
             storage.withLock { raw in
                 var ds = Discord_String()
                 raw.scopes(&ds)
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         set {

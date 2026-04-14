@@ -33,7 +33,7 @@ public struct AuthorizationCodeChallenge: DiscordObject, CustomStringConvertible
             storage.withLock { raw in
                 var ds = Discord_String()
                 raw.challenge(&ds)
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         set {

@@ -92,7 +92,7 @@ public struct ActivityInvite: DiscordObject, Sendable, CustomStringConvertible {
             storage.withLock { raw in
                 var ds = Discord_String()
                 raw.partyId(&ds)
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         set {
@@ -111,7 +111,7 @@ public struct ActivityInvite: DiscordObject, Sendable, CustomStringConvertible {
             storage.withLock { raw in
                 var ds = Discord_String()
                 raw.sessionId(&ds)
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         set {

@@ -15,7 +15,7 @@ extension CallError: CustomStringConvertible {
     public var description: String {
         var raw = Discord_String(ptr: nil, size: 0)
         Discord_Call_ErrorToString(discordValue, &raw)
-        return String(discordOwned: raw)
+        return raw.toString()
     }
 }
 
@@ -23,7 +23,7 @@ extension CallStatus: CustomStringConvertible {
     public var description: String {
         var raw = Discord_String(ptr: nil, size: 0)
         Discord_Call_StatusToString(discordValue, &raw)
-        return String(discordOwned: raw)
+        return raw.toString()
     }
 }
 
@@ -31,7 +31,7 @@ extension AvatarType: CustomStringConvertible {
     public var description: String {
         var raw = Discord_String(ptr: nil, size: 0)
         Discord_UserHandle_AvatarTypeToString(discordValue, &raw)
-        return String(discordOwned: raw)
+        return raw.toString()
     }
 }
 
@@ -39,7 +39,7 @@ extension AdditionalContentType: CustomStringConvertible {
     public var description: String {
         var raw = Discord_String(ptr: nil, size: 0)
         Discord_AdditionalContent_TypeToString(discordValue, &raw)
-        return String(discordOwned: raw)
+        return raw.toString()
     }
 }
 
@@ -47,7 +47,7 @@ extension ClientError: CustomStringConvertible {
     public var description: String {
         var raw = Discord_String(ptr: nil, size: 0)
         Discord_Client_ErrorToString(discordValue, &raw)
-        return String(discordOwned: raw)
+        return raw.toString()
     }
 }
 
@@ -55,7 +55,7 @@ extension ClientStatus: CustomStringConvertible {
     public var description: String {
         var raw = Discord_String(ptr: nil, size: 0)
         Discord_Client_StatusToString(discordValue, &raw)
-        return String(discordOwned: raw)
+        return raw.toString()
     }
 }
 
@@ -63,7 +63,7 @@ extension ClientThread: CustomStringConvertible {
     public var description: String {
         var raw = Discord_String(ptr: nil, size: 0)
         Discord_Client_ThreadToString(discordValue, &raw)
-        return String(discordOwned: raw)
+        return raw.toString()
     }
 }
 

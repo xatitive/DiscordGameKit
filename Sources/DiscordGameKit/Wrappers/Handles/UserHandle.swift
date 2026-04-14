@@ -27,8 +27,8 @@ public struct UserHandle: DiscordObject, Identifiable, Sendable, CustomStringCon
     public var avatar: String? {
         storage.withLock { raw in
             var ds = Discord_String()
-            guard Discord_UserHandle_Avatar(&raw, &ds) else { return nil }
-            return String(discordOwned: ds)
+            guard raw.avatar(&ds) else { return nil }
+            return ds.toString()
         }
     }
 
@@ -41,13 +41,12 @@ public struct UserHandle: DiscordObject, Identifiable, Sendable, CustomStringCon
     ) -> String {
         storage.withLock { raw in
             var ds = Discord_String()
-            Discord_UserHandle_AvatarUrl(
-                &raw,
+            raw.avatarUrl(
                 animatedType.discordValue,
                 staticType.discordValue,
                 &ds
             )
-            return String(discordOwned: ds)
+            return ds.toString()
         }
     }
 
@@ -55,8 +54,8 @@ public struct UserHandle: DiscordObject, Identifiable, Sendable, CustomStringCon
     public var displayName: String {
         storage.withLock { raw in
             var ds = Discord_String()
-            Discord_UserHandle_DisplayName(&raw, &ds)
-            return String(discordOwned: ds)
+            raw.displayName(&ds)
+            return ds.toString()
         }
     }
 
@@ -72,7 +71,7 @@ public struct UserHandle: DiscordObject, Identifiable, Sendable, CustomStringCon
     public var gameActivity: Activity? {
         storage.withLock { raw -> Activity? in
             var activity = Discord_Activity()
-            guard Discord_UserHandle_GameActivity(&raw, &activity) else { return nil }
+            guard raw.gameActivity(&activity) else { return nil }
             return Activity(takingOwnership: activity)
         }
     }
@@ -88,8 +87,8 @@ public struct UserHandle: DiscordObject, Identifiable, Sendable, CustomStringCon
     public var globalName: String? {
         storage.withLock { raw in
             var ds = Discord_String()
-            guard Discord_UserHandle_GlobalName(&raw, &ds) else { return nil }
-            return String(discordOwned: ds)
+            guard raw.globalName(&ds) else { return nil }
+            return ds.toString()
         }
     }
 
@@ -97,26 +96,26 @@ public struct UserHandle: DiscordObject, Identifiable, Sendable, CustomStringCon
     ///
     /// If this returns 0 then the UserHandle is no longer valid.
     public var id: UInt64 {
-        usingLock(Discord_UserHandle_Id)
+        usingLock { $0.id() }
     }
 
     /// Returns true if this user is a provisional account.
     public var isProvisional: Bool {
-        usingLock(Discord_UserHandle_IsProvisional)
+        usingLock { $0.isProvisional() }
     }
 
     /// Returns a reference to the RelationshipHandle between the currently authenticated user and this user, if any.
     public var relationship: RelationshipHandle {
         storage.withLock { raw in
             var handle = Discord_RelationshipHandle()
-            Discord_UserHandle_Relationship(&raw, &handle)
+            raw.relationship(&handle)
             return RelationshipHandle(takingOwnership: handle)
         }
     }
 
     /// Returns the user's online/offline/idle status.
     public var status: StatusType {
-        storage.withLock { Discord_UserHandle_Status(&$0).swiftValue }
+        storage.withLock { $0.status().swiftValue }
     }
 
     /// Returns a list of UserApplicationProfileHandles for this user.
@@ -125,7 +124,7 @@ public struct UserHandle: DiscordObject, Identifiable, Sendable, CustomStringCon
     public var userApplicationProfiles: [UserApplicationProfileHandle] {
         storage.withLock { raw in
             var span = Discord_UserApplicationProfileHandleSpan()
-            Discord_UserHandle_UserApplicationProfiles(&raw, &span)
+            raw.userApplicationProfiles(&span)
             return span.converting()
         }
     }
@@ -139,8 +138,8 @@ public struct UserHandle: DiscordObject, Identifiable, Sendable, CustomStringCon
     public var username: String {
         storage.withLock { raw in
             var ds = Discord_String()
-            Discord_UserHandle_Username(&raw, &ds)
-            return String(discordOwned: ds)
+            raw.username(&ds)
+            return ds.toString()
         }
     }
 

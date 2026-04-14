@@ -72,7 +72,7 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
     public var additionalContent: AdditionalContent? {
         storage.withLock { raw -> AdditionalContent? in
             var content = Discord_AdditionalContent()
-            guard Discord_MessageHandle_AdditionalContent(&raw, &content) else {
+            guard raw.additionalContent(&content) else {
                 return nil
             }
             return AdditionalContent(takingOwnership: content)
@@ -85,7 +85,7 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
     public var applicationId: UInt64? {
         storage.withLock { raw in
             var id: UInt64 = 0
-            guard Discord_MessageHandle_ApplicationId(&raw, &id) else {
+            guard raw.applicationId(&id) else {
                 return nil
             }
             return id
@@ -96,7 +96,7 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
     public var author: UserHandle? {
         storage.withLock { raw in
             var user = Discord_UserHandle()
-            guard Discord_MessageHandle_Author(&raw, &user) else {
+            guard raw.author(&user) else {
                 return nil
             }
             return UserHandle(takingOwnership: user)
@@ -105,14 +105,14 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
 
     /// Returns the user ID of the user who sent this message.
     public var authorId: UInt64 {
-        usingLock(Discord_MessageHandle_AuthorId)
+        usingLock { $0.authorId() }
     }
 
     /// Returns the ChannelHandle for the channel this message was sent in.
     public var channel: ChannelHandle? {
         storage.withLock { raw -> ChannelHandle? in
             var channel = Discord_ChannelHandle()
-            guard Discord_MessageHandle_Channel(&raw, &channel) else {
+            guard raw.channel(&channel) else {
                 return nil
             }
             return ChannelHandle(takingOwnership: channel)
@@ -121,7 +121,7 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
 
     /// Returns the channel ID this message was sent in.
     public var channelId: UInt64 {
-        usingLock(Discord_MessageHandle_ChannelId)
+        usingLock { $0.channelId() }
     }
 
     /// Returns the content of this message, if any.
@@ -132,8 +132,8 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
     public var content: String {
         storage.withLock { raw in
             var ds = Discord_String()
-            Discord_MessageHandle_Content(&raw, &ds)
-            return String(discordOwned: ds)
+            raw.content(&ds)
+            return ds.toString()
         }
     }
 
@@ -141,7 +141,7 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
     public var disclosureType: DisclosureType? {
         storage.withLock { raw in
             var type = Discord_DisclosureTypes.__forceint
-            return Discord_MessageHandle_DisclosureType(&raw, &type) ? type.swiftValue : nil
+            return raw.disclosureType(&type) ? type.swiftValue : nil
         }
     }
 
@@ -149,20 +149,20 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
     ///
     /// Returns nil if the message has not been edited yet.
     public var editedTimestamp: Date? {
-        let date = Date(timeIntervalSince1970: TimeInterval(usingLock(Discord_MessageHandle_EditedTimestamp)) / 100)
+        let date = Date(timeIntervalSince1970: TimeInterval(usingLock { $0.editedTimestamp() }) / 100)
         return date == Date(timeIntervalSince1970: 0) ? nil : date
     }
 
     /// Returns the ID of this message.
     public var id: UInt64 {
-        usingLock(Discord_MessageHandle_Id)
+        usingLock { $0.id() }
     }
 
     /// Returns the LobbyHandle this message was sent in, if it was sent in a lobby.
     public var lobby: LobbyHandle? {
         storage.withLock { raw -> LobbyHandle? in
             var lobby = Discord_LobbyHandle()
-            guard Discord_MessageHandle_Lobby(&raw, &lobby) else {
+            guard raw.lobby(&lobby) else {
                 return nil
             }
             return LobbyHandle(takingOwnership: lobby)
@@ -177,7 +177,7 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
     public var metadata: [String: String] {
         storage.withLock { raw in
             var properties = Discord_Properties()
-            Discord_MessageHandle_Metadata(&raw, &properties)
+            raw.metadata(&properties)
             return properties.toOwnedDictionary()
         }
     }
@@ -191,7 +191,7 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
     public var moderationMetadata: [String: String] {
         storage.withLock { raw in
             var properties = Discord_Properties()
-            Discord_MessageHandle_ModerationMetadata(&raw, &properties)
+            raw.moderationMetadata(&properties)
             return properties.toOwnedDictionary()
         }
     }
@@ -202,8 +202,8 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
     public var rawContent: String {
         storage.withLock { raw in
             var ds = Discord_String()
-            Discord_MessageHandle_RawContent(&raw, &ds)
-            return String(discordOwned: ds)
+            raw.rawContent(&ds)
+            return ds.toString()
         }
     }
 
@@ -211,7 +211,7 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
     public var recipient: UserHandle? {
         storage.withLock { raw -> UserHandle? in
             var user = Discord_UserHandle()
-            guard Discord_MessageHandle_Recipient(&raw, &user) else {
+            guard raw.recipient(&user) else {
                 return nil
             }
             return UserHandle(takingOwnership: user)
@@ -220,19 +220,19 @@ public struct MessageHandle: DiscordObject, Identifiable, Sendable, CustomString
 
     /// When this message was sent in a DM or Ephemeral DM, this method will return the ID of the other user in that DM.
     public var recipientId: UInt64 {
-        usingLock(Discord_MessageHandle_RecipientId)
+        usingLock { $0.recipientId() }
     }
 
     /// Returns true if this message was sent in-game, otherwise false (i.e. from Discord itself).
     ///
     /// If you are using parent / child applications, this will be true if the message was sent from any child application.
     public var sentFromGame: Bool {
-        usingLock(Discord_MessageHandle_SentFromGame)
+        usingLock { $0.sentFromGame() }
     }
 
     /// The timestamp in millis since the epoch when the message was sent.
     public var sentTimestamp: Date {
-        Date(timeIntervalSince1970: TimeInterval(usingLock(Discord_MessageHandle_SentTimestamp)) / 1000)
+        Date(timeIntervalSince1970: TimeInterval(usingLock { $0.sentTimestamp() }) / 1000)
     }
 
     public var description: String {

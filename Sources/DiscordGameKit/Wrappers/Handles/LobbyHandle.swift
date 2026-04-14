@@ -99,14 +99,14 @@ public struct LobbyHandle: DiscordObject, Identifiable, Sendable, CustomStringCo
 
     /// ID of the lobby.
     public var id: UInt64 {
-        usingLock(Discord_LobbyHandle_Id)
+        usingLock { $0.id() }
     }
 
     /// Returns information about the channel linked to this lobby, if any.
     public var linkedChannel: LinkedChannel? {
         storage.withLock { raw -> LinkedChannel? in
             var channel = Discord_LinkedChannel()
-            guard Discord_LobbyHandle_LinkedChannel(&raw, &channel) else { return nil }
+            guard raw.linkedChannel(&channel) else { return nil }
             return LinkedChannel(takingOwnership: channel)
         }
     }
@@ -115,7 +115,7 @@ public struct LobbyHandle: DiscordObject, Identifiable, Sendable, CustomStringCo
     public var lobbyMemberIds: [UInt64] {
         storage.withLock { raw in
             var span = Discord_UInt64Span()
-            Discord_LobbyHandle_LobbyMemberIds(&raw, &span)
+            raw.lobbyMemberIds(&span)
             return span.converting()
         }
     }
@@ -124,7 +124,7 @@ public struct LobbyHandle: DiscordObject, Identifiable, Sendable, CustomStringCo
     public var lobbyMembers: [LobbyMemberHandle] {
         storage.withLock { raw in
             var span = Discord_LobbyMemberHandleSpan()
-            Discord_LobbyHandle_LobbyMembers(&raw, &span)
+            raw.lobbyMembers(&span)
             return span.converting()
         }
     }
@@ -136,7 +136,7 @@ public struct LobbyHandle: DiscordObject, Identifiable, Sendable, CustomStringCo
     public var metadata: [String: String] {
         storage.withLock { raw in
             var properties = Discord_Properties()
-            Discord_LobbyHandle_Metadata(&raw, &properties)
+            raw.metadata(&properties)
             return properties.toOwnedDictionary()
         }
     }
@@ -147,7 +147,7 @@ public struct LobbyHandle: DiscordObject, Identifiable, Sendable, CustomStringCo
     public func callInfo() -> CallInfoHandle? {
         storage.withLock { raw -> CallInfoHandle? in
             var handle = Discord_CallInfoHandle()
-            guard Discord_LobbyHandle_GetCallInfoHandle(&raw, &handle) else { return nil }
+            guard raw.getCallInfoHandle(&handle) else { return nil }
             return CallInfoHandle(takingOwnership: handle)
         }
     }
@@ -156,7 +156,7 @@ public struct LobbyHandle: DiscordObject, Identifiable, Sendable, CustomStringCo
     public func getLobbyMemberHandle(for member: UInt64) -> LobbyMemberHandle? {
         storage.withLock { raw -> LobbyMemberHandle? in
             var handle = Discord_LobbyMemberHandle()
-            guard Discord_LobbyHandle_GetLobbyMemberHandle(&raw, member, &handle) else {
+            guard raw.getLobbyMemberHandle(member, &handle) else {
                 return nil
             }
             return LobbyMemberHandle(takingOwnership: handle)

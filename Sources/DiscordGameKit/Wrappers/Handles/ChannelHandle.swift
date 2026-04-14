@@ -34,7 +34,7 @@ public struct ChannelHandle: DiscordObject, Identifiable, Sendable, CustomString
         storage.withLock { raw in
             var ds = Discord_String()
             raw.name(&ds)
-            return String(discordOwned: ds)
+            return ds.toString()
         }
     }
 

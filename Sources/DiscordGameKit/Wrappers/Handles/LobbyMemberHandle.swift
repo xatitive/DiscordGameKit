@@ -36,17 +36,17 @@ public struct LobbyMemberHandle: DiscordObject, Sendable, CustomStringConvertibl
     /// The use case for this is for games that want to restrict a lobby so that only the
     /// clan/guild/group leader is allowed to manage the linked channel for the lobby.
     public var canLinkLobby: Bool {
-        usingLock(Discord_LobbyMemberHandle_CanLinkLobby)
+        usingLock { $0.canLinkLobby() }
     }
 
     /// Returns true if the user is currently connected to the lobby.
     public var isConnected: Bool {
-        usingLock(Discord_LobbyMemberHandle_Connected)
+        usingLock { $0.connected() }
     }
 
     // ID of the lobby member.
     public var id: UInt64 {
-        usingLock(Discord_LobbyMemberHandle_Id)
+        usingLock { $0.id() }
     }
 
     /// Metadata is a set of string key/value pairs that the game developer can use.
@@ -56,7 +56,7 @@ public struct LobbyMemberHandle: DiscordObject, Sendable, CustomStringConvertibl
     public var metadata: [String: String] {
         storage.withLock { raw in
             var properties = Discord_Properties()
-            Discord_LobbyMemberHandle_Metadata(&raw, &properties)
+            raw.metadata(&properties)
             return properties.toOwnedDictionary()
         }
     }
@@ -65,7 +65,7 @@ public struct LobbyMemberHandle: DiscordObject, Sendable, CustomStringConvertibl
     public var user: UserHandle? {
         storage.withLock { raw -> UserHandle? in
             var handle = Discord_UserHandle()
-            guard Discord_LobbyMemberHandle_User(&raw, &handle) else { return nil }
+            guard raw.user(&handle) else { return nil }
             return UserHandle(takingOwnership: handle)
         }
     }

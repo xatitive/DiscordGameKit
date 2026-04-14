@@ -49,22 +49,22 @@ public struct RelationshipHandle: DiscordObject, Identifiable, Sendable, CustomS
     
     /// ID of the target user in this relationship.
     public var id: UInt64 {
-        usingLock(Discord_RelationshipHandle_Id)
+        usingLock { $0.id() }
     }
 
     /// Whether this relationship is a spam request.
     public var isSpamRequest: Bool {
-        usingLock(Discord_RelationshipHandle_IsSpamRequest)
+        usingLock { $0.isSpamRequest() }
     }
 
     /// Type of Discord relationship.
     public var discordRelationshipType: RelationshipType {
-        storage.withLock { Discord_RelationshipHandle_DiscordRelationshipType(&$0).swiftValue }
+        storage.withLock { $0.discordRelationshipType().swiftValue }
     }
 
     /// Type of Game relationship.
     public var gameRelationshipType: RelationshipType {
-        storage.withLock { Discord_RelationshipHandle_GameRelationshipType(&$0).swiftValue }
+        storage.withLock { $0.gameRelationshipType().swiftValue }
     }
 
     /// The handle to the target user in this relationship, if one is available.
@@ -73,7 +73,7 @@ public struct RelationshipHandle: DiscordObject, Identifiable, Sendable, CustomS
     public var user: UserHandle? {
         storage.withLock { raw -> UserHandle? in
             var handle = Discord_UserHandle()
-            guard Discord_RelationshipHandle_User(&raw, &handle) else { return nil }
+            guard raw.user(&handle) else { return nil }
             return UserHandle(takingOwnership: handle)
         }
     }

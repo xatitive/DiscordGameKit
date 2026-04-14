@@ -16,19 +16,19 @@ public struct CallInfoHandle: DiscordObject, Sendable, CustomStringConvertible {
 
     /// Lobby ID of call.
     public var channelId: UInt64 {
-        usingLock(Discord_CallInfoHandle_ChannelId)
+        usingLock { $0.channelId() }
     }
 
     /// Lobby ID of call.
     public var guildId: UInt64 {
-        usingLock(Discord_CallInfoHandle_GuildId)
+        usingLock { $0.guildId() }
     }
 
     /// Returns a list of the user IDs of the participants in the call.
     public var participants: [UInt64] {
         storage.withLock { raw in
             var span = Discord_UInt64Span()
-            Discord_CallInfoHandle_GetParticipants(&raw, &span)
+            raw.getParticipants(&span)
             return span.converting()
         }
     }
@@ -37,7 +37,7 @@ public struct CallInfoHandle: DiscordObject, Sendable, CustomStringConvertible {
     public func getVoiceStateHandle(userId: UInt64) -> VoiceStateHandle? {
         storage.withLock { raw -> VoiceStateHandle? in
             var handle = Discord_VoiceStateHandle()
-            guard Discord_CallInfoHandle_GetVoiceStateHandle(&raw, userId, &handle) else {
+            guard raw.getVoiceStateHandle(userId, &handle) else {
                 return nil
             }
             return VoiceStateHandle(takingOwnership: handle)

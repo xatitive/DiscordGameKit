@@ -25,8 +25,8 @@ public struct UserApplicationProfileHandle: DiscordObject, Sendable, CustomStrin
     public var avatarHash: String {
         storage.withLock { raw in
             var ds = Discord_String()
-            Discord_UserApplicationProfileHandle_AvatarHash(&raw, &ds)
-            return String(discordOwned: ds)
+            raw.avatarHash(&ds)
+            return ds.toString()
         }
     }
     
@@ -34,8 +34,8 @@ public struct UserApplicationProfileHandle: DiscordObject, Sendable, CustomStrin
     public var metadata: String {
         storage.withLock { raw in
             var ds = Discord_String()
-            Discord_UserApplicationProfileHandle_Metadata(&raw, &ds)
-            return String(discordOwned: ds)
+            raw.metadata(&ds)
+            return ds.toString()
         }
     }
 
@@ -43,8 +43,8 @@ public struct UserApplicationProfileHandle: DiscordObject, Sendable, CustomStrin
     public var providerId: String? {
         storage.withLock { raw in
             var ds = Discord_String()
-            guard Discord_UserApplicationProfileHandle_ProviderId(&raw, &ds) else { return nil }
-            return String(discordOwned: ds)
+            guard raw.providerId(&ds) else { return nil }
+            return ds.toString()
         }
     }
 
@@ -52,22 +52,22 @@ public struct UserApplicationProfileHandle: DiscordObject, Sendable, CustomStrin
     public var providerIssuedUserId: String {
         storage.withLock { raw in
             var ds = Discord_String()
-            Discord_UserApplicationProfileHandle_ProviderIssuedUserId(&raw, &ds)
-            return String(discordOwned: ds)
+            raw.providerIssuedUserId(&ds)
+            return ds.toString()
         }
     }
 
     /// Type of the external identity provider.
     public var providerType: ExternalIdentityProviderType {
-        storage.withLock { Discord_UserApplicationProfileHandle_ProviderType(&$0).swiftValue }
+        storage.withLock { $0.providerType().swiftValue }
     }
 
     /// The user's in-game username.
     public var username: String {
         storage.withLock { raw in
             var ds = Discord_String()
-            Discord_UserApplicationProfileHandle_Username(&raw, &ds)
-            return String(discordOwned: ds)
+            raw.username(&ds)
+            return ds.toString()
         }
     }
 

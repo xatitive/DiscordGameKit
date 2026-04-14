@@ -38,7 +38,7 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                return raw.largeImage(&ds) ? String(discordOwned: ds) : nil
+                return raw.largeImage(&ds) ? ds.toString() : nil
             }
         }
         _modify {
@@ -66,7 +66,7 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                return raw.largeText(&ds) ? String(discordOwned: ds) : nil
+                return raw.largeText(&ds) ? ds.toString() : nil
             }
         }
         _modify {
@@ -214,7 +214,7 @@ public struct ActivityAssets: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                return raw.inviteCoverImage(&ds) ? String(discordOwned: ds) : nil
+                return raw.inviteCoverImage(&ds) ? ds.toString() : nil
             }
         }
         _modify {

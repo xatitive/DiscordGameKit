@@ -16,12 +16,12 @@ public struct UserMessageSummary: DiscordObject, Sendable, CustomStringConvertib
 
     /// Returns the ID of the last message sent in the DM conversation.
     public var lastMessageId: UInt64 {
-        usingLock(Discord_UserMessageSummary_LastMessageId)
+        usingLock { $0.lastMessageId() }
     }
     
 	/// Returns the ID of the other user in the DM conversation.
     public var userId: UInt64 {
-        usingLock(Discord_UserMessageSummary_UserId)
+        usingLock { $0.userId() }
     }
 
     public var description: String {

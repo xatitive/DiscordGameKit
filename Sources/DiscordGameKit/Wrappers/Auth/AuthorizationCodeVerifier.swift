@@ -43,7 +43,7 @@ public struct AuthorizationCodeVerifier: DiscordObject, Sendable, CustomStringCo
             storage.withLock { raw in
                 var ds = Discord_String()
                 raw.verifier(&ds)
-                return String(discordOwned: ds)
+                return ds.toString()
             }
         }
         set {

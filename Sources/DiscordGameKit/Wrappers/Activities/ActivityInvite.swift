@@ -90,17 +90,15 @@ public struct ActivityInvite: DiscordObject, Sendable, CustomStringConvertible {
     public var partyId: String {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                raw.partyId(&ds)
-                return ds.toString()
+                gettingString { span in
+                    raw.partyId(span: &span)
+                }
             }
         }
         set {
             ensureUnique()
-            newValue.withDiscordString { str in
-                storage.withLock { raw in
-                    raw.setPartyId(str)
-                }
+            storage.withLock { raw in
+                raw.setPartyId(span: newValue.utf8Span.span)
             }
         }
     }
@@ -109,17 +107,15 @@ public struct ActivityInvite: DiscordObject, Sendable, CustomStringConvertible {
     public var sessionId: String {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                raw.sessionId(&ds)
-                return ds.toString()
+                gettingString { span in
+                    raw.sessionId(span: &span)
+                }
             }
         }
         set {
             ensureUnique()
-            newValue.withDiscordString { str in
-                storage.withLock { raw in
-                    raw.setSessionId(str)
-                }
+            storage.withLock { raw in
+                raw.setSessionId(span: newValue.utf8Span.span)
             }
         }
     }

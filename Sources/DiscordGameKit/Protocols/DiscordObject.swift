@@ -72,6 +72,15 @@ extension DiscordObject {
             return fn(&raw)
         }
     }
+    
+    func gettingString(
+        _ fn: (inout MutableSpan<UInt8>) -> Void
+    ) -> String {
+        var bytes: InlineArray<1024, UInt8> = .init(repeating: 0)
+        var span: MutableSpan<UInt8> = bytes.mutableSpan
+        fn(&span)
+        return span.toString()
+    }
 }
 
 extension DiscordObject where Object: DiscordRawCopyable {

@@ -120,3 +120,15 @@ extension String {
         return Discord_String(ptr: pointer, size: bytes.count)
     }
 }
+
+extension MutableSpan where Element == UInt8 {
+    func toString() -> String {
+        do {
+            return try String(copying: UTF8Span(validating: self.span))
+        } catch {
+            print("Bad ASCII String!!")
+            print(error)
+            return "BAD STRING!!!!!!"
+        }
+    }
+}

@@ -199,14 +199,14 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         self.storage = .init()
     }
     
-	/// The name of the game or application that the activity is associated with.
+    /// The name of the game or application that the activity is associated with.
     ///
     /// This field defaults to the name of the current game.
     public var name: String {
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_Activity_Name(&raw, &ds)
+                raw.name(&ds)
                 return ds.toString()
             }
         }
@@ -214,7 +214,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
             ensureUnique()
             newValue.withDiscordString { str in
                 storage.withLock { raw in
-                    Discord_Activity_SetName(&raw, str)
+                    raw.setName(str)
                 }
             }
         }
@@ -224,11 +224,11 @@ public struct Activity: DiscordObject, CustomStringConvertible {
     ///
     /// This should almost always be set to ``ActivityType/playing``
     public var type: ActivityType {
-        get { usingLock(Discord_Activity_Type).swiftValue }
+        get { usingLock { $0.type().swiftValue } }
         set {
             ensureUnique()
             storage.withLock { raw in
-                Discord_Activity_SetType(&raw, newValue.discordValue)
+                raw.setType(newValue.discordValue)
             }
         }
     }
@@ -238,14 +238,11 @@ public struct Activity: DiscordObject, CustomStringConvertible {
     /// For example if a game is available on both PC and Mobile, but PC users cannot join Mobile users and vice versa, this field can be
     /// used so that an activity only shows as joinable on Discord if the user is on the appropriate platform.
     public var supportedPlatform: ActivityGamePlatform {
-        get { usingLock(Discord_Activity_SupportedPlatforms).swiftValue }
+        get { usingLock { $0.supportedPlatforms().swiftValue } }
         set {
             ensureUnique()
             storage.withLock { raw in
-                Discord_Activity_SetSupportedPlatforms(
-                    &raw,
-                    newValue.discordValue
-                )
+                raw.setSupportedPlatforms(newValue.discordValue)
             }
         }
     }
@@ -257,7 +254,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { raw in
                 var v = StatusDisplayType.details.discordValue
-                return Discord_Activity_StatusDisplayType(&raw, &v) ? v.swiftValue : nil
+                return raw.statusDisplayType(&v) ? v.swiftValue : nil
             }
         }
         _modify {
@@ -266,12 +263,15 @@ public struct Activity: DiscordObject, CustomStringConvertible {
             yield &value
             
             guard var value else {
-                usingLock(Discord_Activity_SetStatusDisplayType, nil)
+                storage.withLock { raw in
+                    raw.setStatusDisplayType(nil)
+                }
                 return
             }
             
             storage.withLock { raw in
-                Discord_Activity_SetStatusDisplayType(&raw, &value.discordValue)
+                var rawValue = value.discordValue
+                raw.setStatusDisplayType(&rawValue)
             }
         }
     }
@@ -284,7 +284,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                return Discord_Activity_State(&raw, &ds) ? ds.toString() : nil
+                return raw.state(&ds) ? ds.toString() : nil
             }
         }
         _modify {
@@ -293,13 +293,15 @@ public struct Activity: DiscordObject, CustomStringConvertible {
             yield &value
             
             guard let value else {
-                usingLock(Discord_Activity_SetState, nil)
+                storage.withLock { raw in
+                    raw.setState(nil)
+                }
                 return
             }
             
             value.withDiscordStringPointer { str in
                 storage.withLock { raw in
-                    Discord_Activity_SetState(&raw, str)
+                    raw.setState(str)
                 }
             }
         }
@@ -313,22 +315,24 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                return Discord_Activity_StateUrl(&raw, &ds) ? ds.toString() : nil
+                return raw.stateUrl(&ds) ? ds.toString() : nil
             }
         }
         _modify {
             ensureUnique()
-            var value = self.state
+            var value = self.stateUrl
             yield &value
             
             guard let value else {
-                usingLock(Discord_Activity_SetStateUrl, nil)
+                storage.withLock { raw in
+                    raw.setStateUrl(nil)
+                }
                 return
             }
             
             value.withDiscordStringPointer { str in
                 storage.withLock { raw in
-                    Discord_Activity_SetStateUrl(&raw, str)
+                    raw.setStateUrl(str)
                 }
             }
         }
@@ -341,23 +345,25 @@ public struct Activity: DiscordObject, CustomStringConvertible {
     public var details: String? {
         get {
             storage.withLock { raw in
-            	var ds = Discord_String()
-                return Discord_Activity_Details(&raw, &ds) ? ds.toString() : nil
+                var ds = Discord_String()
+                return raw.details(&ds) ? ds.toString() : nil
             }
         }
         _modify {
             ensureUnique()
-            var value = self.state
+            var value = self.details
             yield &value
             
             guard let value else {
-                usingLock(Discord_Activity_SetDetails, nil)
+                storage.withLock { raw in
+                    raw.setDetails(nil)
+                }
                 return
             }
             
             value.withDiscordStringPointer { str in
                 storage.withLock { raw in
-                    Discord_Activity_SetDetails(&raw, str)
+                    raw.setDetails(str)
                 }
             }
         }
@@ -371,22 +377,24 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                return Discord_Activity_DetailsUrl(&raw, &ds) ? ds.toString() : nil
+                return raw.detailsUrl(&ds) ? ds.toString() : nil
             }
         }
         _modify {
             ensureUnique()
-            var value = self.state
+            var value = self.detailsUrl
             yield &value
             
             guard let value else {
-                usingLock(Discord_Activity_SetDetailsUrl, nil)
+                storage.withLock { raw in
+                    raw.setDetailsUrl(nil)
+                }
                 return
             }
             
             value.withDiscordStringPointer { str in
                 storage.withLock { raw in
-                    Discord_Activity_SetDetailsUrl(&raw, str)
+                    raw.setDetailsUrl(str)
                 }
             }
         }
@@ -399,7 +407,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { raw in
                 var v: UInt64 = 0
-                return Discord_Activity_ApplicationId(&raw, &v) ? v : nil
+                return raw.applicationId(&v) ? v : nil
             }
         }
         _modify {
@@ -408,12 +416,14 @@ public struct Activity: DiscordObject, CustomStringConvertible {
             yield &value
             
             guard var value else {
-                usingLock(Discord_Activity_SetApplicationId, nil)
+                storage.withLock { raw in
+                    raw.setApplicationId(nil)
+                }
                 return
             }
             
             storage.withLock { raw in
-                Discord_Activity_SetApplicationId(&raw, &value)
+                raw.setApplicationId(&value)
             }
         }
     }
@@ -425,21 +435,23 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { raw in
                 var v: UInt64 = 0
-                return Discord_Activity_ParentApplicationId(&raw, &v) ? v : nil
+                return raw.parentApplicationId(&v) ? v : nil
             }
         }
         _modify {
             ensureUnique()
-            var value = self.applicationId
+            var value = self.parentApplicationId
             yield &value
             
             guard var value else {
-                usingLock(Discord_Activity_SetParentApplicationId, nil)
+                storage.withLock { raw in
+                    raw.setParentApplicationId(nil)
+                }
                 return
             }
             
             storage.withLock { raw in
-                Discord_Activity_SetParentApplicationId(&raw, &value)
+                raw.setParentApplicationId(&value)
             }
         }
     }
@@ -447,9 +459,9 @@ public struct Activity: DiscordObject, CustomStringConvertible {
     /// Images used to customize how the Activity is displayed in the Discord client.
     public var assets: ActivityAssets? {
         get {
-            storage.withLock { activityRaw in 
+            storage.withLock { activityRaw in
                 var raw = Discord_ActivityAssets()
-                return Discord_Activity_Assets(&activityRaw, &raw) ? ActivityAssets(takingOwnership: raw) : ActivityAssets()
+                return activityRaw.assets(&raw) ? ActivityAssets(takingOwnership: raw) : nil
             }
         }
         _modify {
@@ -458,13 +470,15 @@ public struct Activity: DiscordObject, CustomStringConvertible {
             yield &value
             
             guard let value else {
-				usingLock(Discord_Activity_SetAssets, nil)
+                storage.withLock { raw in
+                    raw.setAssets(nil)
+                }
                 return
             }
             
             storage.withLock { activityRaw in
                 value.storage.withLock { assetRaw in
-                    Discord_Activity_SetAssets(&activityRaw, &assetRaw)
+                    activityRaw.setAssets(&assetRaw)
                 }
             }
         }
@@ -477,7 +491,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { activityRaw in
                 var raw = Discord_ActivityTimestamps()
-                return Discord_Activity_Timestamps(&activityRaw, &raw) ? ActivityTimestamps(takingOwnership: raw) : ActivityTimestamps()
+                return activityRaw.timestamps(&raw) ? ActivityTimestamps(takingOwnership: raw) : nil
             }
         }
         _modify {
@@ -486,13 +500,15 @@ public struct Activity: DiscordObject, CustomStringConvertible {
             yield &value
             
             guard let value else {
-                usingLock(Discord_Activity_SetTimestamps, nil)
+                storage.withLock { raw in
+                    raw.setTimestamps(nil)
+                }
                 return
             }
             
             storage.withLock { activityRaw in
                 value.storage.withLock { timestampRaw in
-                    Discord_Activity_SetTimestamps(&activityRaw, &timestampRaw)
+                    activityRaw.setTimestamps(&timestampRaw)
                 }
             }
         }
@@ -503,7 +519,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { activityRaw in
                 var raw = Discord_ActivityParty()
-                return Discord_Activity_Party(&activityRaw, &raw) ? ActivityParty(takingOwnership: raw) : ActivityParty()
+                return activityRaw.party(&raw) ? ActivityParty(takingOwnership: raw) : nil
             }
         }
         _modify {
@@ -512,13 +528,15 @@ public struct Activity: DiscordObject, CustomStringConvertible {
             yield &value
             
             guard let value else {
-                usingLock(Discord_Activity_SetParty, nil)
+                storage.withLock { raw in
+                    raw.setParty(nil)
+                }
                 return
             }
             
             storage.withLock { activityRaw in
                 value.storage.withLock { partyRaw in
-                    Discord_Activity_SetParty(&activityRaw, &partyRaw)
+                    activityRaw.setParty(&partyRaw)
                 }
             }
         }
@@ -529,7 +547,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { activityRaw in
                 var raw = Discord_ActivitySecrets()
-                return Discord_Activity_Secrets(&activityRaw, &raw) ? ActivitySecrets(takingOwnership: raw) : ActivitySecrets()
+                return activityRaw.secrets(&raw) ? ActivitySecrets(takingOwnership: raw) : nil
             }
         }
         _modify {
@@ -538,13 +556,15 @@ public struct Activity: DiscordObject, CustomStringConvertible {
             yield &value
             
             guard let value else {
-                usingLock(Discord_Activity_SetSecrets, nil)
+                storage.withLock { raw in
+                    raw.setSecrets(nil)
+                }
                 return
             }
             
-            storage.withLock { raw in
-                value.storage.withLock { val in
-                    Discord_Activity_SetSecrets(&raw, &val)
+            storage.withLock { activityRaw in
+                value.storage.withLock { secretsRaw in
+                    activityRaw.setSecrets(&secretsRaw)
                 }
             }
         }
@@ -555,7 +575,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
         ensureUnique()
         storage.withLock { activityRaw in
             button.storage.withLock { buttonRaw in
-                Discord_Activity_AddButton(&activityRaw, &buttonRaw)
+                activityRaw.addButton(&buttonRaw)
             }
         }
     }
@@ -564,7 +584,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
     public var buttons: [ActivityButton] {
         storage.withLock { raw in
             var span = Discord_ActivityButtonSpan()
-            Discord_Activity_GetButtons(&raw, &span)
+            raw.getButtons(&span)
             return span.converting()
         }
     }
@@ -576,6 +596,9 @@ public struct Activity: DiscordObject, CustomStringConvertible {
 
 extension Activity: Equatable {
     public static func == (lhs: Activity, rhs: Activity) -> Bool {
-        compare(lhs.storage, to: rhs.storage, Discord_Activity_Equals)
+        compare(lhs.storage, to: rhs.storage) { (lhsPtr: UnsafeMutablePointer<Discord_Activity>?, rhsPtr: UnsafePointer<Discord_Activity>?) -> Bool in
+            guard let lhsPtr else { return false }
+            return lhsPtr.pointee.equals(rhsPtr)
+        }
     }
 }

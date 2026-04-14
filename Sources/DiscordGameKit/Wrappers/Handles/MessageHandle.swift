@@ -6,7 +6,7 @@
 //
 
 @_implementationOnly import discord_partner_sdk
-import Foundation
+public import Foundation
 
 /// A ``MessageHandle`` represents a single message received by the SDK.
 ///

@@ -6,7 +6,7 @@
 //
 
 @_implementationOnly import discord_partner_sdk
-import Foundation
+public import Foundation
 
 public final class DiscordClient: DiscordObject, @unchecked Sendable {
     private var persistent = PersistentCallbacks()

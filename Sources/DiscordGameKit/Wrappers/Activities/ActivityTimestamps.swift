@@ -6,7 +6,7 @@
 //
 
 @_implementationOnly import discord_partner_sdk
-import Foundation
+public import Foundation
 
 /// See ``Activity/timestamps``
 public struct ActivityTimestamps: DiscordObject, Sendable, CustomStringConvertible {

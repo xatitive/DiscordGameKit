@@ -11,7 +11,24 @@
 #include "cdiscord.h"
 #include <lifetimebound.h>
 #include <ptrcheck.h>
+#include <string.h>
 #include <sys/types.h>
+
+static inline void Discord_CopyStringToSpan(Discord_String str,
+                                            uint8_t *__nonnull __counted_by(size) output __noescape,
+                                            size_t size)
+{
+    if (size == 0) {
+        return;
+    }
+
+    size_t copied = 0;
+    if (str.ptr != NULL && str.size > 0) {
+        copied = (str.size < (size - 1)) ? str.size : (size - 1);
+        memcpy(output, str.ptr, copied);
+    }
+    output[copied] = 0;
+}
 
 
 // MARK: - Activity Invite
@@ -29,8 +46,7 @@ static inline void Discord_ActivityInvite_PartyId_Span(Discord_ActivityInvite*__
 {
     Discord_String str = { NULL, 0 };
     Discord_ActivityInvite_PartyId(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_ActivityInvite_SetSessionId_Span(Discord_ActivityInvite*__nonnull self,
@@ -47,8 +63,7 @@ static inline void Discord_ActivityInvite_SessionId_Span(Discord_ActivityInvite*
 {
     Discord_String str = { NULL, 0 };
     Discord_ActivityInvite_SessionId(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Activity Assets
@@ -72,8 +87,7 @@ static inline bool Discord_ActivityAssets_LargeImage_Span(
 {
     Discord_String str = { NULL, 0 };
     bool hasValue = Discord_ActivityAssets_LargeImage(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
     return hasValue;
 };
 
@@ -97,8 +111,7 @@ static inline bool Discord_ActivityAssets_LargeText_Span(
 {
     Discord_String str = { NULL, 0 };
     bool hasValue = Discord_ActivityAssets_LargeText(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
     return hasValue;
 };
 
@@ -122,8 +135,7 @@ static inline bool Discord_ActivityAssets_LargeUrl_Span(
 {
     Discord_String str = { NULL, 0 };
     bool hasValue = Discord_ActivityAssets_LargeUrl(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
     return hasValue;
 };
 
@@ -147,8 +159,7 @@ static inline bool Discord_ActivityAssets_SmallImage_Span(
 {
     Discord_String str = { NULL, 0 };
     bool hasValue = Discord_ActivityAssets_SmallImage(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
     return hasValue;
 };
 
@@ -172,8 +183,7 @@ static inline bool Discord_ActivityAssets_SmallText_Span(
 {
     Discord_String str = { NULL, 0 };
     bool hasValue = Discord_ActivityAssets_SmallText(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
     return hasValue;
 };
 
@@ -197,8 +207,7 @@ static inline bool Discord_ActivityAssets_SmallUrl_Span(
 {
     Discord_String str = { NULL, 0 };
     bool hasValue = Discord_ActivityAssets_SmallUrl(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
     return hasValue;
 };
 
@@ -222,8 +231,7 @@ static inline bool Discord_ActivityAssets_InviteCoverImage_Span(
 {
     Discord_String str = { NULL, 0 };
     bool hasValue = Discord_ActivityAssets_InviteCoverImage(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
     return hasValue;
 };
 
@@ -242,8 +250,7 @@ static inline void Discord_ActivityParty_Id_Span(Discord_ActivityParty*__nonnull
 {
     Discord_String str = { NULL, 0 };
     Discord_ActivityParty_Id(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Activity Secrets
@@ -261,8 +268,7 @@ static inline void Discord_ActivitySecrets_Join_Span(Discord_ActivitySecrets*__n
 {
     Discord_String str = { NULL, 0 };
     Discord_ActivitySecrets_Join(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Activity Button
@@ -280,8 +286,7 @@ static inline void Discord_ActivityButton_Label_Span(Discord_ActivityButton*__no
 {
     Discord_String str = { NULL, 0 };
     Discord_ActivityButton_Label(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_ActivityButton_SetUrl_Span(Discord_ActivityButton*__nonnull self,
@@ -298,8 +303,7 @@ static inline void Discord_ActivityButton_Url_Span(Discord_ActivityButton*__nonn
 {
     Discord_String str = { NULL, 0 };
     Discord_ActivityButton_Url(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Client Result
@@ -309,8 +313,7 @@ static inline void Discord_ClientResult_ToString_Span(Discord_ClientResult*__non
 {
     Discord_String str = { NULL, 0 };
     Discord_ClientResult_ToString(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_ClientResult_SetError_Span(Discord_ClientResult*__nonnull self,
@@ -327,8 +330,7 @@ static inline void Discord_ClientResult_Error_Span(Discord_ClientResult*__nonnul
 {
     Discord_String str = { NULL, 0 };
     Discord_ClientResult_Error(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_ClientResult_SetResponseBody_Span(Discord_ClientResult*__nonnull self,
@@ -345,8 +347,7 @@ static inline void Discord_ClientResult_ResponseBody_Span(Discord_ClientResult*_
 {
     Discord_String str = { NULL, 0 };
     Discord_ClientResult_ResponseBody(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Auth Code Challenge
@@ -366,8 +367,7 @@ static inline void Discord_AuthorizationCodeChallenge_Challenge_Span(
 {
     Discord_String str = { NULL, 0 };
     Discord_AuthorizationCodeChallenge_Challenge(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Auth Code Verifier
@@ -387,8 +387,7 @@ static inline void Discord_AuthorizationCodeVerifier_Verifier_Span(
 {
     Discord_String str = { NULL, 0 };
     Discord_AuthorizationCodeVerifier_Verifier(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Auth Args
@@ -406,8 +405,7 @@ static inline void Discord_AuthorizationArgs_Scopes_Span(Discord_AuthorizationAr
 {
     Discord_String str = { NULL, 0 };
     Discord_AuthorizationArgs_Scopes(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_AuthorizationArgs_SetState_Span(Discord_AuthorizationArgs*__nonnull self,
@@ -428,8 +426,7 @@ static inline bool Discord_AuthorizationArgs_State_Span(Discord_AuthorizationArg
 {
     Discord_String str = { NULL, 0 };
     bool hasValue = Discord_AuthorizationArgs_State(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
     return hasValue;
 };
 
@@ -451,8 +448,7 @@ static inline bool Discord_AuthorizationArgs_Nonce_Span(Discord_AuthorizationArg
 {
     Discord_String str = { NULL, 0 };
     bool hasValue = Discord_AuthorizationArgs_Nonce(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
     return hasValue;
 };
 
@@ -476,8 +472,7 @@ static inline bool Discord_AuthorizationArgs_CustomSchemeParam_Span(
 {
     Discord_String str = { NULL, 0 };
     bool hasValue = Discord_AuthorizationArgs_CustomSchemeParam(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
     return hasValue;
 };
 
@@ -498,8 +493,7 @@ static inline void Discord_DeviceAuthorizationArgs_Scopes_Span(
 {
     Discord_String str = { NULL, 0 };
     Discord_DeviceAuthorizationArgs_Scopes(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Enum ToString
@@ -509,8 +503,7 @@ static inline void Discord_Call_ErrorToString_Span(Discord_Call_Error type,
 {
     Discord_String str = { NULL, 0 };
     Discord_Call_ErrorToString(type, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_Call_StatusToString_Span(Discord_Call_Status type,
@@ -519,8 +512,7 @@ static inline void Discord_Call_StatusToString_Span(Discord_Call_Status type,
 {
     Discord_String str = { NULL, 0 };
     Discord_Call_StatusToString(type, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_UserHandle_AvatarTypeToString_Span(
@@ -530,8 +522,7 @@ static inline void Discord_UserHandle_AvatarTypeToString_Span(
 {
     Discord_String str = { NULL, 0 };
     Discord_UserHandle_AvatarTypeToString(type, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_AdditionalContent_TypeToString_Span(
@@ -541,8 +532,7 @@ static inline void Discord_AdditionalContent_TypeToString_Span(
 {
     Discord_String str = { NULL, 0 };
     Discord_AdditionalContent_TypeToString(type, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_Client_ErrorToString_Span(Discord_Client_Error type,
@@ -551,8 +541,7 @@ static inline void Discord_Client_ErrorToString_Span(Discord_Client_Error type,
 {
     Discord_String str = { NULL, 0 };
     Discord_Client_ErrorToString(type, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_Client_StatusToString_Span(Discord_Client_Status type,
@@ -561,8 +550,7 @@ static inline void Discord_Client_StatusToString_Span(Discord_Client_Status type
 {
     Discord_String str = { NULL, 0 };
     Discord_Client_StatusToString(type, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_Client_ThreadToString_Span(Discord_Client_Thread type,
@@ -571,8 +559,7 @@ static inline void Discord_Client_ThreadToString_Span(Discord_Client_Thread type
 {
     Discord_String str = { NULL, 0 };
     Discord_Client_ThreadToString(type, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Channel Handle
@@ -582,8 +569,7 @@ static inline void Discord_ChannelHandle_Name_Span(Discord_ChannelHandle*__nonnu
 {
     Discord_String str = { NULL, 0 };
     Discord_ChannelHandle_Name(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Guild Minimal
@@ -601,8 +587,7 @@ static inline void Discord_GuildMinimal_Name_Span(Discord_GuildMinimal*__nonnull
 {
     Discord_String str = { NULL, 0 };
     Discord_GuildMinimal_Name(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Guild Channel
@@ -620,8 +605,7 @@ static inline void Discord_GuildChannel_Name_Span(Discord_GuildChannel*__nonnull
 {
     Discord_String str = { NULL, 0 };
     Discord_GuildChannel_Name(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - User Application Profile Handle
@@ -632,8 +616,7 @@ static inline void Discord_UserApplicationProfileHandle_AvatarHash_Span(
 {
     Discord_String str = { NULL, 0 };
     Discord_UserApplicationProfileHandle_AvatarHash(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_UserApplicationProfileHandle_Metadata_Span(
@@ -643,8 +626,7 @@ static inline void Discord_UserApplicationProfileHandle_Metadata_Span(
 {
     Discord_String str = { NULL, 0 };
     Discord_UserApplicationProfileHandle_Metadata(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline bool Discord_UserApplicationProfileHandle_ProviderId_Span(
@@ -654,8 +636,7 @@ static inline bool Discord_UserApplicationProfileHandle_ProviderId_Span(
 {
     Discord_String str = { NULL, 0 };
     bool hasValue = Discord_UserApplicationProfileHandle_ProviderId(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
     return hasValue;
 };
 
@@ -666,8 +647,7 @@ static inline void Discord_UserApplicationProfileHandle_ProviderIssuedUserId_Spa
 {
     Discord_String str = { NULL, 0 };
     Discord_UserApplicationProfileHandle_ProviderIssuedUserId(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_UserApplicationProfileHandle_Username_Span(
@@ -677,8 +657,7 @@ static inline void Discord_UserApplicationProfileHandle_Username_Span(
 {
     Discord_String str = { NULL, 0 };
     Discord_UserApplicationProfileHandle_Username(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - User Handle
@@ -688,8 +667,7 @@ static inline bool Discord_UserHandle_Avatar_Span(Discord_UserHandle*__nonnull s
 {
     Discord_String str = { NULL, 0 };
     bool hasValue = Discord_UserHandle_Avatar(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
     return hasValue;
 };
 
@@ -701,8 +679,7 @@ static inline void Discord_UserHandle_AvatarUrl_Span(Discord_UserHandle*__nonnul
 {
     Discord_String str = { NULL, 0 };
     Discord_UserHandle_AvatarUrl(self, animatedType, staticType, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_UserHandle_DisplayName_Span(Discord_UserHandle*__nonnull self,
@@ -711,8 +688,7 @@ static inline void Discord_UserHandle_DisplayName_Span(Discord_UserHandle*__nonn
 {
     Discord_String str = { NULL, 0 };
     Discord_UserHandle_DisplayName(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline bool Discord_UserHandle_GlobalName_Span(Discord_UserHandle*__nonnull self,
@@ -721,8 +697,7 @@ static inline bool Discord_UserHandle_GlobalName_Span(Discord_UserHandle*__nonnu
 {
     Discord_String str = { NULL, 0 };
     bool hasValue = Discord_UserHandle_GlobalName(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
     return hasValue;
 };
 
@@ -732,8 +707,7 @@ static inline void Discord_UserHandle_Username_Span(Discord_UserHandle*__nonnull
 {
     Discord_String str = { NULL, 0 };
     Discord_UserHandle_Username(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Additional Content
@@ -755,8 +729,7 @@ static inline bool Discord_AdditionalContent_Title_Span(Discord_AdditionalConten
 {
     Discord_String str = { NULL, 0 };
     bool hasValue = Discord_AdditionalContent_Title(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
     return hasValue;
 };
 
@@ -775,8 +748,7 @@ static inline void Discord_LinkedChannel_Name_Span(Discord_LinkedChannel*__nonnu
 {
     Discord_String str = { NULL, 0 };
     Discord_LinkedChannel_Name(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Message Handle
@@ -786,8 +758,7 @@ static inline void Discord_MessageHandle_Content_Span(Discord_MessageHandle*__no
 {
     Discord_String str = { NULL, 0 };
     Discord_MessageHandle_Content(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_MessageHandle_RawContent_Span(Discord_MessageHandle*__nonnull self,
@@ -796,8 +767,7 @@ static inline void Discord_MessageHandle_RawContent_Span(Discord_MessageHandle*_
 {
     Discord_String str = { NULL, 0 };
     Discord_MessageHandle_RawContent(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Audio Device
@@ -815,8 +785,7 @@ static inline void Discord_AudioDevice_Id_Span(Discord_AudioDevice*__nonnull sel
 {
     Discord_String str = { NULL, 0 };
     Discord_AudioDevice_Id(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_AudioDevice_SetName_Span(Discord_AudioDevice*__nonnull self,
@@ -833,8 +802,7 @@ static inline void Discord_AudioDevice_Name_Span(Discord_AudioDevice*__nonnull s
 {
     Discord_String str = { NULL, 0 };
     Discord_AudioDevice_Name(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 // MARK: - Client Create Options
@@ -852,8 +820,7 @@ static inline void Discord_ClientCreateOptions_WebBase_Span(Discord_ClientCreate
 {
     Discord_String str = { NULL, 0 };
     Discord_ClientCreateOptions_WebBase(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 static inline void Discord_ClientCreateOptions_SetApiBase_Span(Discord_ClientCreateOptions*__nonnull self,
@@ -870,8 +837,7 @@ static inline void Discord_ClientCreateOptions_ApiBase_Span(Discord_ClientCreate
 {
     Discord_String str = { NULL, 0 };
     Discord_ClientCreateOptions_ApiBase(self, &str);
-    output = str.ptr;
-    size = str.size;
+    Discord_CopyStringToSpan(str, output, size);
 };
 
 

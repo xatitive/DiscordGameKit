@@ -79,7 +79,8 @@ extension DiscordObject {
         var bytes: InlineArray<1024, UInt8> = .init(repeating: 0)
         var span: MutableSpan<UInt8> = bytes.mutableSpan
         fn(&span)
-        return span.toString()
+        let str = span.toString()
+        return str
     }
     
     func gettingString(

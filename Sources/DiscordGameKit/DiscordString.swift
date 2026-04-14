@@ -123,12 +123,24 @@ extension String {
 
 extension MutableSpan where Element == UInt8 {
     func toString() -> String {
-        do {
-            return try String(copying: UTF8Span(validating: self.span))
-        } catch {
-            print("Bad ASCII String!!")
-            print(error)
-            return "BAD STRING!!!!!!"
+        let count = self.span.count
+        if count == 0 {
+            return ""
         }
+
+        var bytes: [UInt8] = []
+        bytes.reserveCapacity(count)
+
+        var i = 0
+        while i < count {
+            let byte = self.span[i]
+            if byte == 0 {
+                break
+            }
+            bytes.append(byte)
+            i += 1
+        }
+
+        return String(decoding: bytes, as: UTF8.self)
     }
 }

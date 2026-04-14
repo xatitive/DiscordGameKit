@@ -1182,3 +1182,12 @@ Functions:
   SwiftName: Discord_ClientCreateOptions.setApiBase(self:span:_:)
 - Name: Discord_ClientCreateOptions_ApiBase_Span
   SwiftName: Discord_ClientCreateOptions.apiBase(self:span:_:)
+
+- Name: Discord_Client_GetDefaultAudioDeviceId_Span
+  SwiftName: Discord_Client_GetDefaultAudioDeviceId(span:_:)
+- Name: Discord_Client_GetDefaultCommunicationScopes_Span
+  SwiftName: Discord_Client_GetDefaultCommunicationScopes(span:_:)
+- Name: Discord_Client_GetDefaultPresenceScopes_Span
+  SwiftName: Discord_Client_GetDefaultPresenceScopes(span:_:)
+- Name: Discord_Client_GetVersionHash_Span
+  SwiftName: Discord_Client_GetVersionHash(span:_:)

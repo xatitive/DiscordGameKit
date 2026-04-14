@@ -13,7 +13,7 @@
 ///
 /// - seealso: https://discord.com/developers/docs/rich-presence/overview
 @nonexhaustive
-public enum ActivityActionType: Int32, Sendable {
+public enum ActivityActionType: UInt32, Sendable {
     case invalid = 0
     case join = 1
     case joinRequest = 5
@@ -21,7 +21,7 @@ public enum ActivityActionType: Int32, Sendable {
 
 /// Allows your game to control the privacy of the party the user is in.
 @nonexhaustive
-public enum ActivityPartyPrivacy: Int32, Sendable {
+public enum ActivityPartyPrivacy: UInt32, Sendable {
     
     /// The party is private (or unknown), which means that the user is in a party but it is
     /// not
@@ -45,7 +45,7 @@ public enum ActivityPartyPrivacy: Int32, Sendable {
 ///
 /// See https://discord.com/developers/docs/rich-presence/overview for more information.
 @nonexhaustive
-public enum ActivityType: Int32, Sendable {
+public enum ActivityType: UInt32, Sendable {
     case playing = 0
     case streaming = 1
     case listening = 2
@@ -59,7 +59,7 @@ public enum ActivityType: Int32, Sendable {
 ///
 /// See https://discord.com/developers/docs/rich-presence/overview for more information.
 @nonexhaustive
-public enum StatusDisplayType: Int32, Sendable {
+public enum StatusDisplayType: UInt32, Sendable {
     case name = 0
     case state = 1
     case details = 2
@@ -76,15 +76,15 @@ public struct ActivityGamePlatform: Sendable, RawRepresentable {
     public static let ps4       = ActivityGamePlatform(rawValue: 64)
     public static let ps5       = ActivityGamePlatform(rawValue: 128)
     
-    public let rawValue: Int32
-    public init(rawValue: Int32) {
+    public let rawValue: UInt32
+    public init(rawValue: UInt32) {
         self.rawValue = rawValue
     }
 }
 
 /// Enum representing various types of errors the SDK returns.
 @nonexhaustive
-public enum ErrorType: Int32, Sendable, Error {
+public enum ErrorType: UInt32, Sendable, Error {
     
     /// No error, the operation was successful.
     case none = 0
@@ -148,7 +148,7 @@ public enum ErrorType: Int32, Sendable, Error {
 /// For convenience, we have defined a couple of enum values that are non-standard HTTP codes to
 /// represent certain types of errors.
 @nonexhaustive
-public enum HttpStatusCode: Int32, Sendable {
+public enum HttpStatusCode: UInt32, Sendable {
     case none = 0
     case `continue` = 100
     case switchingProtocols = 101
@@ -215,13 +215,13 @@ public enum HttpStatusCode: Int32, Sendable {
 ///
 /// The only method used by the SDK is sha256.
 @nonexhaustive
-public enum AuthenticationCodeChallengeMethod: Int32, Sendable {
+public enum AuthenticationCodeChallengeMethod: UInt32, Sendable {
     case s256 = 0
 }
 
 /// Represents the type of integration the app will be installed as.
 @nonexhaustive
-public enum IntegrationType: Int32, Sendable {
+public enum IntegrationType: UInt32, Sendable {
     case guildInstall = 0
     case userInstall = 1
 }
@@ -230,7 +230,7 @@ public enum IntegrationType: Int32, Sendable {
 ///
 /// For more information see: https://discord.com/developers/docs/resources/channel
 @nonexhaustive
-public enum ChannelType: Int32, Sendable {
+public enum ChannelType: UInt32, Sendable {
     case guildText = 0
     case dm = 1
     case guildVoice = 2
@@ -251,7 +251,7 @@ public enum ChannelType: Int32, Sendable {
 
 /// Represents the type of additional content contained in a message.
 @nonexhaustive
-public enum AdditionalContentType: Int32, Sendable {
+public enum AdditionalContentType: UInt32, Sendable {
     case other = 0
     case attachment = 1
     case poll = 2
@@ -263,14 +263,14 @@ public enum AdditionalContentType: Int32, Sendable {
 
 /// The Discord Voice audio system to use.
 @nonexhaustive
-public enum AudioSystem: Int32, Sendable {
+public enum AudioSystem: UInt32, Sendable {
     case standard = 0
     case game = 1
 }
 
 /// Enum that represents any network errors with the Call.
 @nonexhaustive
-public enum CallError: Int32, Sendable, Error {
+public enum CallError: UInt32, Sendable, Error {
     case none = 0
     case signalingConnectionFailed = 1
     case signalingUnexpectedClose = 2
@@ -281,7 +281,7 @@ public enum CallError: Int32, Sendable, Error {
 
 /// Represents whether a voice call is using push to talk or auto voice detection
 @nonexhaustive
-public enum AudioModeType: Int32, Sendable {
+public enum AudioModeType: UInt32, Sendable {
     case uninitialized = 0
     case vad = 1
     case ptt = 2
@@ -289,7 +289,7 @@ public enum AudioModeType: Int32, Sendable {
 
 /// Enum that respresents the state of the Call's network connection.
 @nonexhaustive
-public enum CallStatus: Int32, Sendable {
+public enum CallStatus: UInt32, Sendable {
     case disconnected = 0
     case joining = 1
     case connecting = 2
@@ -301,7 +301,7 @@ public enum CallStatus: Int32, Sendable {
 
 /// Enum that represents the possible types of relationships that can exist between two users
 @nonexhaustive
-public enum RelationshipType: Int32, Sendable {
+public enum RelationshipType: UInt32, Sendable {
     
     /// The user has no relationship with the other user.
     case none = 0
@@ -328,7 +328,7 @@ public enum RelationshipType: Int32, Sendable {
 
 /// The type of external identity provider.
 @nonexhaustive
-public enum ExternalIdentityProviderType: Int32, Sendable {
+public enum ExternalIdentityProviderType: UInt32, Sendable {
     case oidc = 0
     case epicOnlineServices = 1
     case steam = 2
@@ -340,7 +340,7 @@ public enum ExternalIdentityProviderType: Int32, Sendable {
 
 /// The desired type of avatar url to generate for a User.
 @nonexhaustive
-public enum AvatarType: Int32, Sendable {
+public enum AvatarType: UInt32, Sendable {
     case gif = 0
     case webp = 1
     case png = 2
@@ -352,7 +352,7 @@ public enum AvatarType: Int32, Sendable {
 /// Generally a user is online or offline, but in Discord users are able to further customize their
 /// status such as turning on "Do not Disturb" mode or "Dnd" to silence notifications.
 @nonexhaustive
-public enum StatusType: Int32, Sendable {
+public enum StatusType: UInt32, Sendable {
     case online = 0
     case offline = 1
     case blocked = 2
@@ -368,7 +368,7 @@ public enum StatusType: Int32, Sendable {
 ///
 /// See MessageHandle for more details.
 @nonexhaustive
-public enum DisclosureType: Int32, Sendable {
+public enum DisclosureType: UInt32, Sendable {
     
     /// This disclosure type happens the first time a user sends a message in game,
     /// and that message will be able to be viewed on Discord,
@@ -384,7 +384,7 @@ public enum DisclosureType: Int32, Sendable {
 /// date will be ``unexpectedClose`` and you should look at the other Error fields for the specific
 /// details.
 @nonexhaustive
-public enum ClientError: Int32, Sendable, Error {
+public enum ClientError: UInt32, Sendable, Error {
     case none = 0
     case connectionFailed = 1
     case unexpectedClose = 2
@@ -406,7 +406,7 @@ public enum ClientError: Int32, Sendable, Error {
 /// blips. But it will try to automatically reconnect, as indicated by the ``reconnecting``
 /// status.
 @nonexhaustive
-public enum ClientStatus: Int32, Sendable {
+public enum ClientStatus: UInt32, Sendable {
     case disconnected = 0
     case connecting = 1
     case connected = 2
@@ -418,7 +418,7 @@ public enum ClientStatus: Int32, Sendable {
 
 /// Represents the type of thread to control thread priority on.
 @nonexhaustive
-public enum ClientThread: Int32, Sendable {
+public enum ClientThread: UInt32, Sendable {
     case client = 0
     case voice = 1
     case network = 2
@@ -427,7 +427,7 @@ public enum ClientThread: Int32, Sendable {
 /// Represents the type of auth token used by the SDK, either the normal tokens produced by
 /// the Discord desktop app, or an oauth2 bearer token. Only the latter can be used by the SDK.
 @nonexhaustive
-public enum AuthorizationTokenType: Int32, Sendable {
+public enum AuthorizationTokenType: UInt32, Sendable {
     case user = 0
     case bearer = 1
 }
@@ -435,7 +435,7 @@ public enum AuthorizationTokenType: Int32, Sendable {
 /// Represents the various identity providers that can be used to authenticate a provisional
 /// account user for public clients.
 @nonexhaustive
-public enum AuthenticationExternalAuthType: Int32, Sendable {
+public enum AuthenticationExternalAuthType: UInt32, Sendable {
     case oidc = 0
     case epicOnlineServicesAccessToken = 1
     case epicOnlineServicesIdToken = 2
@@ -448,7 +448,7 @@ public enum AuthenticationExternalAuthType: Int32, Sendable {
 
 /// Enum that represents the various log levels supported by the SDK.
 @nonexhaustive
-public enum LoggingSeverity: Int32, Sendable {
+public enum LoggingSeverity: UInt32, Sendable {
     case verbose = 1
     case info = 2
     case warning = 3
@@ -458,7 +458,7 @@ public enum LoggingSeverity: Int32, Sendable {
 
 /// Enum that represents the logical groups of relationships based on online status and game activity
 @nonexhaustive
-public enum RelationshipGroupType: Int32, Sendable {
+public enum RelationshipGroupType: UInt32, Sendable {
     
     /// Users who are online and currently playing the game/
     case onlinePlayingGame = 0

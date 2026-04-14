@@ -8,15 +8,15 @@
 @_implementationOnly import discord_partner_sdk
 
 protocol DiscordSwiftRepresentable: RawRepresentable where RawValue == UInt32 {
-    associatedtype SwiftType: RawRepresentable where SwiftType.RawValue == Int32
+    associatedtype SwiftType: RawRepresentable where SwiftType.RawValue == UInt32
     var swiftValue: SwiftType { get set }
 }
 
 extension DiscordSwiftRepresentable {
     @inlinable
     var swiftValue: SwiftType {
-        get { SwiftType(rawValue: Int32(rawValue))! }
-        set { self = .init(rawValue: UInt32(newValue.rawValue))! }
+        get { SwiftType(rawValue: rawValue)! }
+        set { self = .init(rawValue: newValue.rawValue)! }
     }
 }
 

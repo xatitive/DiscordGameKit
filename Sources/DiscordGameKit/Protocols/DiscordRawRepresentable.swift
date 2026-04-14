@@ -9,17 +9,17 @@
 
 // MARK: - Protocol
 
-protocol DiscordRawRepresentable: RawRepresentable where RawValue == Int32 {
+protocol DiscordRawRepresentable: RawRepresentable where RawValue == UInt32 {
     associatedtype DiscordType: RawRepresentable where DiscordType.RawValue == UInt32
     var discordValue: DiscordType { get }
 }
 
 extension DiscordRawRepresentable {
-    /// Default implementation — just reinterprets the Int32 as UInt32
+    /// Default implementation — just uses the same UInt32 raw value
     @inlinable
     var discordValue: DiscordType {
-        get { DiscordType(rawValue: UInt32(rawValue))! }
-        set { self = .init(rawValue: Int32(newValue.rawValue))! }
+        get { DiscordType(rawValue: rawValue)! }
+        set { self = .init(rawValue: newValue.rawValue)! }
     }
 }
 

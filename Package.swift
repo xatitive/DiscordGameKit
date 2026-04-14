@@ -23,7 +23,7 @@ let sourcesDirectory = URL(fileURLWithPath: #filePath)
     .deletingLastPathComponent()
     .appending(path: "Sources")
 
-let discordTBD = sourcesDirectory.appending(path: "CDiscord/libdiscord_partner_sdk.tbd")
+let discordTBD = sourcesDirectory.appending(path: "discord_partner_sdk/libdiscord_partner_sdk.tbd")
 let discordLinkerSetting = LinkerSetting.unsafeFlags([discordTBD.path])
 
 
@@ -44,13 +44,17 @@ let package = Package(
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
+            name: "discord_partner_sdk",
+            swiftSettings: extraSettings,
+            linkerSettings: [discordLinkerSetting]
+        ),
+        .target(
             name: "DiscordGameKit",
-            dependencies: ["CDiscord"],
+            dependencies: ["discord_partner_sdk"],
             swiftSettings: [
                 .unsafeFlags(["-enable-library-evolution", "-emit-module-interface"]),
                 .define("asyncCallbacks"),
             ] + extraSettings,
-            linkerSettings: [discordLinkerSetting]
         ),
         .executableTarget(
             name: "DiscordGameRunner",
@@ -59,7 +63,7 @@ let package = Package(
                 .define("asyncCallbacks")
             ] + extraSettings
         ),
-        .systemLibrary(name: "CDiscord", path: nil, pkgConfig: nil, providers: nil),
+        //.systemLibrary(name: "CDiscord", path: "Sources/CDiscord", pkgConfig: nil, providers: nil),
         //.binaryTarget(name: "discord_partner_sdk", path: "discord_partner_sdk.xcframework")
     ],
     swiftLanguageModes: [.v6]

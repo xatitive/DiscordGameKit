@@ -1,0 +1,6 @@
+
+module discord_partner_sdk {
+    header "cdiscord.h"
+    header "Span_Shims.h"
+    export *
+}

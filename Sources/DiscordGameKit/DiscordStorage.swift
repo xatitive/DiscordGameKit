@@ -40,6 +40,13 @@ final class DiscordStorage<T: DiscordRawObject>: @unchecked Sendable {
     }
 }
 
+extension DiscordObject {
+    var rawObject: Object {
+        mutating get { storage.raw }
+        set { storage.raw = newValue }
+    }
+}
+
 func compare<D: DiscordRawObject>(
     _ lhs: DiscordStorage<D>,
     to rhs: DiscordStorage<D>,
@@ -90,3 +97,4 @@ func compare<D: DiscordRawObject>(
         }
     }
 }
+

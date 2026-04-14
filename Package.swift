@@ -4,6 +4,21 @@
 import PackageDescription
 import Foundation
 
+let extraSettings: [SwiftSetting] = [
+    .enableExperimentalFeature("SuppressedAssociatedTypes"),
+    .enableExperimentalFeature("LifetimeDependence"),
+    .enableUpcomingFeature("LifetimeDependence"),
+    .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+    .enableUpcomingFeature("InferIsolatedConformances"),
+    .enableUpcomingFeature("ExistentialAny"),
+    .enableUpcomingFeature("MemberImportVisibility"),
+    .enableUpcomingFeature("InternalImportsByDefault"),
+    //    .treatAllWarnings(as: .error),
+    //.strictMemorySafety(),
+    .enableExperimentalFeature("SafeInteropWrappers"),
+    .unsafeFlags(["-Xcc", "-fexperimental-bounds-safety-attributes"]),
+]
+
 let sourcesDirectory = URL(fileURLWithPath: #filePath)
     .deletingLastPathComponent()
     .appending(path: "Sources")
@@ -14,7 +29,7 @@ let discordLinkerSetting = LinkerSetting.unsafeFlags([discordTBD.path])
 
 let package = Package(
     name: "DiscordGameKit",
-    platforms: [.macOS(.v11), .iOS(.v15)],
+    platforms: [.macOS(.v26), .iOS(.v26)],
     products: [
         .library(
             name: "DiscordGameKit",
@@ -34,7 +49,7 @@ let package = Package(
             swiftSettings: [
                 .unsafeFlags(["-enable-library-evolution", "-emit-module-interface"]),
                 .define("asyncCallbacks"),
-            ],
+            ] + extraSettings,
             linkerSettings: [discordLinkerSetting]
         ),
         .executableTarget(
@@ -42,7 +57,7 @@ let package = Package(
             dependencies: ["DiscordGameKit"],
             swiftSettings: [
                 .define("asyncCallbacks")
-            ]
+            ] + extraSettings
         ),
         .systemLibrary(name: "CDiscord", path: nil, pkgConfig: nil, providers: nil),
         //.binaryTarget(name: "discord_partner_sdk", path: "discord_partner_sdk.xcframework")

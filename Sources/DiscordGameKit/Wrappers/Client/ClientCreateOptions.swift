@@ -25,7 +25,7 @@ extension DiscordClient {
             get {
                 storage.withLock { raw in
                     var ds = Discord_String()
-                    Discord_ClientCreateOptions_WebBase(&raw, &ds)
+                    raw.webBase(&ds)
                     return String(discordOwned: ds)
                 }
             }
@@ -33,7 +33,7 @@ extension DiscordClient {
                 ensureUnique()
                 newValue.withDiscordString { str in
                     storage.withLock { raw in
-                        Discord_ClientCreateOptions_SetWebBase(&raw, str)
+                        raw.setWebBase(str)
                     }
                 }
             }
@@ -44,7 +44,7 @@ extension DiscordClient {
             get {
                 storage.withLock { raw in
                     var ds = Discord_String()
-                    Discord_ClientCreateOptions_ApiBase(&raw, &ds)
+                    raw.apiBase(&ds)
                     return String(discordOwned: ds)
                 }
             }
@@ -52,7 +52,7 @@ extension DiscordClient {
                 ensureUnique()
                 newValue.withDiscordString { str in
                     storage.withLock { raw in
-                        Discord_ClientCreateOptions_SetApiBase(&raw, str)
+                        raw.setApiBase(str)
                     }
                 }
             }
@@ -71,14 +71,11 @@ extension DiscordClient {
         @available(iOS 18.2, *)
         @available(Android 11.0, *)
         public var experimentalAudioSystem: AudioSystem {
-            get { storage.withLock { Discord_ClientCreateOptions_ExperimentalAudioSystem(&$0).swiftValue } }
+            get { storage.withLock { $0.experimentalAudioSystem().swiftValue } }
             set {
                 ensureUnique()
                 storage.withLock { raw in
-                    Discord_ClientCreateOptions_SetExperimentalAudioSystem(
-                        &raw,
-                        newValue.discordValue
-                    )
+                    raw.setExperimentalAudioSystem(newValue.discordValue)
                 }
             }
         }
@@ -94,16 +91,13 @@ extension DiscordClient {
         public var experimentalAndroidPreventCommsForBluetooth: Bool {
             get {
                 storage.withLock { raw in
-                    Discord_ClientCreateOptions_ExperimentalAndroidPreventCommsForBluetooth(&raw)
+                    raw.experimentalAndroidPreventCommsForBluetooth()
                 }
             }
             set {
                 ensureUnique()
                 storage.withLock { raw in
-                    Discord_ClientCreateOptions_SetExperimentalAndroidPreventCommsForBluetooth(
-                        &raw,
-                        newValue
-                    )
+                    raw.setExperimentalAndroidPreventCommsForBluetooth(newValue)
                 }
             }
         }
@@ -113,7 +107,7 @@ extension DiscordClient {
             get {
                 storage.withLock { raw in
                     var v: UInt64 = 0
-                    return Discord_ClientCreateOptions_CpuAffinityMask(&raw, &v) ? v : nil
+                    return raw.cpuAffinityMask(&v) ? v : nil
                 }
             }
             _modify {
@@ -123,13 +117,13 @@ extension DiscordClient {
                 
                 guard var value else {
                     storage.withLock { raw in
-                        Discord_ClientCreateOptions_SetCpuAffinityMask(&raw, nil)
+                        raw.setCpuAffinityMask(nil)
                     }
                     return
                 }
                 
                 storage.withLock { raw in
-                    Discord_ClientCreateOptions_SetCpuAffinityMask(&raw, &value)
+                    raw.setCpuAffinityMask(&value)
                 }
             }
         }

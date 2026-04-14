@@ -26,10 +26,10 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable, Er
     ///
     /// See ``ErrorType`` for more information.
     public var errorType: ErrorType {
-        get { usingLock(Discord_ClientResult_Type).swiftValue }
+        get { usingLock { $0.type().swiftValue } }
         set {
             ensureUnique()
-            usingLock(Discord_ClientResult_SetType, newValue.discordValue)
+            usingLock { $0.setType(newValue.discordValue) }
         }
     }
     
@@ -37,10 +37,10 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable, Er
     ///
     /// This will only be set if the type of error is``ErrorType/httpError``.
     public var status: HttpStatusCode {
-        get { usingLock(Discord_ClientResult_Status).swiftValue }
+        get { usingLock { $0.status().swiftValue } }
         set {
             ensureUnique()
-            usingLock(Discord_ClientResult_SetStatus, newValue.discordValue)
+            usingLock { $0.setStatus(newValue.discordValue) }
         }
     }
     
@@ -49,14 +49,14 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable, Er
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_ClientResult_Error(&raw, &ds)
+                raw.error(&ds)
                 return String(discordOwned: ds)
             }
         }
         set {
             ensureUnique()
             newValue.withDiscordString { str in
-                usingLock(Discord_ClientResult_SetError, str)
+                usingLock { $0.setError(str) }
             }
         }
     }
@@ -72,14 +72,14 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable, Er
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_ClientResult_ResponseBody(&raw, &ds)
+                raw.responseBody(&ds)
                 return String(discordOwned: ds)
             }
         }
         set {
             ensureUnique()
             newValue.withDiscordString { str in
-                usingLock(Discord_ClientResult_SetResponseBody, str)
+                usingLock { $0.setResponseBody(str) }
             }
         }
     }
@@ -89,37 +89,37 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable, Er
     /// Many of these error codes are documented at: https://discord.com/developers/docs/topics/opcodes-and-status-codes#json
     /// This will only be set if the type of error is ``ErrorType/httpError``.
     public var errorCode: Int32 {
-        get { usingLock(Discord_ClientResult_ErrorCode) }
+        get { usingLock { $0.errorCode() } }
         set {
             ensureUnique()
-            usingLock(Discord_ClientResult_SetErrorCode, newValue)
+            usingLock { $0.setErrorCode(newValue) }
         }
     }
     
     /// Equivalent to `errorType == ErrorType/none`
     public var isSuccessful: Bool {
-        get { usingLock(Discord_ClientResult_Successful) }
+        get { usingLock { $0.successful() } }
         set {
             ensureUnique()
-            usingLock(Discord_ClientResult_SetSuccessful, newValue)
+            usingLock { $0.setSuccessful(newValue) }
         }
     }
 
     /// Indicates if, although an API request failed, it is safe and recommended to retry it.
     public var isRetryable: Bool {
-        get { usingLock(Discord_ClientResult_Retryable) }
+        get { usingLock { $0.retryable() } }
         set {
             ensureUnique()
-            usingLock(Discord_ClientResult_SetRetryable, newValue)
+            usingLock { $0.setRetryable(newValue) }
         }
     }
 
     /// When a user is being rate limited by Discord (and so status == 429), this field should be set and is the number of seconds to wait before trying again.
     public var retryAfter: Float {
-        get { usingLock(Discord_ClientResult_RetryAfter) }
+        get { usingLock { $0.retryAfter() } }
         set {
             ensureUnique()
-            usingLock(Discord_ClientResult_SetRetryAfter, newValue)
+            usingLock { $0.setRetryAfter(newValue) }
         }
     }
     
@@ -127,24 +127,8 @@ public struct ClientResult: DiscordObject, CustomStringConvertible, Sendable, Er
     public var description: String {
         storage.withLock { raw in
             var ds = Discord_String()
-            Discord_ClientResult_ToString(&raw, &ds)
+            raw.toString(&ds)
             return String(discordOwned: ds)
-        }
-    }
-}
-
-extension Discord_ClientResult {
-    var successful: Bool {
-        mutating get {
-            Discord_ClientResult_Successful(&self)
-        }
-    }
-}
-
-extension UnsafeMutablePointer where Pointee == Discord_ClientResult {
-    var successful: Bool {
-        get {
-            pointee.successful
         }
     }
 }

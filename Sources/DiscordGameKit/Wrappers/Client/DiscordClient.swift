@@ -51,44 +51,44 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     /// This is used for things like authentication, rich presence, and activity invites when *not* connected with
     /// ``connect()``. When calling ``connect()``, the application ID is set automatically
     public var applicationId: UInt64 {
-        get { usingLock(Discord_Client_GetApplicationId) }
-        set { usingLock(Discord_Client_SetApplicationId, newValue)}
+        get { usingLock { $0.getApplicationId() } }
+        set { usingLock { $0.setApplicationId(newValue) } }
     }
 
     /// Input volume for the current user's microphone.
     /// Input volume is specified as a percentage in the range [0, 100] which represents the perceptual loudness.
     public var inputVolume: Float {
-        get { usingLock(Discord_Client_GetInputVolume) }
-        set { usingLock(Discord_Client_SetInputVolume, newValue) }
+        get { usingLock { $0.getInputVolume() } }
+        set { usingLock { $0.setInputVolume(newValue) } }
     }
 
     /// Output volume for the current user.
     /// Output volume specified as a percentage in the range [0, 200] which represents the perceptual loudness.
     public var outputVolume: Float {
-        get { usingLock(Discord_Client_GetOutputVolume) }
-        set { usingLock(Discord_Client_SetOutputVolume, newValue) }
+        get { usingLock { $0.getOutputVolume() } }
+        set { usingLock { $0.setOutputVolume(newValue) } }
     }
 
     /// Whether the current user is deafened in all calls.
     public var isDeafEverywhere: Bool {
-        get { usingLock(Discord_Client_GetSelfDeafAll) }
-        set { usingLock(Discord_Client_SetSelfDeafAll, newValue) }
+        get { usingLock { $0.getSelfDeafAll() } }
+        set { usingLock { $0.setSelfDeafAll(newValue) } }
     }
 
     /// Whether the current user is deafened in all calls.
     public var isMutedEverywhere: Bool {
-        get { usingLock(Discord_Client_GetSelfMuteAll) }
-        set { usingLock(Discord_Client_SetSelfMuteAll, newValue) }
+        get { usingLock { $0.getSelfMuteAll() } }
+        set { usingLock { $0.setSelfMuteAll(newValue) } }
     }
 
     /// Returns true if the SDK has a non-empty OAuth2 token set, regardless of whether that token is valid or not.
     public var isAuthenticated: Bool {
-        usingLock(Discord_Client_IsAuthenticated)
+        usingLock { $0.isAuthenticated() }
     }
 
     /// Current status of the client.
     public var status: ClientStatus {
-        usingLock(Discord_Client_GetStatus).swiftValue
+        usingLock { $0.getStatus().swiftValue }
     }
 
     /// Returns a list of all lobbies that the user is a member of and that the SDK has loaded.
@@ -98,7 +98,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     public var lobbyIds: [UInt64] {
         storage.withLock { raw in
             var span = Discord_UInt64Span()
-            Discord_Client_GetLobbyIds(&raw, &span)
+            raw.getLobbyIds(&span)
             return span.converting()
         }
     }
@@ -106,7 +106,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     public var currentUser: UserHandle? {
         storage.withLock { raw in
             var handle = Discord_UserHandle()
-            return Discord_Client_GetCurrentUserV2(&raw, &handle) ? UserHandle(takingOwnership: handle) : nil
+            return raw.getCurrentUserV2(&handle) ? UserHandle(takingOwnership: handle) : nil
         }
     }
     
@@ -114,7 +114,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     public var relationships: [RelationshipHandle] {
         storage.withLock { raw in
             var span = Discord_RelationshipHandleSpan()
-            Discord_Client_GetRelationships(&raw, &span)
+            raw.getRelationships(&span)
             return span.converting()
         }
     }
@@ -130,7 +130,9 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
         set {
             $autoGain.withLock { gain in
                 gain = newValue
-                usingLock(Discord_Client_SetAutomaticGainControl, gain)
+                storage.withLock { raw in
+                    raw.setAutomaticGainControl(gain)
+                }
             }
         }
     }
@@ -145,7 +147,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
         set {
             $echoCancel.withLock { echo in
                 echo = newValue
-                usingLock(Discord_Client_SetEchoCancellation, echo)
+                usingLock { $0.setEchoCancellation(echo) }
             }
         }
     }
@@ -169,7 +171,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
         set {
             $engineManaged.withLock { engine in
                 engine = newValue
-                usingLock(Discord_Client_SetEngineManagedAudioSession, engine)
+                usingLock { $0.setEngineManagedAudioSession(engine) }
             }
         }
     }
@@ -188,7 +190,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
         set {
             $audioDBFS.withLock { dbfs in
                 dbfs = newValue
-                usingLock(Discord_Client_SetNoAudioInputThreshold, dbfs)
+                usingLock { $0.setNoAudioInputThreshold(dbfs) }
             }
         }
     }
@@ -204,7 +206,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
         set {
             $supressingNoise.withLock { noise in
                 noise = newValue
-                usingLock(Discord_Client_SetNoiseSuppression, noise)
+                usingLock { $0.setNoiseSuppression(noise) }
             }
         }
     }
@@ -221,7 +223,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
         set {
             $opusHardware.withLock { opus in
                 opus = newValue
-                usingLock(Discord_Client_SetOpusHardwareCoding, opus.encoding, opus.decoding)
+                usingLock { $0.setOpusHardwareCoding(opus.encoding, opus.decoding) }
             }
         }
     }
@@ -263,7 +265,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     private(set) public lazy var authorizationCodeVerifier: AuthorizationCodeVerifier = {
         storage.withLock { raw in
             var verifier = Discord_AuthorizationCodeVerifier()
-            Discord_Client_CreateAuthorizationCodeVerifier(&raw, &verifier)
+            raw.createAuthorizationCodeVerifier(&verifier)
             return AuthorizationCodeVerifier(takingOwnership: verifier)
         }
     }()
@@ -281,14 +283,14 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     //    }
 
     public func setHttpRequestTimeout(milliseconds time: Int32) {
-        usingLock(Discord_Client_SetHttpRequestTimeout, time)
+        usingLock { $0.setHttpRequestTimeout(time) }
     }
 
     /// Returns a reference to the currently active call, if any.
     public func call(for channel: UInt64) -> DiscordCall {
         storage.withLock { raw in
             var call = Discord_Call()
-            Discord_Client_GetCall(&raw, channel, &call)
+            _ = raw.getCall(channel, &call)
             return DiscordCall(takingOwnership: call)
         }
     }
@@ -297,7 +299,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     public func calls() -> [DiscordCall] {
         storage.withLock { raw in
             var span = Discord_CallSpan()
-            Discord_Client_GetCalls(&raw, &span)
+            raw.getCalls(&span)
             return span.converting()
         }
     }
@@ -306,14 +308,14 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     /// Used to diagnose issues with acoustic echo cancellation.
     /// The input and output waveform data will be written to the log directory.
     public func aecDump(enabled: Bool) {
-        usingLock(Discord_Client_SetAecDump, enabled)
+        usingLock { $0.setAecDump(enabled) }
     }
 
     /// On mobile devices, enable speakerphone mode.
     @discardableResult
     @available(*, deprecated, message: "Calling Client.setSpeakerMode is DEPRECATED.")
     public func speakerMode(enabled: Bool) -> Bool {
-        usingLock(Discord_Client_SetSpeakerMode, enabled)
+        usingLock { $0.setSpeakerMode(enabled) }
     }
 
     /// Allows setting the priority of various SDK threads.
@@ -332,18 +334,14 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     ///   - priority: The priority value to assign. Higher values typically indicate
     ///               higher scheduling precedence.
     public func setPriority(thread: ClientThread, priority: Int32) {
-        usingLock(
-            Discord_Client_SetThreadPriority,
-            thread.discordValue,
-            priority
-        )
+        usingLock { $0.setThreadPriority(thread.discordValue, priority) }
     }
 
     /// On iOS devices, show the system audio route picker.
     @discardableResult
     @available(iOS 15.1, *)
     public func showAudioRoutePicker() -> Bool {
-        usingLock(Discord_Client_ShowAudioRoutePicker)
+        usingLock { $0.showAudioRoutePicker() }
     }
 
     /// Starts or joins a call in the lobby specified by `id` (for a lobby, simply
@@ -372,12 +370,12 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     ///
     /// - important: This *will not* close authorization windows presented to the user.
     public func abortAuthorize() {
-        usingLock(Discord_Client_AbortAuthorize)
+        usingLock { $0.abortAuthorize() }
     }
 
     /// This function is used to abort/cleanup the device authorization flow.
     public func abortGetDeviceToken() {
-        usingLock(Discord_Client_AbortGetTokenFromDevice)
+        usingLock { $0.abortGetTokenFromDevice() }
     }
 
     /// This function is used to hide the device authorization screen and is used for the
@@ -385,7 +383,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     /// function should be used in conjunction with a backend server to handle the device
     /// authorization flow. For a public client, you can use ``abortGetDeviceToken()`` instead.
     public func closeAuthorizationDeviceScreen() {
-        usingLock(Discord_Client_CloseAuthorizeDeviceScreen)
+        usingLock { $0.closeAuthorizeDeviceScreen() }
     }
 
     /// This function is used to show the device authorization screen and is used for the
@@ -405,7 +403,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     /// and then calling ``provisionalUserMergeCompleted(_:)`` to signal to the SDK that
     /// the pending operation can continue with the new account.
     public func provisionalUserMergeCompleted(_ success: Bool) {
-        usingLock(Discord_Client_ProvisionalUserMergeCompleted, success)
+        usingLock { $0.provisionalUserMergeCompleted(success) }
     }
 
     /// Stops listening for the `AUTHORIZE_REQUEST` event and removes the registered callback
@@ -414,7 +412,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     /// rolled out to a percentage of Discord users over time. More documentation and implementation
 	/// details to come as the client experiments run.
     public func removeAuthorizeRequestCallback() {
-        usingLock(Discord_Client_RemoveAuthorizeRequestCallback)
+        usingLock { $0.removeAuthorizeRequestCallback() }
     }
 
     /// When users are linking their account with Discord, which involves an OAuth2 flow,
@@ -423,7 +421,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     /// integration you may need to set the window PID using this method. It defaults to the current
     /// pid.
     public func setGameWindowPID(to pid: pid_t) {
-        usingLock(Discord_Client_SetGameWindowPid, pid)
+        usingLock { $0.setGameWindowPid(pid) }
     }
     
 
@@ -433,7 +431,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     /// are ephemeral and not persisted on Discord so cannot be opened. This function checks those
     /// conditions and makes sure the message is viewable in Discord.
     public func canOpenMessageInDiscord(id: UInt64) -> Bool {
-        usingLock(Discord_Client_CanOpenMessageInDiscord, id)
+        usingLock { $0.canOpenMessageInDiscord(id) }
     }
 
     /// Returns a reference to the Discord channel object for the given ID.
@@ -445,7 +443,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     public func channelHandle(for id: UInt64) -> ChannelHandle? {
         storage.withLock { raw -> ChannelHandle? in
             var handle = Discord_ChannelHandle()
-            guard Discord_Client_GetChannelHandle(&raw, id, &handle) else { return nil }
+            guard raw.getChannelHandle(id, &handle) else { return nil }
             return ChannelHandle(takingOwnership: handle)
         }
     }
@@ -457,7 +455,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     public func messageHandle(for msgId: UInt64) -> MessageHandle? {
         storage.withLock { raw -> MessageHandle? in
             var handle = Discord_MessageHandle()
-            guard Discord_Client_GetMessageHandle(&raw, msgId, &handle) else { return nil }
+            guard raw.getMessageHandle(msgId, &handle) else { return nil }
             return MessageHandle(takingOwnership: handle)
         }
     }
@@ -466,7 +464,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     public func lobbyHandle(for id: UInt64) -> LobbyHandle? {
         storage.withLock { raw -> LobbyHandle? in
             var handle = Discord_LobbyHandle()
-            guard Discord_Client_GetLobbyHandle(&raw, id, &handle) else { return nil }
+            guard raw.getLobbyHandle(id, &handle) else { return nil }
             return LobbyHandle(takingOwnership: handle)
         }
     }
@@ -474,7 +472,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     public func relationshipHandle(for id: UInt64) -> RelationshipHandle {
         storage.withLock { raw in
             var handle = Discord_RelationshipHandle()
-            Discord_Client_GetRelationshipHandle(&raw, id, &handle)
+            raw.getRelationshipHandle(id, &handle)
             return RelationshipHandle(takingOwnership: handle)
         }
     }
@@ -492,7 +490,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     ///
     /// - Parameter show: A Boolean value indicating whether chat is currently visible in the game.
     public func showChat(_ show: Bool) {
-        usingLock(Discord_Client_SetShowingChat, show)
+        usingLock { $0.setShowingChat(show) }
     }
 
     /// Asynchronously connects the client to Discord.
@@ -502,7 +500,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     /// and ``DiscordClient/status`` to receive updates on the client status. The client is only
     /// safe to use once the status changes to ``ClientStatus/ready``.
     public func connect() {
-        usingLock(Discord_Client_Connect)
+        usingLock { $0.connect() }
     }
 
     /// Asynchronously disconnects the client.
@@ -511,7 +509,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     /// updates on the client status. The client is fully disconnected once the status
     /// changes to ``ClientStatus/disconnected``.
     public func disconnect() {
-        usingLock(Discord_Client_Disconnect)
+        usingLock { $0.disconnect() }
     }
 
     /// Causes logs generated by the SDK to be written to disk in the specified directory.
@@ -534,36 +532,30 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     /// - Returns: `true` if the log file was successfully opened, otherwise `false`.
     public func setLogDir(to path: String, for severity: LoggingSeverity) -> Bool {
         path.withDiscordString { str in
-            usingLock(
-                Discord_Client_SetLogDir,
-                str,
-                severity.discordValue
-            )
+            usingLock { $0.setLogDir(str, severity.discordValue) }
         }
     }
 
     public func setVoiceLogDir(to path: String, for severity: LoggingSeverity) {
         path.withDiscordString { str in
-            usingLock(
-                Discord_Client_SetVoiceLogDir,
-                str,
-                severity.discordValue
-            )
+            usingLock { $0.setVoiceLogDir(str, severity.discordValue) }
         }
     }
     /// Clears the rich presence for the current user.
     public func clearRichPresence() {
-        usingLock(Discord_Client_ClearRichPresence)
+        usingLock { $0.clearRichPresence() }
     }
 
     @discardableResult
     public func registerLaunchCommand(id: UInt64, command: String) -> Bool {
-        command.withDiscordString { usingLock(Discord_Client_RegisterLaunchCommand, id, $0) }
+        command.withDiscordString { str in
+            usingLock { $0.registerLaunchCommand(id, str) }
+        }
     }
 
     @discardableResult
     public func registerLaunchSteamApplication(id: UInt64, steamId: UInt32) -> Bool {
-        usingLock(Discord_Client_RegisterLaunchSteamApplication, id, steamId)
+        usingLock { $0.registerLaunchSteamApplication(id, steamId) }
     }
 
     /// Returns a list of relationships that belong to the specified relationship group type.
@@ -577,11 +569,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
     ) -> [RelationshipHandle] {
         storage.withLock { raw in
             var span = Discord_RelationshipHandleSpan()
-            Discord_Client_GetRelationshipsByGroup(
-                &raw,
-                group.discordValue,
-                &span
-            )
+            raw.getRelationshipsByGroup(group.discordValue, &span)
             return span.converting()
         }
     }
@@ -592,7 +580,7 @@ public final class DiscordClient: DiscordObject, @unchecked Sendable {
         username.withDiscordString { str in
             storage.withLock { raw in
                 var span = Discord_UserHandleSpan()
-                Discord_Client_SearchFriendsByUsername(&raw, str, &span)
+                raw.searchFriendsByUsername(str, &span)
                 return span.converting()
             }
         }

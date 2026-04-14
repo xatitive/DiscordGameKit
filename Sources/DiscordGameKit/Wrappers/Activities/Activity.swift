@@ -262,7 +262,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
             var value = self.statusDisplay
             yield &value
             
-            guard var value else {
+            guard var value = value?.discordValue else {
                 storage.withLock { raw in
                     raw.setStatusDisplayType(nil)
                 }
@@ -270,8 +270,7 @@ public struct Activity: DiscordObject, CustomStringConvertible {
             }
             
             storage.withLock { raw in
-                var rawValue = value.discordValue
-                raw.setStatusDisplayType(&rawValue)
+                raw.setStatusDisplayType(&value)
             }
         }
     }

@@ -20,10 +20,10 @@ public struct AuthorizationCodeChallenge: DiscordObject, CustomStringConvertible
     
     /// The method used to generate the challenge. The only method used by the SDK is `sha256`.
     public var method: AuthenticationCodeChallengeMethod {
-        get { usingLock(Discord_AuthorizationCodeChallenge_Method).swiftValue }
+        get { usingLock { $0.method().swiftValue } }
         set {
             ensureUnique()
-            usingLock(Discord_AuthorizationCodeChallenge_SetMethod, newValue.discordValue)
+            usingLock { $0.setMethod(newValue.discordValue) }
         }
     }
     
@@ -32,14 +32,14 @@ public struct AuthorizationCodeChallenge: DiscordObject, CustomStringConvertible
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_AuthorizationCodeChallenge_Challenge(&raw, &ds)
+                raw.challenge(&ds)
                 return String(discordOwned: ds)
             }
         }
         set {
             ensureUnique()
             newValue.withDiscordString { str in
-                usingLock(Discord_AuthorizationCodeChallenge_SetChallenge, str)
+                usingLock { $0.setChallenge(str) }
             }
         }
     }

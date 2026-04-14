@@ -21,9 +21,9 @@ public struct AuthorizationCodeVerifier: DiscordObject, Sendable, CustomStringCo
     /// The challenge part of the code verification flow.
     public var challenge: AuthorizationCodeChallenge {
         get {
-        	storage.withLock { raw in
+            storage.withLock { raw in
                 var challenge = Discord_AuthorizationCodeChallenge()
-                Discord_AuthorizationCodeVerifier_Challenge(&raw, &challenge)
+                raw.challenge(&challenge)
                 return AuthorizationCodeChallenge(takingOwnership: challenge)
             }
         }
@@ -31,7 +31,7 @@ public struct AuthorizationCodeVerifier: DiscordObject, Sendable, CustomStringCo
             ensureUnique()
             storage.withLock { raw in
                 newValue.storage.withLock { challenge in
-                    Discord_AuthorizationCodeVerifier_SetChallenge(&raw, &challenge)
+                    raw.setChallenge(&challenge)
                 }
             }
         }
@@ -42,14 +42,14 @@ public struct AuthorizationCodeVerifier: DiscordObject, Sendable, CustomStringCo
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_AuthorizationCodeVerifier_Verifier(&raw, &ds)
+                raw.verifier(&ds)
                 return String(discordOwned: ds)
             }
         }
         set {
             ensureUnique()
             newValue.withDiscordString { str in
-				usingLock(Discord_AuthorizationCodeVerifier_SetVerifier, str)
+                usingLock { $0.setVerifier(str) }
             }
         }
     }

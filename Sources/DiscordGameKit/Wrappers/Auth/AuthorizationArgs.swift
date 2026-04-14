@@ -20,10 +20,10 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
     
     /// Optional. The Discord application ID for your game. Defaults to the value set by ``DiscordClient/applicationId``
     public var clientId: UInt64 {
-        get { usingLock(Discord_AuthorizationArgs_ClientId) }
+        get { usingLock { $0.clientId() } }
         set {
             ensureUnique()
-            usingLock(Discord_AuthorizationArgs_SetClientId, newValue)
+            usingLock { $0.setClientId(newValue) }
         }
     }
     
@@ -43,14 +43,14 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_AuthorizationArgs_Scopes(&raw, &ds)
+                raw.scopes(&ds)
                 return String(discordOwned: ds)
             }
         }
         set {
             ensureUnique()
             newValue.withDiscordString { str in
-                usingLock(Discord_AuthorizationArgs_SetScopes, str)
+                usingLock { $0.setScopes(str) }
             }
         }
     }
@@ -62,7 +62,7 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                guard Discord_AuthorizationArgs_State(&raw, &ds) else { return nil }
+                guard raw.state(&ds) else { return nil }
                 return String(discordOwned: ds)
             }
         }
@@ -71,11 +71,11 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             var value = self.state
             yield &value
             guard let value else {
-                usingLock(Discord_AuthorizationArgs_SetState, nil)
+                usingLock { $0.setState(nil) }
                 return
             }
             value.withDiscordStringPointer { ptr in
-                usingLock(Discord_AuthorizationArgs_SetState, ptr)
+                usingLock { $0.setState(ptr) }
             }
         }
     }
@@ -88,7 +88,7 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                guard Discord_AuthorizationArgs_Nonce(&raw, &ds) else { return nil }
+                guard raw.nonce(&ds) else { return nil }
                 return String(discordOwned: ds)
             }
         }
@@ -97,11 +97,11 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             var value = self.nonce
             yield &value
             guard let value else {
-                usingLock(Discord_AuthorizationArgs_SetNonce, nil)
+                usingLock { $0.setNonce(nil) }
                 return
             }
             value.withDiscordStringPointer { ptr in
-                usingLock(Discord_AuthorizationArgs_SetNonce, ptr)
+                usingLock { $0.setNonce(ptr) }
             }
         }
     }
@@ -112,7 +112,7 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
     public var codeChallenge: AuthorizationCodeChallenge? {
         get {
             var codeChallenge = Discord_AuthorizationCodeChallenge()
-            guard storage.withLock({ Discord_AuthorizationArgs_CodeChallenge(&$0, &codeChallenge) }) else { return nil }
+            guard storage.withLock({ $0.codeChallenge(&codeChallenge) }) else { return nil }
             return AuthorizationCodeChallenge(storage: .init(takingOwnership: codeChallenge))
         }
         _modify {
@@ -121,13 +121,13 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             yield &value
             
             guard let value else {
-                usingLock(Discord_AuthorizationArgs_SetCodeChallenge, nil)
+                usingLock { $0.setCodeChallenge(nil) }
                 return
             }
             
             value.storage.withLock { challenge in
                 self.storage.withLock { raw in
-                    Discord_AuthorizationArgs_SetCodeChallenge(&raw, &challenge)
+                    raw.setCodeChallenge(&challenge)
                 }
             }
         }
@@ -138,8 +138,8 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
     /// - seealso: https://discord.com/developers/docs/resources/application#installation-context
     public var integrationType: IntegrationType? {
         get {
-            var integrationType = Discord_IntegrationType.__forceint
-            guard storage.withLock({ Discord_AuthorizationArgs_IntegrationType(&$0, &integrationType) }) else { return nil }
+            var integrationType = IntegrationType.guildInstall.discordValue
+            guard storage.withLock({ $0.integrationType(&integrationType) }) else { return nil }
             return integrationType.swiftValue
         }
         _modify {
@@ -147,12 +147,12 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             var value = self.integrationType
             yield &value
             guard let value else {
-                usingLock(Discord_AuthorizationArgs_SetIntegrationType, nil)
+                usingLock { $0.setIntegrationType(nil) }
                 return
             }
             storage.withLock { raw in
                 var dValue = value.discordValue
-                Discord_AuthorizationArgs_SetIntegrationType(&raw, &dValue)
+                raw.setIntegrationType(&dValue)
             }
         }
     }
@@ -172,7 +172,7 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                guard Discord_AuthorizationArgs_CustomSchemeParam(&raw, &ds) else { return nil }
+                guard raw.customSchemeParam(&ds) else { return nil }
                 return String(discordOwned: ds)
             }
         }
@@ -181,11 +181,11 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             var value = self.customSchemeParam
             yield &value
             guard let value else {
-                usingLock(Discord_AuthorizationArgs_SetCustomSchemeParam, nil)
+                usingLock { $0.setCustomSchemeParam(nil) }
                 return
             }
             value.withDiscordStringPointer { ptr in
-                usingLock(Discord_AuthorizationArgs_SetCustomSchemeParam, ptr)
+                usingLock { $0.setCustomSchemeParam(ptr) }
             }
         }
     }

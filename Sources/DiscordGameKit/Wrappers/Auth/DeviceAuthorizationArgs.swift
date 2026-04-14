@@ -20,10 +20,10 @@ public struct DeviceAuthorizationArgs: DiscordObject, CustomStringConvertible {
     
     /// Optional. The Discord application ID for your game. Defaults to the value set by ``DiscordClient/applicationId``
     public var clientId: UInt64 {
-        get { usingLock(Discord_DeviceAuthorizationArgs_ClientId) }
+        get { usingLock { $0.clientId() } }
         set {
             ensureUnique()
-            usingLock(Discord_DeviceAuthorizationArgs_SetClientId, newValue)
+            usingLock { $0.setClientId(newValue) }
         }
     }
     
@@ -43,14 +43,14 @@ public struct DeviceAuthorizationArgs: DiscordObject, CustomStringConvertible {
         get {
             storage.withLock { raw in
                 var ds = Discord_String()
-                Discord_DeviceAuthorizationArgs_Scopes(&raw, &ds)
+                raw.scopes(&ds)
                 return String(discordOwned: ds)
             }
         }
         set {
             ensureUnique()
-            newValue.withDiscordString{ str in
-                usingLock(Discord_DeviceAuthorizationArgs_SetScopes, str)
+            newValue.withDiscordString { str in
+                usingLock { $0.setScopes(str) }
             }
         }
     }

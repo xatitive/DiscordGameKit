@@ -118,6 +118,7 @@ Enumerators:
 ## Objects
 
 Functions:
+# Activity Invite
 - Name: Discord_ActivityInvite_SetSenderId
   SwiftName: Discord_ActivityInvite.setSenderId(self:_:)
 - Name: Discord_ActivityInvite_SenderId
@@ -154,3 +155,33 @@ Functions:
   SwiftName: Discord_ActivityInvite.setIsValid(self:_:)
 - Name: Discord_ActivityInvite_IsValid
   SwiftName: Discord_ActivityInvite.isValid(self:)
+
+# Activity Assets
+- Name: Discord_ActivityAssets_SetLargeImage
+  SwiftName: Discord_ActivityAssets.setLargeImage(self:_:)
+- Name: Discord_ActivityAssets_LargeImage
+  SwiftName: Discord_ActivityAssets.largeImage(self:_:)
+- Name: Discord_ActivityAssets_SetLargeText
+  SwiftName: Discord_ActivityAssets.setLargeText(self:_:)
+- Name: Discord_ActivityAssets_LargeText
+  SwiftName: Discord_ActivityAssets.largeText(self:_:)
+- Name: Discord_ActivityAssets_SetLargeUrl
+  SwiftName: Discord_ActivityAssets.setLargeUrl(self:_:)
+- Name: Discord_ActivityAssets_LargeUrl
+  SwiftName: Discord_ActivityAssets.largeUrl(self:_:)
+- Name: Discord_ActivityAssets_SetSmallImage
+  SwiftName: Discord_ActivityAssets.setSmallImage(self:_:)
+- Name: Discord_ActivityAssets_SmallImage
+  SwiftName: Discord_ActivityAssets.smallImage(self:_:)
+- Name: Discord_ActivityAssets_SetSmallText
+  SwiftName: Discord_ActivityAssets.setSmallText(self:_:)
+- Name: Discord_ActivityAssets_SmallText
+  SwiftName: Discord_ActivityAssets.smallText(self:_:)
+- Name: Discord_ActivityAssets_SetSmallUrl
+  SwiftName: Discord_ActivityAssets.setSmallUrl(self:_:)
+- Name: Discord_ActivityAssets_SmallUrl
+  SwiftName: Discord_ActivityAssets.smallUrl(self:_:)
+- Name: Discord_ActivityAssets_SetInviteCoverImage
+  SwiftName: Discord_ActivityAssets.setInviteCoverImage(self:_:)
+- Name: Discord_ActivityAssets_InviteCoverImage
+  SwiftName: Discord_ActivityAssets.inviteCoverImage(self:_:)

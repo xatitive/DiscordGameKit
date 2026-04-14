@@ -46,6 +46,32 @@ extension DiscordObject {
             return fn(&raw, repeat (each args))
         }
     }
+    
+    func usingLock<R>(
+        _ fn: () -> R
+    ) -> R {
+        return storage.withLock { raw in
+            return fn()
+        }
+    }
+    
+    func usingLock<each T, R>(
+        _ fn: (repeat each T) -> R,
+        _ args: repeat each T
+    ) -> R {
+        return storage.withLock { raw in
+            return fn(repeat (each args))
+        }
+    }
+    
+    @inlinable
+    func usingLock<R>(
+        _ fn: (inout Object) -> R
+    ) -> R {
+        return storage.withLock { raw in
+            return fn(&raw)
+        }
+    }
 }
 
 extension DiscordObject where Object: DiscordRawCopyable {

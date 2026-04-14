@@ -31,15 +31,17 @@ public struct AuthorizationCodeChallenge: DiscordObject, CustomStringConvertible
     public var challenge: String {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                raw.challenge(&ds)
-                return ds.toString()
+                gettingString { span in
+                    raw.challenge(span: &span)
+                }
             }
         }
         set {
             ensureUnique()
-            newValue.withDiscordString { str in
-                usingLock { $0.setChallenge(str) }
+            storage.withLock { raw in
+                settingString(newValue) { buf in
+                    raw.setChallenge(span: buf)
+                }
             }
         }
     }

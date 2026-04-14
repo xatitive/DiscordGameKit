@@ -42,15 +42,17 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
     public var scopes: String {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                raw.scopes(&ds)
-                return ds.toString()
+                gettingString { span in
+                    raw.scopes(span: &span)
+                }
             }
         }
         set {
             ensureUnique()
-            newValue.withDiscordString { str in
-                usingLock { $0.setScopes(str) }
+            storage.withLock { raw in
+                settingString(newValue) { buf in
+                    raw.setScopes(span: buf)
+                }
             }
         }
     }
@@ -61,9 +63,9 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
     public var state: String? {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                guard raw.state(&ds) else { return nil }
-                return ds.toString()
+                gettingString { span in
+                    raw.state(span: &span)
+                }
             }
         }
         _modify {
@@ -71,11 +73,13 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             var value = self.state
             yield &value
             guard let value else {
-                usingLock { $0.setState(nil) }
+                usingLock { $0.setState(span: nil) }
                 return
             }
-            value.withDiscordStringPointer { ptr in
-                usingLock { $0.setState(ptr) }
+            storage.withLock { raw in
+                settingString(value) { buf in
+                    raw.setState(span: buf)
+                }
             }
         }
     }
@@ -87,9 +91,9 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
     public var nonce: String? {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                guard raw.nonce(&ds) else { return nil }
-                return ds.toString()
+                gettingString { span in
+                    raw.nonce(span: &span)
+                }
             }
         }
         _modify {
@@ -97,11 +101,13 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             var value = self.nonce
             yield &value
             guard let value else {
-                usingLock { $0.setNonce(nil) }
+                usingLock { $0.setNonce(span: nil) }
                 return
             }
-            value.withDiscordStringPointer { ptr in
-                usingLock { $0.setNonce(ptr) }
+            storage.withLock { raw in
+                settingString(value) { buf in
+                    raw.setNonce(span: buf)
+                }
             }
         }
     }
@@ -171,9 +177,9 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
     public var customSchemeParam: String? {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                guard raw.customSchemeParam(&ds) else { return nil }
-                return ds.toString()
+                gettingString { span in
+                    raw.customSchemeParam(span: &span)
+                }
             }
         }
         _modify {
@@ -181,11 +187,13 @@ public struct AuthorizationArgs: DiscordObject, Sendable, CustomStringConvertibl
             var value = self.customSchemeParam
             yield &value
             guard let value else {
-                usingLock { $0.setCustomSchemeParam(nil) }
+                usingLock { $0.setCustomSchemeParam(span: nil) }
                 return
             }
-            value.withDiscordStringPointer { ptr in
-                usingLock { $0.setCustomSchemeParam(ptr) }
+            storage.withLock { raw in
+                settingString(value) { buf in
+                    raw.setCustomSchemeParam(span: buf)
+                }
             }
         }
     }

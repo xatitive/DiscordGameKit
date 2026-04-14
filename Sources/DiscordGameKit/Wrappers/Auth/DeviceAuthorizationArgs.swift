@@ -42,15 +42,17 @@ public struct DeviceAuthorizationArgs: DiscordObject, CustomStringConvertible {
     public var scopes: String {
         get {
             storage.withLock { raw in
-                var ds = Discord_String()
-                raw.scopes(&ds)
-                return ds.toString()
+                gettingString { span in
+                    raw.scopes(span: &span)
+                }
             }
         }
         set {
             ensureUnique()
-            newValue.withDiscordString { str in
-                usingLock { $0.setScopes(str) }
+            storage.withLock { raw in
+                settingString(newValue) { buf in
+                    raw.setScopes(span: buf)
+                }
             }
         }
     }

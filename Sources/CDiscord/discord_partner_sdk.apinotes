@@ -437,10 +437,10 @@ Functions:
   SwiftName: Discord_Call.setAudioMode(self:_:)
 - Name: Discord_Call_SetLocalMute
   SwiftName: Discord_Call.setLocalMute(self:_:_:)
-- Name: Discord_Call_SetOnVoiceStateChangedCallback
-  SwiftName: Discord_Call.setOnVoiceStateChangedCallback(self:_:_:_:)
-- Name: Discord_Call_SetParticipantChangedCallback
-  SwiftName: Discord_Call.setParticipantChangedCallback(self:_:_:_:)
+#- Name: Discord_Call_SetOnVoiceStateChangedCallback
+#  SwiftName: Discord_Call.setOnVoiceStateChangedCallback(self:_:_:_:)
+#- Name: Discord_Call_SetParticipantChangedCallback
+#  SwiftName: Discord_Call.setParticipantChangedCallback(self:_:_:_:)
 - Name: Discord_Call_SetParticipantVolume
   SwiftName: Discord_Call.setParticipantVolume(self:_:_:)
 - Name: Discord_Call_SetPTTActive
@@ -451,10 +451,10 @@ Functions:
   SwiftName: Discord_Call.setSelfDeaf(self:_:)
 - Name: Discord_Call_SetSelfMute
   SwiftName: Discord_Call.setSelfMute(self:_:)
-- Name: Discord_Call_SetSpeakingStatusChangedCallback
-  SwiftName: Discord_Call.setSpeakingStatusChangedCallback(self:_:_:_:)
-- Name: Discord_Call_SetStatusChangedCallback
-  SwiftName: Discord_Call.setStatusChangedCallback(self:_:_:_:)
+#- Name: Discord_Call_SetSpeakingStatusChangedCallback
+#  SwiftName: Discord_Call.setSpeakingStatusChangedCallback(self:_:_:_:)
+#- Name: Discord_Call_SetStatusChangedCallback
+#  SwiftName: Discord_Call.setStatusChangedCallback(self:_:_:_:)
 - Name: Discord_Call_SetVADThreshold
   SwiftName: Discord_Call.setVADThreshold(self:_:_:)
 
@@ -719,24 +719,24 @@ Functions:
   SwiftName: Discord_Client.getCurrentUser(self:_:)
 - Name: Discord_Client_SetHttpRequestTimeout
   SwiftName: Discord_Client.setHttpRequestTimeout(self:_:)
-- Name: Discord_Client_EndCall
-  SwiftName: Discord_Client.endCall(self:_:_:_:_:)
-- Name: Discord_Client_EndCalls
-  SwiftName: Discord_Client.endCalls(self:_:_:_:)
+#- Name: Discord_Client_EndCall
+#  SwiftName: Discord_Client.endCall(self:_:_:_:_:)
+#- Name: Discord_Client_EndCalls
+#  SwiftName: Discord_Client.endCalls(self:_:_:_:)
 - Name: Discord_Client_GetCall
   SwiftName: Discord_Client.getCall(self:_:_:)
 - Name: Discord_Client_GetCalls
   SwiftName: Discord_Client.getCalls(self:_:)
-- Name: Discord_Client_GetCurrentInputDevice
-  SwiftName: Discord_Client.getCurrentInputDevice(self:_:_:_:)
-- Name: Discord_Client_GetCurrentOutputDevice
-  SwiftName: Discord_Client.getCurrentOutputDevice(self:_:_:_:)
-- Name: Discord_Client_GetInputDevices
-  SwiftName: Discord_Client.getInputDevices(self:_:_:_:)
+#- Name: Discord_Client_GetCurrentInputDevice
+#  SwiftName: Discord_Client.getCurrentInputDevice(self:_:_:_:)
+#- Name: Discord_Client_GetCurrentOutputDevice
+#  SwiftName: Discord_Client.getCurrentOutputDevice(self:_:_:_:)
+#- Name: Discord_Client_GetInputDevices
+#  SwiftName: Discord_Client.getInputDevices(self:_:_:_:)
 - Name: Discord_Client_GetInputVolume
   SwiftName: Discord_Client.getInputVolume(self:)
-- Name: Discord_Client_GetOutputDevices
-  SwiftName: Discord_Client.getOutputDevices(self:_:_:_:)
+#- Name: Discord_Client_GetOutputDevices
+#  SwiftName: Discord_Client.getOutputDevices(self:_:_:_:)
 - Name: Discord_Client_GetOutputVolume
   SwiftName: Discord_Client.getOutputVolume(self:)
 - Name: Discord_Client_GetSelfDeafAll
@@ -747,26 +747,26 @@ Functions:
   SwiftName: Discord_Client.setAecDump(self:_:)
 - Name: Discord_Client_SetAutomaticGainControl
   SwiftName: Discord_Client.setAutomaticGainControl(self:_:)
-- Name: Discord_Client_SetDeviceChangeCallback
-  SwiftName: Discord_Client.setDeviceChangeCallback(self:_:_:_:)
+#- Name: Discord_Client_SetDeviceChangeCallback
+#  SwiftName: Discord_Client.setDeviceChangeCallback(self:_:_:_:)
 - Name: Discord_Client_SetEchoCancellation
   SwiftName: Discord_Client.setEchoCancellation(self:_:)
 - Name: Discord_Client_SetEngineManagedAudioSession
   SwiftName: Discord_Client.setEngineManagedAudioSession(self:_:)
-- Name: Discord_Client_SetInputDevice
-  SwiftName: Discord_Client.setInputDevice(self:_:_:_:_:)
+#- Name: Discord_Client_SetInputDevice
+#  SwiftName: Discord_Client.setInputDevice(self:_:_:_:_:)
 - Name: Discord_Client_SetInputVolume
   SwiftName: Discord_Client.setInputVolume(self:_:)
-- Name: Discord_Client_SetNoAudioInputCallback
-  SwiftName: Discord_Client.setNoAudioInputCallback(self:_:_:_:)
+#- Name: Discord_Client_SetNoAudioInputCallback
+#  SwiftName: Discord_Client.setNoAudioInputCallback(self:_:_:_:)
 - Name: Discord_Client_SetNoAudioInputThreshold
   SwiftName: Discord_Client.setNoAudioInputThreshold(self:_:)
 - Name: Discord_Client_SetNoiseSuppression
   SwiftName: Discord_Client.setNoiseSuppression(self:_:)
 - Name: Discord_Client_SetOpusHardwareCoding
   SwiftName: Discord_Client.setOpusHardwareCoding(self:_:_:)
-- Name: Discord_Client_SetOutputDevice
-  SwiftName: Discord_Client.setOutputDevice(self:_:_:_:_:)
+#- Name: Discord_Client_SetOutputDevice
+#  SwiftName: Discord_Client.setOutputDevice(self:_:_:_:_:)
 - Name: Discord_Client_SetOutputVolume
   SwiftName: Discord_Client.setOutputVolume(self:_:)
 - Name: Discord_Client_SetSelfDeafAll
@@ -777,228 +777,229 @@ Functions:
   SwiftName: Discord_Client.setSpeakerMode(self:_:)
 - Name: Discord_Client_SetThreadPriority
   SwiftName: Discord_Client.setThreadPriority(self:_:_:)
-- Name: Discord_Client_SetVoiceParticipantChangedCallback
-  SwiftName: Discord_Client.setVoiceParticipantChangedCallback(self:_:_:_:)
+#- Name: Discord_Client_SetVoiceParticipantChangedCallback
+#  SwiftName: Discord_Client.setVoiceParticipantChangedCallback(self:_:_:_:)
 - Name: Discord_Client_ShowAudioRoutePicker
   SwiftName: Discord_Client.showAudioRoutePicker(self:)
-- Name: Discord_Client_StartCall
-  SwiftName: Discord_Client.startCall(self:_:_:)
-- Name: Discord_Client_StartCallWithAudioCallbacks
-  SwiftName: Discord_Client.startCallWithAudioCallbacks(self:_:_:_:_:_:_:_:_:)
+#- Name: Discord_Client_StartCall
+#  SwiftName: Discord_Client.startCall(self:_:_:)
+#- Name: Discord_Client_StartCallWithAudioCallbacks
+#  SwiftName: Discord_Client.startCallWithAudioCallbacks(self:_:_:_:_:_:_:_:_:)
 - Name: Discord_Client_AbortAuthorize
   SwiftName: Discord_Client.abortAuthorize(self:)
 - Name: Discord_Client_AbortGetTokenFromDevice
   SwiftName: Discord_Client.abortGetTokenFromDevice(self:)
-- Name: Discord_Client_Authorize
-  SwiftName: Discord_Client.authorize(self:_:_:_:_:)
+#- Name: Discord_Client_Authorize
+#  SwiftName: Discord_Client.authorize(self:_:_:_:_:)
 - Name: Discord_Client_CloseAuthorizeDeviceScreen
   SwiftName: Discord_Client.closeAuthorizeDeviceScreen(self:)
 - Name: Discord_Client_CreateAuthorizationCodeVerifier
   SwiftName: Discord_Client.createAuthorizationCodeVerifier(self:_:)
-- Name: Discord_Client_ExchangeChildToken
-  SwiftName: Discord_Client.exchangeChildToken(self:_:_:_:_:_:)
-- Name: Discord_Client_FetchCurrentUser
-  SwiftName: Discord_Client.fetchCurrentUser(self:_:_:_:_:_:)
-- Name: Discord_Client_GetProvisionalToken
-  SwiftName: Discord_Client.getProvisionalToken(self:_:_:_:_:_:_:)
-- Name: Discord_Client_GetToken
-  SwiftName: Discord_Client.getToken(self:_:_:_:_:_:_:_:)
-- Name: Discord_Client_GetTokenFromDevice
-  SwiftName: Discord_Client.getTokenFromDevice(self:_:_:_:_:)
-- Name: Discord_Client_GetTokenFromDeviceProvisionalMerge
-  SwiftName: Discord_Client.getTokenFromDeviceProvisionalMerge(self:_:_:_:_:_:_:)
-- Name: Discord_Client_GetTokenFromProvisionalMerge
-  SwiftName: Discord_Client.getTokenFromProvisionalMerge(self:_:_:_:_:_:_:_:_:_:)
+#- Name: Discord_Client_ExchangeChildToken
+#  SwiftName: Discord_Client.exchangeChildToken(self:_:_:_:_:_:)
+#- Name: Discord_Client_FetchCurrentUser
+#  SwiftName: Discord_Client.fetchCurrentUser(self:_:_:_:_:_:)
+#- Name: Discord_Client_GetProvisionalToken
+#  SwiftName: Discord_Client.getProvisionalToken(self:_:_:_:_:_:_:)
+#- Name: Discord_Client_GetToken
+#  SwiftName: Discord_Client.getToken(self:_:_:_:_:_:_:_:)
+#- Name: Discord_Client_GetTokenFromDevice
+#  SwiftName: Discord_Client.getTokenFromDevice(self:_:_:_:_:)
+#- Name: Discord_Client_GetTokenFromDeviceProvisionalMerge
+#  SwiftName: Discord_Client.getTokenFromDeviceProvisionalMerge(self:_:_:_:_:_:_:)
+#- Name: Discord_Client_GetTokenFromProvisionalMerge
+#  SwiftName: Discord_Client.getTokenFromProvisionalMerge(self:_:_:_:_:_:_:_:_:_:)
 - Name: Discord_Client_IsAuthenticated
   SwiftName: Discord_Client.isAuthenticated(self:)
-- Name: Discord_Client_OpenAuthorizeDeviceScreen
-  SwiftName: Discord_Client.openAuthorizeDeviceScreen(self:_:_:)
+#- Name: Discord_Client_OpenAuthorizeDeviceScreen
+#  SwiftName: Discord_Client.openAuthorizeDeviceScreen(self:_:_:)
 - Name: Discord_Client_ProvisionalUserMergeCompleted
   SwiftName: Discord_Client.provisionalUserMergeCompleted(self:_:)
-- Name: Discord_Client_RefreshToken
-  SwiftName: Discord_Client.refreshToken(self:_:_:_:_:_:)
-- Name: Discord_Client_RegisterAuthorizeRequestCallback
-  SwiftName: Discord_Client.registerAuthorizeRequestCallback(self:_:_:_:)
+#- Name: Discord_Client_RefreshToken
+#  SwiftName: Discord_Client.refreshToken(self:_:_:_:_:_:)
+#- Name: Discord_Client_RegisterAuthorizeRequestCallback
+#  SwiftName: Discord_Client.registerAuthorizeRequestCallback(self:_:_:_:)
 - Name: Discord_Client_RemoveAuthorizeRequestCallback
   SwiftName: Discord_Client.removeAuthorizeRequestCallback(self:)
-- Name: Discord_Client_RevokeToken
-  SwiftName: Discord_Client.revokeToken(self:_:_:_:_:_:)
-- Name: Discord_Client_SetAuthorizeDeviceScreenClosedCallback
-  SwiftName: Discord_Client.setAuthorizeDeviceScreenClosedCallback(self:_:_:_:)
+#- Name: Discord_Client_RevokeToken
+#  SwiftName: Discord_Client.revokeToken(self:_:_:_:_:_:)
+#- Name: Discord_Client_SetAuthorizeDeviceScreenClosedCallback
+#  SwiftName: Discord_Client.setAuthorizeDeviceScreenClosedCallback(self:_:_:_:)
 - Name: Discord_Client_SetGameWindowPid
   SwiftName: Discord_Client.setGameWindowPid(self:_:)
-- Name: Discord_Client_SetTokenExpirationCallback
-  SwiftName: Discord_Client.setTokenExpirationCallback(self:_:_:_:)
-- Name: Discord_Client_UnmergeIntoProvisionalAccount
-  SwiftName: Discord_Client.unmergeIntoProvisionalAccount(self:_:_:_:_:_:_:)
-- Name: Discord_Client_UpdateProvisionalAccountDisplayName
-  SwiftName: Discord_Client.updateProvisionalAccountDisplayName(self:_:_:_:_:)
-- Name: Discord_Client_UpdateToken
-  SwiftName: Discord_Client.updateToken(self:_:_:_:_:_:)
+#- Name: Discord_Client_SetTokenExpirationCallback
+#  SwiftName: Discord_Client.setTokenExpirationCallback(self:_:_:_:)
+#- Name: Discord_Client_UnmergeIntoProvisionalAccount
+#  SwiftName: Discord_Client.unmergeIntoProvisionalAccount(self:_:_:_:_:_:_:)
+#- Name: Discord_Client_UpdateProvisionalAccountDisplayName
+#  SwiftName: Discord_Client.updateProvisionalAccountDisplayName(self:_:_:_:_:)
+#- Name: Discord_Client_UpdateToken
+#  SwiftName: Discord_Client.updateToken(self:_:_:_:_:_:)
 - Name: Discord_Client_CanOpenMessageInDiscord
   SwiftName: Discord_Client.canOpenMessageInDiscord(self:_:)
-- Name: Discord_Client_DeleteUserMessage
-  SwiftName: Discord_Client.deleteUserMessage(self:_:_:_:_:_:)
-- Name: Discord_Client_EditUserMessage
-  SwiftName: Discord_Client.editUserMessage(self:_:_:_:_:_:_:)
+#- Name: Discord_Client_DeleteUserMessage
+#  SwiftName: Discord_Client.deleteUserMessage(self:_:_:_:_:_:)
+#- Name: Discord_Client_EditUserMessage
+#  SwiftName: Discord_Client.editUserMessage(self:_:_:_:_:_:_:)
 - Name: Discord_Client_GetChannelHandle
   SwiftName: Discord_Client.getChannelHandle(self:_:_:)
-- Name: Discord_Client_GetLobbyMessagesWithLimit
-  SwiftName: Discord_Client.getLobbyMessagesWithLimit(self:_:_:_:_:_:)
+#- Name: Discord_Client_GetLobbyMessagesWithLimit
+#  SwiftName: Discord_Client.getLobbyMessagesWithLimit(self:_:_:_:_:_:)
 - Name: Discord_Client_GetMessageHandle
   SwiftName: Discord_Client.getMessageHandle(self:_:_:)
-- Name: Discord_Client_GetUserMessageSummaries
-  SwiftName: Discord_Client.getUserMessageSummaries(self:_:_:_:)
-- Name: Discord_Client_GetUserMessagesWithLimit
-  SwiftName: Discord_Client.getUserMessagesWithLimit(self:_:_:_:_:_:)
-- Name: Discord_Client_OpenMessageInDiscord
-  SwiftName: Discord_Client.openMessageInDiscord(self:_:_:_:_:_:_:_:)
-- Name: Discord_Client_SendLobbyMessage
-  SwiftName: Discord_Client.sendLobbyMessage(self:_:_:_:_:_:)
-- Name: Discord_Client_SendLobbyMessageWithMetadata
-  SwiftName: Discord_Client.sendLobbyMessageWithMetadata(self:_:_:_:_:_:_:)
-- Name: Discord_Client_SendUserMessage
-  SwiftName: Discord_Client.sendUserMessage(self:_:_:_:_:_:)
-- Name: Discord_Client_SendUserMessageWithMetadata
-  SwiftName: Discord_Client.sendUserMessageWithMetadata(self:_:_:_:_:_:_:)
-- Name: Discord_Client_SetMessageCreatedCallback
-  SwiftName: Discord_Client.setMessageCreatedCallback(self:_:_:_:)
-- Name: Discord_Client_SetMessageDeletedCallback
-  SwiftName: Discord_Client.setMessageDeletedCallback(self:_:_:_:)
-- Name: Discord_Client_SetMessageUpdatedCallback
-  SwiftName: Discord_Client.setMessageUpdatedCallback(self:_:_:_:)
+#- Name: Discord_Client_GetUserMessageSummaries
+#  SwiftName: Discord_Client.getUserMessageSummaries(self:_:_:_:)
+#- Name: Discord_Client_GetUserMessagesWithLimit
+#  SwiftName: Discord_Client.getUserMessagesWithLimit(self:_:_:_:_:_:)
+#- Name: Discord_Client_OpenMessageInDiscord
+#  SwiftName: Discord_Client.openMessageInDiscord(self:_:_:_:_:_:_:_:)
+#- Name: Discord_Client_SendLobbyMessage
+#  SwiftName: Discord_Client.sendLobbyMessage(self:_:_:_:_:_:)
+#- Name: Discord_Client_SendLobbyMessageWithMetadata
+#  SwiftName: Discord_Client.sendLobbyMessageWithMetadata(self:_:_:_:_:_:_:)
+#- Name: Discord_Client_SendUserMessage
+#  SwiftName: Discord_Client.sendUserMessage(self:_:_:_:_:_:)
+#- Name: Discord_Client_SendUserMessageWithMetadata
+#  SwiftName: Discord_Client.sendUserMessageWithMetadata(self:_:_:_:_:_:_:)
+#- Name: Discord_Client_SetMessageCreatedCallback
+#  SwiftName: Discord_Client.setMessageCreatedCallback(self:_:_:_:)
+#- Name: Discord_Client_SetMessageDeletedCallback
+#  SwiftName: Discord_Client.setMessageDeletedCallback(self:_:_:_:)
+#- Name: Discord_Client_SetMessageUpdatedCallback
+#  SwiftName: Discord_Client.setMessageUpdatedCallback(self:_:_:_:)
 - Name: Discord_Client_SetShowingChat
   SwiftName: Discord_Client.setShowingChat(self:_:)
-- Name: Discord_Client_AddLogCallback
-  SwiftName: Discord_Client.addLogCallback(self:_:_:_:_:)
-- Name: Discord_Client_AddVoiceLogCallback
-  SwiftName: Discord_Client.addVoiceLogCallback(self:_:_:_:_:)
+#- Name: Discord_Client_AddLogCallback
+#  SwiftName: Discord_Client.addLogCallback(self:_:_:_:_:)
+#- Name: Discord_Client_AddVoiceLogCallback
+#  SwiftName: Discord_Client.addVoiceLogCallback(self:_:_:_:_:)
 - Name: Discord_Client_Connect
   SwiftName: Discord_Client.connect(self:)
 - Name: Discord_Client_Disconnect
   SwiftName: Discord_Client.disconnect(self:)
 - Name: Discord_Client_GetStatus
   SwiftName: Discord_Client.getStatus(self:)
-- Name: Discord_Client_OpenConnectedGamesSettingsInDiscord
-  SwiftName: Discord_Client.openConnectedGamesSettingsInDiscord(self:_:_:_:)
+#- Name: Discord_Client_OpenConnectedGamesSettingsInDiscord
+#  SwiftName: Discord_Client.openConnectedGamesSettingsInDiscord(self:_:_:_:)
 - Name: Discord_Client_SetApplicationId
   SwiftName: Discord_Client.setApplicationId(self:_:)
 - Name: Discord_Client_SetLogDir
   SwiftName: Discord_Client.setLogDir(self:_:_:)
-- Name: Discord_Client_SetStatusChangedCallback
-  SwiftName: Discord_Client.setStatusChangedCallback(self:_:_:_:)
+#- Name: Discord_Client_SetStatusChangedCallback
+#  SwiftName: Discord_Client.setStatusChangedCallback(self:_:_:_:)
 - Name: Discord_Client_SetVoiceLogDir
   SwiftName: Discord_Client.setVoiceLogDir(self:_:_:)
-- Name: Discord_Client_CreateOrJoinLobby
-  SwiftName: Discord_Client.createOrJoinLobby(self:_:_:_:_:)
-- Name: Discord_Client_CreateOrJoinLobbyWithMetadata
-  SwiftName: Discord_Client.createOrJoinLobbyWithMetadata(self:_:_:_:_:_:_:)
-- Name: Discord_Client_GetGuildChannels
-  SwiftName: Discord_Client.getGuildChannels(self:_:_:_:_:)
+#- Name: Discord_Client_CreateOrJoinLobby
+#  SwiftName: Discord_Client.createOrJoinLobby(self:_:_:_:_:)
+#- Name: Discord_Client_CreateOrJoinLobbyWithMetadata
+#  SwiftName: Discord_Client.createOrJoinLobbyWithMetadata(self:_:_:_:_:_:_:)
+#- Name: Discord_Client_GetGuildChannels
+#  SwiftName: Discord_Client.getGuildChannels(self:_:_:_:_:)
 - Name: Discord_Client_GetLobbyHandle
   SwiftName: Discord_Client.getLobbyHandle(self:_:_:)
 - Name: Discord_Client_GetLobbyIds
   SwiftName: Discord_Client.getLobbyIds(self:_:)
-- Name: Discord_Client_GetUserGuilds
-  SwiftName: Discord_Client.getUserGuilds(self:_:_:_:)
-- Name: Discord_Client_JoinLinkedLobbyGuild
-  SwiftName: Discord_Client.joinLinkedLobbyGuild(self:_:_:_:_:_:_:_:)
-- Name: Discord_Client_LeaveLobby
-  SwiftName: Discord_Client.leaveLobby(self:_:_:_:_:)
-- Name: Discord_Client_LinkChannelToLobby
-  SwiftName: Discord_Client.linkChannelToLobby(self:_:_:_:_:_:)
-- Name: Discord_Client_SetLobbyCreatedCallback
-  SwiftName: Discord_Client.setLobbyCreatedCallback(self:_:_:_:)
-- Name: Discord_Client_SetLobbyDeletedCallback
-  SwiftName: Discord_Client.setLobbyDeletedCallback(self:_:_:_:)
-- Name: Discord_Client_SetLobbyMemberAddedCallback
-  SwiftName: Discord_Client.setLobbyMemberAddedCallback(self:_:_:_:)
-- Name: Discord_Client_SetLobbyMemberRemovedCallback
-  SwiftName: Discord_Client.setLobbyMemberRemovedCallback(self:_:_:_:)
-- Name: Discord_Client_SetLobbyMemberUpdatedCallback
-  SwiftName: Discord_Client.setLobbyMemberUpdatedCallback(self:_:_:_:)
-- Name: Discord_Client_SetLobbyUpdatedCallback
-  SwiftName: Discord_Client.setLobbyUpdatedCallback(self:_:_:_:)
-- Name: Discord_Client_UnlinkChannelFromLobby
-  SwiftName: Discord_Client.unlinkChannelFromLobby(self:_:_:_:_:)
-- Name: Discord_Client_IsDiscordAppInstalled
-  SwiftName: Discord_Client.isDiscordAppInstalled(self:_:_:_:)
-- Name: Discord_Client_AcceptActivityInvite
-  SwiftName: Discord_Client.acceptActivityInvite(self:_:_:_:_:)
+#- Name: Discord_Client_GetUserGuilds
+#  SwiftName: Discord_Client.getUserGuilds(self:_:_:_:)
+#- Name: Discord_Client_JoinLinkedLobbyGuild
+#  SwiftName: Discord_Client.joinLinkedLobbyGuild(self:_:_:_:_:_:_:_:)
+#- Name: Discord_Client_LeaveLobby
+#  SwiftName: Discord_Client.leaveLobby(self:_:_:_:_:)
+#- Name: Discord_Client_LinkChannelToLobby
+#  SwiftName: Discord_Client.linkChannelToLobby(self:_:_:_:_:_:)
+#- Name: Discord_Client_SetLobbyCreatedCallback
+#  SwiftName: Discord_Client.setLobbyCreatedCallback(self:_:_:_:)
+#- Name: Discord_Client_SetLobbyDeletedCallback
+#  SwiftName: Discord_Client.setLobbyDeletedCallback(self:_:_:_:)
+#- Name: Discord_Client_SetLobbyMemberAddedCallback
+#  SwiftName: Discord_Client.setLobbyMemberAddedCallback(self:_:_:_:)
+#- Name: Discord_Client_SetLobbyMemberRemovedCallback
+#  SwiftName: Discord_Client.setLobbyMemberRemovedCallback(self:_:_:_:)
+#- Name: Discord_Client_SetLobbyMemberUpdatedCallback
+#  SwiftName: Discord_Client.setLobbyMemberUpdatedCallback(self:_:_:_:)
+#- Name: Discord_Client_SetLobbyUpdatedCallback
+#  SwiftName: Discord_Client.setLobbyUpdatedCallback(self:_:_:_:)
+#- Name: Discord_Client_UnlinkChannelFromLobby
+#  SwiftName: Discord_Client.unlinkChannelFromLobby(self:_:_:_:_:)
+#- Name: Discord_Client_IsDiscordAppInstalled
+#  SwiftName: Discord_Client.isDiscordAppInstalled(self:_:_:_:)
+#- Name: Discord_Client_AcceptActivityInvite
+#  SwiftName: Discord_Client.acceptActivityInvite(self:_:_:_:_:)
 - Name: Discord_Client_ClearRichPresence
   SwiftName: Discord_Client.clearRichPresence(self:)
 - Name: Discord_Client_RegisterLaunchCommand
   SwiftName: Discord_Client.registerLaunchCommand(self:_:_:)
 - Name: Discord_Client_RegisterLaunchSteamApplication
   SwiftName: Discord_Client.registerLaunchSteamApplication(self:_:_:)
-- Name: Discord_Client_SendActivityInvite
-  SwiftName: Discord_Client.sendActivityInvite(self:_:_:_:_:_:)
-- Name: Discord_Client_SendActivityJoinRequest
-  SwiftName: Discord_Client.sendActivityJoinRequest(self:_:_:_:_:)
-- Name: Discord_Client_SendActivityJoinRequestReply
-  SwiftName: Discord_Client.sendActivityJoinRequestReply(self:_:_:_:_:)
-- Name: Discord_Client_SetActivityInviteCreatedCallback
-  SwiftName: Discord_Client.setActivityInviteCreatedCallback(self:_:_:_:)
-- Name: Discord_Client_SetActivityInviteUpdatedCallback
-  SwiftName: Discord_Client.setActivityInviteUpdatedCallback(self:_:_:_:)
-- Name: Discord_Client_SetActivityJoinCallback
-  SwiftName: Discord_Client.setActivityJoinCallback(self:_:_:_:)
-- Name: Discord_Client_SetActivityJoinWithApplicationCallback
-  SwiftName: Discord_Client.setActivityJoinWithApplicationCallback(self:_:_:_:)
-- Name: Discord_Client_SetOnlineStatus
-  SwiftName: Discord_Client.setOnlineStatus(self:_:_:_:_:)
-- Name: Discord_Client_UpdateRichPresence
-  SwiftName: Discord_Client.updateRichPresence(self:_:_:_:_:)
-- Name: Discord_Client_AcceptDiscordFriendRequest
-  SwiftName: Discord_Client.acceptDiscordFriendRequest(self:_:_:_:_:)
-- Name: Discord_Client_AcceptGameFriendRequest
-  SwiftName: Discord_Client.acceptGameFriendRequest(self:_:_:_:_:)
-- Name: Discord_Client_BlockUser
-  SwiftName: Discord_Client.blockUser(self:_:_:_:_:)
-- Name: Discord_Client_CancelDiscordFriendRequest
-  SwiftName: Discord_Client.cancelDiscordFriendRequest(self:_:_:_:_:)
-- Name: Discord_Client_CancelGameFriendRequest
-  SwiftName: Discord_Client.cancelGameFriendRequest(self:_:_:_:_:)
+#- Name: Discord_Client_SendActivityInvite
+#  SwiftName: Discord_Client.sendActivityInvite(self:_:_:_:_:_:)
+#- Name: Discord_Client_SendActivityJoinRequest
+#  SwiftName: Discord_Client.sendActivityJoinRequest(self:_:_:_:_:)
+#- Name: Discord_Client_SendActivityJoinRequestReply
+#  SwiftName: Discord_Client.sendActivityJoinRequestReply(self:_:_:_:_:)
+#- Name: Discord_Client_SetActivityInviteCreatedCallback
+#  SwiftName: Discord_Client.setActivityInviteCreatedCallback(self:_:_:_:)
+#- Name: Discord_Client_SetActivityInviteUpdatedCallback
+#  SwiftName: Discord_Client.setActivityInviteUpdatedCallback(self:_:_:_:)
+#- Name: Discord_Client_SetActivityJoinCallback
+#  SwiftName: Discord_Client.setActivityJoinCallback(self:_:_:_:)
+#- Name: Discord_Client_SetActivityJoinWithApplicationCallback
+#  SwiftName: Discord_Client.setActivityJoinWithApplicationCallback(self:_:_:_:)
+#- Name: Discord_Client_SetOnlineStatus
+#  SwiftName: Discord_Client.setOnlineStatus(self:_:_:_:_:)
+#- Name: Discord_Client_UpdateRichPresence
+#  SwiftName: Discord_Client.updateRichPresence(self:_:_:_:_:)
+#- Name: Discord_Client_AcceptDiscordFriendRequest
+#  SwiftName: Discord_Client.acceptDiscordFriendRequest(self:_:_:_:_:)
+#- Name: Discord_Client_AcceptGameFriendRequest
+#  SwiftName: Discord_Client.acceptGameFriendRequest(self:_:_:_:_:)
+#- Name: Discord_Client_BlockUser
+#  SwiftName: Discord_Client.blockUser(self:_:_:_:_:)
+#- Name: Discord_Client_CancelDiscordFriendRequest
+#  SwiftName: Discord_Client.cancelDiscordFriendRequest(self:_:_:_:_:)
+#- Name: Discord_Client_CancelGameFriendRequest
+#  SwiftName: Discord_Client.cancelGameFriendRequest(self:_:_:_:_:)
 - Name: Discord_Client_GetRelationshipHandle
   SwiftName: Discord_Client.getRelationshipHandle(self:_:_:)
 - Name: Discord_Client_GetRelationships
   SwiftName: Discord_Client.getRelationships(self:_:)
 - Name: Discord_Client_GetRelationshipsByGroup
   SwiftName: Discord_Client.getRelationshipsByGroup(self:_:_:)
-- Name: Discord_Client_RejectDiscordFriendRequest
-  SwiftName: Discord_Client.rejectDiscordFriendRequest(self:_:_:_:_:)
-- Name: Discord_Client_RejectGameFriendRequest
-  SwiftName: Discord_Client.rejectGameFriendRequest(self:_:_:_:_:)
-- Name: Discord_Client_RemoveDiscordAndGameFriend
-  SwiftName: Discord_Client.removeDiscordAndGameFriend(self:_:_:_:_:)
-- Name: Discord_Client_RemoveGameFriend
-  SwiftName: Discord_Client.removeGameFriend(self:_:_:_:_:)
+#- Name: Discord_Client_RejectDiscordFriendRequest
+#  SwiftName: Discord_Client.rejectDiscordFriendRequest(self:_:_:_:_:)
+#- Name: Discord_Client_RejectGameFriendRequest
+#  SwiftName: Discord_Client.rejectGameFriendRequest(self:_:_:_:_:)
+#- Name: Discord_Client_RemoveDiscordAndGameFriend
+#  SwiftName: Discord_Client.removeDiscordAndGameFriend(self:_:_:_:_:)
+#- Name: Discord_Client_RemoveGameFriend
+#  SwiftName: Discord_Client.removeGameFriend(self:_:_:_:_:)
 - Name: Discord_Client_SearchFriendsByUsername
   SwiftName: Discord_Client.searchFriendsByUsername(self:_:_:)
-- Name: Discord_Client_SendDiscordFriendRequest
-  SwiftName: Discord_Client.sendDiscordFriendRequest(self:_:_:_:_:)
-- Name: Discord_Client_SendDiscordFriendRequestById
-  SwiftName: Discord_Client.sendDiscordFriendRequestById(self:_:_:_:_:)
-- Name: Discord_Client_SendGameFriendRequest
-  SwiftName: Discord_Client.sendGameFriendRequest(self:_:_:_:_:)
-- Name: Discord_Client_SendGameFriendRequestById
-  SwiftName: Discord_Client.sendGameFriendRequestById(self:_:_:_:_:)
-- Name: Discord_Client_SetRelationshipCreatedCallback
-  SwiftName: Discord_Client.setRelationshipCreatedCallback(self:_:_:_:)
-- Name: Discord_Client_SetRelationshipDeletedCallback
-  SwiftName: Discord_Client.setRelationshipDeletedCallback(self:_:_:_:)
-- Name: Discord_Client_UnblockUser
-  SwiftName: Discord_Client.unblockUser(self:_:_:_:_:)
+#- Name: Discord_Client_SendDiscordFriendRequest
+#  SwiftName: Discord_Client.sendDiscordFriendRequest(self:_:_:_:_:)
+#- Name: Discord_Client_SendDiscordFriendRequestById
+#  SwiftName: Discord_Client.sendDiscordFriendRequestById(self:_:_:_:_:)
+#- Name: Discord_Client_SendGameFriendRequest
+#  SwiftName: Discord_Client.sendGameFriendRequest(self:_:_:_:_:)
+#- Name: Discord_Client_SendGameFriendRequestById
+#  SwiftName: Discord_Client.sendGameFriendRequestById(self:_:_:_:_:)
+#- Name: Discord_Client_SetRelationshipCreatedCallback
+#  SwiftName: Discord_Client.setRelationshipCreatedCallback(self:_:_:_:)
+#- Name: Discord_Client_SetRelationshipDeletedCallback
+#  SwiftName: Discord_Client.setRelationshipDeletedCallback(self:_:_:_:)
+#- Name: Discord_Client_UnblockUser
+#  SwiftName: Discord_Client.unblockUser(self:_:_:_:_:)
 - Name: Discord_Client_GetCurrentUserV2
   SwiftName: Discord_Client.getCurrentUserV2(self:_:)
-- Name: Discord_Client_GetDiscordClientConnectedUser
-  SwiftName: Discord_Client.getDiscordClientConnectedUser(self:_:_:_:_:)
+#- Name: Discord_Client_GetDiscordClientConnectedUser
+#  SwiftName: Discord_Client.getDiscordClientConnectedUser(self:_:_:_:_:)
 - Name: Discord_Client_GetUser
   SwiftName: Discord_Client.getUser(self:_:_:)
-- Name: Discord_Client_SetRelationshipGroupsUpdatedCallback
-  SwiftName: Discord_Client.setRelationshipGroupsUpdatedCallback(self:_:_:_:)
-- Name: Discord_Client_SetUserUpdatedCallback
-  SwiftName: Discord_Client.setUserUpdatedCallback(self:_:_:_:)
+  SwiftPrivate: true
+#- Name: Discord_Client_SetRelationshipGroupsUpdatedCallback
+#  SwiftName: Discord_Client.setRelationshipGroupsUpdatedCallback(self:_:_:_:)
+#- Name: Discord_Client_SetUserUpdatedCallback
+#  SwiftName: Discord_Client.setUserUpdatedCallback(self:_:_:_:)
 
 # CallInfoHandle
 - Name: Discord_CallInfoHandle_ChannelId
@@ -1009,4 +1010,3 @@ Functions:
   SwiftName: Discord_CallInfoHandle.getVoiceStateHandle(self:_:_:)
 - Name: Discord_CallInfoHandle_GuildId
   SwiftName: Discord_CallInfoHandle.guildId(self:)
-

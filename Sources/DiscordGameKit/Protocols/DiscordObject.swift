@@ -81,6 +81,30 @@ extension DiscordObject {
         fn(&span)
         return span.toString()
     }
+    
+    func gettingString(
+        _ fn: (inout MutableSpan<UInt8>) -> Bool
+    ) -> String? {
+        var bytes: InlineArray<1024, UInt8> = .init(repeating: 0)
+        var span: MutableSpan<UInt8> = bytes.mutableSpan
+        return fn(&span) ? span.toString() : nil
+    }
+
+    mutating func settingString(
+        _ value: String,
+        _ fn: (Span<UInt8>) -> Void,
+    ) {
+        fn(value.utf8Span.span)
+    }
+    
+    mutating func settingString(
+        _ value: String,
+        _ fn: (UnsafeMutableBufferPointer<UInt8>) -> Void
+    ) {
+        value.utf8.withContiguousStorageIfAvailable { buf in
+            fn(.init(mutating: buf))
+        }
+    }
 }
 
 extension DiscordObject where Object: DiscordRawCopyable {

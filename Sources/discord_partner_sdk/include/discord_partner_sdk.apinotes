@@ -1010,3 +1010,107 @@ Functions:
   SwiftName: Discord_CallInfoHandle.getVoiceStateHandle(self:_:_:)
 - Name: Discord_CallInfoHandle_GuildId
   SwiftName: Discord_CallInfoHandle.guildId(self:)
+
+
+
+# Span Shims
+- Name: Discord_ActivityInvite_SetPartyId_Span
+  SwiftName: Discord_ActivityInvite.setPartyId(self:span:_:)
+- Name: Discord_ActivityInvite_PartyId_Span
+  SwiftName: Discord_ActivityInvite.partyId(self:span:_:)
+  
+- Name: Discord_ActivityInvite_SetSessionId_Span
+  SwiftName: Discord_ActivityInvite.setSessionId(self:span:_:)
+- Name: Discord_ActivityInvite_SessionId_Span
+  SwiftName: Discord_ActivityInvite.sessionId(self:span:_:)
+
+- Name: Discord_ActivityAssets_SetLargeImage_Span
+  SwiftName: Discord_ActivityAssets.setLargeImage(self:span:_:)
+- Name: Discord_ActivityAssets_LargeImage_Span
+  SwiftName: Discord_ActivityAssets.largeImage(self:span:_:)
+- Name: Discord_ActivityAssets_SetLargeText_Span
+  SwiftName: Discord_ActivityAssets.setLargeText(self:span:_:)
+- Name: Discord_ActivityAssets_LargeText_Span
+  SwiftName: Discord_ActivityAssets.largeText(self:span:_:)
+- Name: Discord_ActivityAssets_SetLargeUrl_Span
+  SwiftName: Discord_ActivityAssets.setLargeUrl(self:span:_:)
+- Name: Discord_ActivityAssets_LargeUrl_Span
+  SwiftName: Discord_ActivityAssets.largeUrl(self:span:_:)
+- Name: Discord_ActivityAssets_SetSmallImage_Span
+  SwiftName: Discord_ActivityAssets.setSmallImage(self:span:_:)
+- Name: Discord_ActivityAssets_SmallImage_Span
+  SwiftName: Discord_ActivityAssets.smallImage(self:span:_:)
+- Name: Discord_ActivityAssets_SetSmallText_Span
+  SwiftName: Discord_ActivityAssets.setSmallText(self:span:_:)
+- Name: Discord_ActivityAssets_SmallText_Span
+  SwiftName: Discord_ActivityAssets.smallText(self:span:_:)
+- Name: Discord_ActivityAssets_SetSmallUrl_Span
+  SwiftName: Discord_ActivityAssets.setSmallUrl(self:span:_:)
+- Name: Discord_ActivityAssets_SmallUrl_Span
+  SwiftName: Discord_ActivityAssets.smallUrl(self:span:_:)
+- Name: Discord_ActivityAssets_SetInviteCoverImage_Span
+  SwiftName: Discord_ActivityAssets.setInviteCoverImage(self:span:_:)
+- Name: Discord_ActivityAssets_InviteCoverImage_Span
+  SwiftName: Discord_ActivityAssets.inviteCoverImage(self:span:_:)
+
+- Name: Discord_ActivityParty_SetId_Span
+  SwiftName: Discord_ActivityParty.setId(self:span:_:)
+- Name: Discord_ActivityParty_Id_Span
+  SwiftName: Discord_ActivityParty.id(self:span:_:)
+
+- Name: Discord_ActivitySecrets_SetJoin_Span
+  SwiftName: Discord_ActivitySecrets.setJoin(self:span:_:)
+- Name: Discord_ActivitySecrets_Join_Span
+  SwiftName: Discord_ActivitySecrets.join(self:span:_:)
+
+- Name: Discord_ActivityButton_SetLabel_Span
+  SwiftName: Discord_ActivityButton.setLabel(self:span:_:)
+- Name: Discord_ActivityButton_Label_Span
+  SwiftName: Discord_ActivityButton.label(self:span:_:)
+- Name: Discord_ActivityButton_SetUrl_Span
+  SwiftName: Discord_ActivityButton.setUrl(self:span:_:)
+- Name: Discord_ActivityButton_Url_Span
+  SwiftName: Discord_ActivityButton.url(self:span:_:)
+
+- Name: Discord_ClientResult_ToString_Span
+  SwiftName: Discord_ClientResult.toString(self:span:_:)
+- Name: Discord_ClientResult_SetError_Span
+  SwiftName: Discord_ClientResult.setError(self:span:_:)
+- Name: Discord_ClientResult_Error_Span
+  SwiftName: Discord_ClientResult.error(self:span:_:)
+- Name: Discord_ClientResult_SetResponseBody_Span
+  SwiftName: Discord_ClientResult.setResponseBody(self:span:_:)
+- Name: Discord_ClientResult_ResponseBody_Span
+  SwiftName: Discord_ClientResult.responseBody(self:span:_:)
+
+- Name: Discord_AuthorizationCodeChallenge_SetChallenge_Span
+  SwiftName: Discord_AuthorizationCodeChallenge.setChallenge(self:span:_:)
+- Name: Discord_AuthorizationCodeChallenge_Challenge_Span
+  SwiftName: Discord_AuthorizationCodeChallenge.challenge(self:span:_:)
+
+- Name: Discord_AuthorizationCodeVerifier_SetVerifier_Span
+  SwiftName: Discord_AuthorizationCodeVerifier.setVerifier(self:span:_:)
+- Name: Discord_AuthorizationCodeVerifier_Verifier_Span
+  SwiftName: Discord_AuthorizationCodeVerifier.verifier(self:span:_:)
+
+- Name: Discord_AuthorizationArgs_SetScopes_Span
+  SwiftName: Discord_AuthorizationArgs.setScopes(self:span:_:)
+- Name: Discord_AuthorizationArgs_Scopes_Span
+  SwiftName: Discord_AuthorizationArgs.scopes(self:span:_:)
+- Name: Discord_AuthorizationArgs_SetState_Span
+  SwiftName: Discord_AuthorizationArgs.setState(self:span:_:)
+- Name: Discord_AuthorizationArgs_State_Span
+  SwiftName: Discord_AuthorizationArgs.state(self:span:_:)
+- Name: Discord_AuthorizationArgs_SetNonce_Span
+  SwiftName: Discord_AuthorizationArgs.setNonce(self:span:_:)
+- Name: Discord_AuthorizationArgs_Nonce_Span
+  SwiftName: Discord_AuthorizationArgs.nonce(self:span:_:)
+- Name: Discord_AuthorizationArgs_SetCustomSchemeParam_Span
+  SwiftName: Discord_AuthorizationArgs.setCustomSchemeParam(self:span:_:)
+- Name: Discord_AuthorizationArgs_CustomSchemeParam_Span
+  SwiftName: Discord_AuthorizationArgs.customSchemeParam(self:span:_:)
+
+- Name: Discord_DeviceAuthorizationArgs_SetScopes_Span
+  SwiftName: Discord_DeviceAuthorizationArgs.setScopes(self:span:_:)
+- Name: Discord_DeviceAuthorizationArgs_Scopes_Span
+  SwiftName: Discord_DeviceAuthorizationArgs.scopes(self:span:_:)

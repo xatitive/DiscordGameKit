@@ -7,63 +7,71 @@
 
 @_implementationOnly import discord_partner_sdk
 
+@inline(__always)
+private func enumToString(_ fn: (inout MutableSpan<UInt8>) -> Void) -> String {
+    var bytes: InlineArray<1024, UInt8> = .init(repeating: 0)
+    var span: MutableSpan<UInt8> = bytes.mutableSpan
+    fn(&span)
+    return span.toString()
+}
+
 // ═══════════════════════════════════════════════════════════════
 // MARK: ENUMS — C API backed (Discord_XxxToString exists)
 // ═══════════════════════════════════════════════════════════════
 
 extension CallError: CustomStringConvertible {
     public var description: String {
-        var raw = Discord_String(ptr: nil, size: 0)
-        Discord_Call_ErrorToString(discordValue, &raw)
-        return raw.toString()
+        enumToString { span in
+            Discord_Call_ErrorToString_Span(discordValue, &span)
+        }
     }
 }
 
 extension CallStatus: CustomStringConvertible {
     public var description: String {
-        var raw = Discord_String(ptr: nil, size: 0)
-        Discord_Call_StatusToString(discordValue, &raw)
-        return raw.toString()
+        enumToString { span in
+            Discord_Call_StatusToString_Span(discordValue, &span)
+        }
     }
 }
 
 extension AvatarType: CustomStringConvertible {
     public var description: String {
-        var raw = Discord_String(ptr: nil, size: 0)
-        Discord_UserHandle_AvatarTypeToString(discordValue, &raw)
-        return raw.toString()
+        enumToString { span in
+            Discord_UserHandle_AvatarTypeToString_Span(discordValue, &span)
+        }
     }
 }
 
 extension AdditionalContentType: CustomStringConvertible {
     public var description: String {
-        var raw = Discord_String(ptr: nil, size: 0)
-        Discord_AdditionalContent_TypeToString(discordValue, &raw)
-        return raw.toString()
+        enumToString { span in
+            Discord_AdditionalContent_TypeToString_Span(discordValue, &span)
+        }
     }
 }
 
 extension ClientError: CustomStringConvertible {
     public var description: String {
-        var raw = Discord_String(ptr: nil, size: 0)
-        Discord_Client_ErrorToString(discordValue, &raw)
-        return raw.toString()
+        enumToString { span in
+            Discord_Client_ErrorToString_Span(discordValue, &span)
+        }
     }
 }
 
 extension ClientStatus: CustomStringConvertible {
     public var description: String {
-        var raw = Discord_String(ptr: nil, size: 0)
-        Discord_Client_StatusToString(discordValue, &raw)
-        return raw.toString()
+        enumToString { span in
+            Discord_Client_StatusToString_Span(discordValue, &span)
+        }
     }
 }
 
 extension ClientThread: CustomStringConvertible {
     public var description: String {
-        var raw = Discord_String(ptr: nil, size: 0)
-        Discord_Client_ThreadToString(discordValue, &raw)
-        return raw.toString()
+        enumToString { span in
+            Discord_Client_ThreadToString_Span(discordValue, &span)
+        }
     }
 }
 
